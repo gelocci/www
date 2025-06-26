@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+	<head>
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-H3WXX5RDYY"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-H3WXX5RDYY');
+	</script>
+    <meta charset="UTF-8">
+    <title>Gelocci - Conversão de Taxas</title>
+    <link rel="stylesheet" href="../../assets/css/globals.css">
+    <link rel="stylesheet" href="../../assets/css/header.css">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/forms.css">
+    <link rel="stylesheet" href="../../assets/css/form-converter.css">
+    <link rel="stylesheet" href="../../assets/css/footer.css">
+    <link rel="stylesheet" href="../../assets/css/responsive.css">
+    <link rel="icon" href="../../assets/imagens/favicon.ico" type="image/x-icon">
+    <meta name="description" content="Converta taxas de juros para diferentes períodos.">
+    <meta name="keywords" content="taxa, conversão, juros, financeiro, calculadora">
+    <meta name="author" content="Gerson Locci">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <header>
+        <h1>Conversão de Taxas</h1>
+        <h2>gelocci.com.br</h2>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="../../index.html" class="inicio">Início</a></li>
+            <li><a href="../../quem-somos/index.html">Quem Somos</a></li>
+            <li><a href="../../politica-de-privacidade/index.html">Política de Privacidade</a></li>
+            <li><a href="../../termos-de-uso/index.html">Termos de Uso</a></li>
+            <li><a href="../../contato/index.html">Contato</a></li>
+        </ul>
+    </nav>
+    
+    <main>
+        <section class="converter">
+            <h2>Digite a taxa e escolha o período</h2>
+            <form id="rateConversionForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="rateInput">Taxa (%):</label>
+                        <input type="number" id="rateInput" name="rateInput" required placeholder="Ex: 1,5">
+                    </div>
+                    <div class="form-group">
+                        <label for="periodSelect">Período:</label>
+                        <select id="periodSelect" name="periodSelect">
+                            <option value="monthly">Mensal</option>
+                            <option value="quarterly">Trimestral</option>
+                            <option value="semiannual">Semestral</option>
+                            <option value="annual">Anual</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="button" onclick="converterTaxa()">Converter</button>
+                </div>
+            </form>
+
+            <div id="result">
+                <!-- Resultados serão exibidos aqui -->
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="../../assets/js/load-footer.js" defer></script>
+    <script src="./js/converter.js" defer></script> <!-- Caminho atualizado -->
+</body>
+</html>

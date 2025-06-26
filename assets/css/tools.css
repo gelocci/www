@@ -1,0 +1,94 @@
+/* =====================================
+   Estilos para os Cards
+===================================== */
+.ferramentas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-top: 40px;
+    justify-content: center;
+}
+
+.ferramenta {
+    background-color: var(--secondary-bg);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 250px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.ferramenta:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.ferramenta i {
+    font-size: 3.5rem; /* Maior destaque para os ícones */
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    transition: transform 0.3s;
+}
+
+.ferramenta:hover i {
+    transform: scale(1.1); /* Leve efeito nos ícones ao passar o mouse */
+}
+
+.ferramenta button {
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    margin-top: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    border-radius: 5px;
+}
+
+.ferramenta button:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px); /* Elevação sutil ao passar o mouse */
+}
+
+/* =====================================
+   Estilos para o Call to Action (CTA)
+===================================== */
+.cta {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+    background-color: var(--secondary-bg);
+    border-radius: 8px;
+}
+
+.cta h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+.cta p {
+    margin-bottom: 20px;
+    color: var(--text-color);
+}
+
+.btn-cta {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-cta:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+}

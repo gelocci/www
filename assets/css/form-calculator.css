@@ -1,0 +1,76 @@
+/* =====================================
+   Calculadora - Ajustes
+===================================== */
+
+.calculator {
+    background-color: var(--secondary-bg);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 600px; /* Diminuímos a largura para compactar um pouco mais */
+    margin: 20px auto;
+}
+
+/* Organização dos Campos */
+.form-row {
+    display: flex;
+    gap: 15px; /* Diminui o gap entre os campos */
+    margin-bottom: 12px; /* Reduz o espaçamento entre as linhas */
+}
+
+.form-group {
+    flex: 1;
+    min-width: 180px; /* Garante que os campos fiquem um pouco mais compactos */
+}
+
+.calculator input[type="text"],
+.calculator select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 8px; /* Ajuste no espaçamento inferior */
+    background-color: var(--secondary-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    border-radius: 4px;
+    text-align: left;
+    padding-right: 10px;
+}
+
+/* Ajuste no botão */
+.calculator button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.1rem; /* Ajusta o tamanho da fonte */
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.calculator button:hover {
+    background-color: var(--primary-hover);
+}
+
+/* =====================================
+   Resultado
+===================================== */
+#result {
+	display: none; /* Esconde o div inicialmente */
+    margin-top: 20px;
+    padding: 12px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    font-size: 1.2rem;
+    color: var(--text-color);
+    text-align: center;
+}
+
+/* Estilo para Destaque no Resultado */
+#result strong {
+    color: var(--primary-color);
+}

@@ -1,0 +1,143 @@
+/* =====================================
+   Estilos Específicos para Black-Scholes
+===================================== */
+
+.calculator {
+    background-color: var(--secondary-bg);
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 600px;
+    margin: 20px auto;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.form-group {
+    flex: 1;
+    min-width: 150px;
+}
+
+.calculator label {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* Ajustes nos campos de input e select */
+input[type="text"],
+input[type="date"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    background-color: var(--secondary-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+/* Ajustes para o campo de data */
+input[type="date"] {
+    width: 100%;
+    background-color: var(--secondary-bg); /* Mantendo o fundo do campo igual ao restante */
+    color: var(--text-color); /* Garantindo que o texto dentro do campo seja visível */
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1rem;
+    text-align: left;
+}
+
+/* Estilizando o seletor de data (calendário) para garantir que o usuário veja a interação */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    background-color: #4CAF50; /* Cor de fundo do ícone de calendário */
+    color: white; /* Cor do ícone */
+    border-radius: 50%;
+    padding: 2px;
+}
+
+/* Para garantir que o calendário do input tenha um bom contraste */
+input[type="date"]:focus::-webkit-calendar-picker-indicator {
+    background-color: #45A049; /* Um verde mais escuro no foco */
+}
+
+/* Botão com largura ajustada */
+.calculator button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 20px auto;
+}
+
+.calculator button:hover {
+    background-color: var(--primary-hover);
+}
+
+/* ===========================
+   Estilos de Resultados (Tabela)
+=========================== */
+#result {
+    margin-top: 20px;
+    font-size: 1.1rem;
+    text-align: left;
+}
+
+.taxa-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    text-align: left;
+    background-color: #333; /* Tabela com fundo escuro */
+    border: 1px solid #ddd;
+}
+
+.taxa-table th, .taxa-table td {
+    padding: 10px;
+    border: 1px solid #444;
+}
+
+.taxa-table th {
+    background-color: #1a1a1a; /* Cabeçalho escuro */
+    color: #4CAF50; /* Verde para o cabeçalho */
+}
+
+.taxa-table td {
+    background-color: #222; /* Fundo mais escuro para as células */
+    color: #bbb; /* Texto claro nas células */
+}
+
+.taxa-table tbody tr:nth-child(even) {
+    background-color: #2a2a2a;
+}
+
+.taxa-table tbody tr:hover {
+    background-color: #444;
+}
+
+#callPrice, #putPrice {
+    color: white; /* Texto explicativo em branco */
+}
+
+#callPrice span, #putPrice span {
+    font-weight: bold;
+    color: var(--primary-color); /* Verde para o valor */
+}

@@ -1,0 +1,81 @@
+/* =====================================
+   Estilos Específicos para a Página de Contato
+===================================== */
+.contact-form {
+    max-width: 600px; /* Formulário mais estreito */
+    margin: 20px auto; /* Centraliza o formulário */
+    padding: 15px;
+    background-color: var(--secondary-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Ajusta o título */
+.contact-intro h2 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+/* Reduz a largura dos campos de entrada */
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    background-color: var(--secondary-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+    color: #888;
+    font-style: italic;
+}
+
+/* Ajusta o botão */
+.contact-form button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    width: 100%;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+.contact-form button:hover {
+    background-color: #45A049;
+}
+
+/* Adapta a frase para um placeholder */
+.contact-intro p {
+    display: none; /* Remove a frase da tela */
+}
+
+/* Ajuste para os campos de texto */
+.contact-form textarea {
+    placeholder: "Escreva sua mensagem aqui"; /* Adiciona a frase como placeholder */
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .contact-form {
+        max-width: 100%;
+        padding: 10px;
+    }
+
+    .contact-intro h2 {
+        font-size: 1.1rem;
+    }
+
+    .contact-intro p {
+        font-size: 0.9rem;
+    }
+}

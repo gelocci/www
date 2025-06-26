@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-H3WXX5RDYY"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-H3WXX5RDYY');
+	</script>
+    <meta charset="UTF-8">
+    <title>Gelocci - Cálculo de Opções Black-Scholes</title>
+    <link rel="stylesheet" href="../../assets/css/globals.css">
+    <link rel="stylesheet" href="../../assets/css/header.css">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/forms.css">
+    <link rel="stylesheet" href="../../assets/css/form-bs.css">
+    <link rel="stylesheet" href="../../assets/css/footer.css">
+    <link rel="stylesheet" href="../../assets/css/responsive.css">
+    <link rel="icon" href="../../assets/imagens/favicon.ico" type="image/x-icon">
+    <meta name="description" content="Calculadora de preço de opções baseada no modelo Black and Scholes.">
+    <meta name="keywords" content="taxa, conversão, juros, financeiro, calculadora, black and scholes">
+    <meta name="author" content="Gerson Locci">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Precificação de Opções - Black-Scholes</h1>
+        <h2>gelocci.com.br</h2>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="../../index.html" class="inicio">Início</a></li>
+            <li><a href="../../quem-somos/index.html">Quem Somos</a></li>
+            <li><a href="../../politica-de-privacidade/index.html">Política de Privacidade</a></li>
+            <li><a href="../../termos-de-uso/index.html">Termos de Uso</a></li>
+            <li><a href="../../contato/index.html">Contato</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="calculator">
+            <form id="blackScholesForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="currentPrice">Preço Atual do Ativo:</label>
+                        <input type="text" id="currentPrice" name="currentPrice" placeholder="Ex: 100,00">
+                    </div>
+                    <div class="form-group">
+                        <label for="strikePrice">Preço de Exercício (Strike):</label>
+                        <input type="text" id="strikePrice" name="strikePrice" placeholder="Ex: 100,00">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="timeToMaturity">Data de Vencimento:</label>
+                        <input type="date" id="timeToMaturity" name="timeToMaturity" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="interestRate">Taxa de Juros Anual (%):</label>
+                        <input type="text" id="interestRate" name="interestRate" placeholder="Ex: 5">
+                    </div>
+                    <div class="form-group">
+                        <label for="volatility">Volatilidade (%):</label>
+                        <input type="text" id="volatility" name="volatility" placeholder="Ex: 20">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="button" id="calculateButton">Calcular</button>
+                </div>
+            </form>
+
+            <!-- Tabela para exibir os resultados -->
+            <div id="result">
+                <h3>Resultados:</h3>
+                <table class="taxa-table">
+                    <thead>
+                        <tr>
+                            <th>Tipo de Opção</th>
+                            <th>Preço</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Preço da Call</td>
+                            <td id="callPrice"><span id="callValue"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Preço da Put</td>
+                            <td id="putPrice"><span id="putValue"></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="../../assets/js/load-footer.js" defer></script>
+    <script src="./js/black-scholes.js" defer></script>
+</body>
+</html>
