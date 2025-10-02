@@ -27,8 +27,3 @@ footer a:focus {
     text-decoration: underline; /* Adiciona sublinhado */
     color: var(--primary-hover); /* Cor ao passar o mouse */
 }
-
-footer a:focus {
-    outline: 2px dashed var(--primary-color); /* Indicação de foco */
-    outline-offset: 4px; /* Espaçamento do contorno */
-}

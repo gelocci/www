@@ -9,9 +9,11 @@
 	  gtag('js', new Date());
 
 	  gtag('config', 'G-H3WXX5RDYY');
+      document.documentElement.classList.add('js');
 	</script>
     <meta charset="UTF-8">
     <title>Gelocci - Conversão de Taxas</title>
+    <link rel="stylesheet" href="../../assets/css/animate.css">
     <link rel="stylesheet" href="../../assets/css/globals.css">
     <link rel="stylesheet" href="../../assets/css/header.css">
     <link rel="stylesheet" href="../../assets/css/main.css">
@@ -27,10 +29,10 @@
 </head>
 <body>
     <header>
-        <h1>Conversão de Taxas</h1>
-        <h2>gelocci.com.br</h2>
+        <h1 class="fadeInDown" data-anime="200">Conversão de Taxas</h1>
+        <h2 class="fadeInUp" data-anime="200">gelocci.com.br</h2>
     </header>
-    <nav>
+    <nav class="navegacao">
         <ul>
             <li><a href="../../index.html" class="inicio">Início</a></li>
             <li><a href="../../quem-somos/index.html">Quem Somos</a></li>
@@ -41,7 +43,7 @@
     </nav>
     
     <main>
-        <section class="converter">
+        <section class="converter" data-anime="200">
             <h2>Digite a taxa e escolha o período</h2>
             <form id="rateConversionForm">
                 <div class="form-row">
@@ -71,7 +73,7 @@
     </main>
 
     <div id="footer-placeholder"></div>
-
+    <script src="../../plugins/simple-anime.js"></script>
     <script src="../../assets/js/load-footer.js" defer></script>
     <script src="./js/converter.js" defer></script> <!-- Caminho atualizado -->
 </body>

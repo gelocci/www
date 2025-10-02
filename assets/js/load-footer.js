@@ -15,3 +15,16 @@ document.addEventListener('DOMContentLoaded', function() {
       console.error(error);
     });
 });
+
+
+const links = document.querySelectorAll('.navegacao a');
+links.forEach(link => {
+  if (link.href === window.location.href) {
+    link.classList.add('active');
+  }});
+
+if(window.SimpleAnime){
+    
+    new SimpleAnime();
+
+}

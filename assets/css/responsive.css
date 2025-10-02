@@ -3,7 +3,7 @@
 ===================================== */
 
 /* Telas menores que 768px (Tablets e Smartphones) */
-@media (max-width: 768px) {
+@media (max-width: 770px) {
     /* Header */
     header {
         padding: 15px;
@@ -16,11 +16,16 @@
     header h2 {
         font-size: 1.2rem; /* Ajusta o subtítulo */
     }
-
+    .navegacao{
+        justify-content: start;
+        flex-direction: column;
+        padding: 0 12px;
+    }
     /* Navegação */
     nav ul {
         flex-direction: column; /* Navegação vertical */
         gap: 15px; /* Espaçamento menor entre itens */
+       
     }
 
     /* Main */
@@ -127,6 +132,7 @@
     .ferramenta {
         width: 300px; /* Aumenta a largura dos cards */
         padding: 30px; /* Mais espaço interno para cards */
+      
     }
 }
 

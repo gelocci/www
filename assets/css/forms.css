@@ -13,7 +13,7 @@ input, textarea, select, button {
     padding: 10px;
     margin-bottom: 20px;
     background-color: var(--secondary-bg);
-    border: 1px solid var(--border-color);
+    border: px solid var(--border-color);
     color: var(--text-color);
     border-radius: 4px;
     transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
@@ -29,7 +29,7 @@ input::placeholder, textarea::placeholder {
 /* Foco nos Campos */
 input:focus, textarea:focus, select:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 5px var(--primary-color);
+    box-shadow: 0 0 5px var(--primary-color); 
     outline: none;
 }
 
@@ -44,11 +44,12 @@ button {
     padding: 12px 20px; /* Maior espaçamento interno */
     color: #fff; /* Texto branco */
     border-radius: 4px; /* Consistência com outros elementos */
+
 }
 
 button:hover {
     background-color: #45A049;
-    transform: translateY(-2px); /* Efeito de elevação */
+
 }
 
 /* Botão Secundário */

@@ -12,7 +12,9 @@
     --secondary-bg: #1e1e1e;
     --border-color: #444;
     --footer-text: #a0a0a0;
-    --font-family: 'Roboto', sans-serif;
+    --font-family: "Roboto", sans-serif;
+    --font-family-alt: "Poppins", sans-serif;
+    --font-family-title: "Merriweather", serif;
 }
 
 /* =====================================
@@ -26,6 +28,11 @@
 
 html {
     overflow-y: scroll;
+}
+input:autofill{
+-webkit-box-shadow: 0 0 0 1000px var(--secondary-bg) inset !important;
+-webkit-text-fill-color: var(--text-color) !important;
+transition: background-color 9999s ease-in-out 0s;
 }
 
 /* =====================================
@@ -45,20 +52,31 @@ body {
 /* =====================================
    Links
 ===================================== */
-a {
+.navegacao a {
     color: var(--primary-color);
     text-decoration: none;
     transition: color 0.3s;
+    position: relative;
+}
+.navegacao a::after{
+    content: "";
+    display: block;
+    height: 2px;
+    width: 0%;
+    background: #81C784;
+    margin-top: 2px;
+    transition: 0.3s;
+    position: absolute;
+    transition:  ease-in-out 400ms;
+}
+.navegacao a:hover::after,
+.ativo::after{
+    width: 100%;
+}
+.navegacao .active::after{
+    width: 100%;
 }
 
-a:hover, a:focus {
-    color: var(--primary-hover);
-}
-
-a:focus {
-    outline: 2px dashed var(--primary-color);
-    outline-offset: 4px;
-}
 
 /* =====================================
    Classe para Elementos Ocultos

@@ -9,9 +9,11 @@
 	  gtag('js', new Date());
 
 	  gtag('config', 'G-H3WXX5RDYY');
+    
 	</script>
     <meta charset="UTF-8">
     <title>Gelocci - Contato</title>
+    <link rel="stylesheet" href="../assets/css/animate.css">
 	<link rel="stylesheet" href="../assets/css/globals.css">
     <link rel="stylesheet" href="../assets/css/header.css">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -26,13 +28,14 @@
     <meta name="author" content="Gerson Locci">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<script src="../assets/js/load-footer.js" defer></script>
+    <script>document.documentElement.classList.add('js')</script>
 </head>
 <body class="contato-page">
     <header>
-        <h1>Contato</h1>
-        <h2>gelocci.com.br</h2>
+        <h1 class="fadeInDown" data-anime="200">Contato</h1>
+        <h2 class="fadeInUp" data-anime="200">gelocci.com.br</h2>
     </header>
-    <nav>
+    <nav class="navegacao">
         <ul>
             <li><a href="../index.html" class="inicio">Início</a></li>
             <li><a href="../quem-somos/index.html">Quem Somos</a></li>
@@ -42,7 +45,7 @@
         </ul>
     </nav>
     <main>
-        <section class="contact-form">
+        <section class="contact-form" data-anime="200">
             <form action="/success.html" method="POST" netlify-honeypot="bot-field" data-netlify="true" data-netlify-recaptcha="true">
                 <div>
                     <label for="nome">Nome:</label>
@@ -69,5 +72,6 @@
 	
     <!-- Placeholder para o footer -->
     <div id="footer-placeholder"></div>
+    <script src="../plugins/simple-anime.js"></script>
 </body>
 </html>

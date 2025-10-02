@@ -7,8 +7,12 @@
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    max-width: 600px; /* Diminuímos a largura para compactar um pouco mais */
+    width: 600px;
+    max-width: 1200px; /* Diminuímos a largura para compactar um pouco mais */
     margin: 20px auto;
+}
+.calculator .response{
+    width: 1200px;
 }
 
 /* Organização dos Campos */
@@ -22,7 +26,9 @@
     flex: 1;
     min-width: 180px; /* Garante que os campos fiquem um pouco mais compactos */
 }
-
+.calculator label{
+    text-align: start;
+}
 .calculator input[type="text"],
 .calculator select {
     width: 100%;
@@ -35,6 +41,12 @@
     border-radius: 4px;
     text-align: left;
     padding-right: 10px;
+}
+.calculator input[type="text"]:focus,
+.calculator select:focus {
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 0 5px var(--primary-color);
+    outline: none;
 }
 
 /* Ajuste no botão */
@@ -59,18 +71,67 @@
 /* =====================================
    Resultado
 ===================================== */
-#result {
-	display: none; /* Esconde o div inicialmente */
-    margin-top: 20px;
-    padding: 12px;
-    background-color: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
-    font-size: 1.2rem;
-    color: var(--text-color);
+
+section .form-container{
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    grid-column: 1/-1;
+    grid-row: 1/3;
     text-align: center;
+    align-items: center;
+    margin-bottom: 20px;
+
+    
+    
+}
+#result {
+    display: none; /* Esconde o div inicialmente */
+    background-color: #292929;
+    color: #f7f7f7;
+    padding: 20px;
+    border-radius: 4px;
+    height: 340.78px;
+    align-content: center;
+    
+    
+}
+#result p {
+    margin: 10px 0;
+    font-size: 1.1rem;
 }
 
 /* Estilo para Destaque no Resultado */
 #result strong {
     color: var(--primary-color);
+}
+section{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap:20px;
+    grid-template-rows: auto auto auto auto; 
+    max-width: 800px;
+    
+}
+
+section .form-calculator{
+    grid-column: 1;
+    grid-row: 1/3;
+}
+section .resultado{
+    grid-column: 2;
+    grid-row: 1/3;
+    
+}
+section .chart-container{
+    justify-items: center;
+    grid-column: span 2; 
+
+}
+section canvas{
+
+    display: none;
+    width: 1100px;
+    height: 400px !important;
+    grid-column: 1/-1;
 }

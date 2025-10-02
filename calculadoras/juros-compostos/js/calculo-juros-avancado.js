@@ -43,7 +43,7 @@ document.getElementById('advancedCompoundInterestForm').addEventListener('submit
     // Exibindo os resultados no padrão brasileiro
     const resultDiv = document.getElementById('result');
 	resultDiv.style.display = 'block'; // Exibe o elemento #result
-    resultDiv.innerHTML = `<p>Reserva Acumulada (R$): ${accumulated.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+    resultDiv.innerHTML = `<p> <span style= "color: #4bc0c0;">Reserva Acumulada (R$):</span> ${accumulated.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
                            <p>Valor Presente (R$): ${presentValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
                            <p>Valor Mensal de Aposentadoria (R$): ${monthlyRetirement.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>`;
 
@@ -113,3 +113,15 @@ document.querySelectorAll('input[type="number"]').forEach(input => {
         target.value = value;
     });
 });
+
+
+const sectionCalculator = document.querySelector('.calculator');
+const buttonCalculate = document.querySelector('.calculateButton');
+
+function aumentarSection(event){
+    event.preventDefault();
+    sectionCalculator.style.width = '1200px';
+ 
+}
+
+sectionCalculator.addEventListener('submit', aumentarSection)

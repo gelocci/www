@@ -24,7 +24,7 @@
     padding: 10px;
     margin-bottom: 15px;
     background-color: var(--secondary-bg);
-    border: 1px solid var(--border-color);
+    border: 2px solid var(--border-color);
     color: var(--text-color);
     border-radius: 4px;
     font-size: 1rem;
@@ -34,6 +34,11 @@
 .contact-form textarea::placeholder {
     color: #888;
     font-style: italic;
+}
+.contact-form input:focus,
+.contact-form textarea:focus {
+    border: 2px solid var(--primary-color);
+
 }
 
 /* Ajusta o botão */
@@ -48,10 +53,13 @@
     cursor: pointer;
     transition: background-color 0.3s;
     margin-top: 20px;
+    transition:  ease-in-out 0.3s;
 }
 
 .contact-form button:hover {
-    background-color: #45A049;
+    background-color: #3a863d;
+    transition:  ease-in-out 0.2s;
+    
 }
 
 /* Adapta a frase para um placeholder */

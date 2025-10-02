@@ -9,9 +9,15 @@
 	  gtag('js', new Date());
 
 	  gtag('config', 'G-H3WXX5RDYY');
+      document.documentElement.classList.add('js');
 	</script>
     <meta charset="UTF-8">
     <title>Gelocci - Cálculo de Opções Black-Scholes</title>
+    <link rel="stylesheet" href="../../assets/css/animate.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,w
+    ght@1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../assets/css/globals.css">
     <link rel="stylesheet" href="../../assets/css/header.css">
     <link rel="stylesheet" href="../../assets/css/main.css">
@@ -29,10 +35,10 @@
 </head>
 <body>
     <header>
-        <h1>Precificação de Opções - Black-Scholes</h1>
-        <h2>gelocci.com.br</h2>
+        <h1 class="fadeInDown" data-anime="200">Precificação de Opções - Black-Scholes</h1>
+        <h2 class="fadeInUp" data-anime="200">gelocci.com.br</h2>
     </header>
-    <nav>
+    <nav class="navegacao">
         <ul>
             <li><a href="../../index.html" class="inicio">Início</a></li>
             <li><a href="../../quem-somos/index.html">Quem Somos</a></li>
@@ -43,7 +49,7 @@
     </nav>
 
     <main>
-        <section class="calculator">
+        <section class="calculator" data-anime="200">
             <form id="blackScholesForm">
                 <div class="form-row">
                     <div class="form-group">
@@ -101,6 +107,7 @@
 
     <div id="footer-placeholder"></div>
 
+    <script src="../../plugins/simple-anime.js"></script>
     <script src="../../assets/js/load-footer.js" defer></script>
     <script src="./js/black-scholes.js" defer></script>
 </body>

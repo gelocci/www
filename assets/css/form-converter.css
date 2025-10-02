@@ -47,6 +47,12 @@
     color: var(--text-color);
     border-radius: 4px;
 }
+.converter input[type="number"]:focus,
+.converter select:focus {
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 0 5px var(--primary-color);
+    outline: none;
+}
 
 .converter button {
     width: 100%; /* Tornando o botão maior e ocupando toda a largura */

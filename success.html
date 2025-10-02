@@ -9,9 +9,11 @@
 	  gtag('js', new Date());
 
 	  gtag('config', 'G-H3WXX5RDYY');
+      document.documentElement.classList.add('js');
 	</script>
     <meta charset="UTF-8">
     <title>Gelocci - Sucesso</title>
+    <link rel="stylesheet" href=".assets/css/animate.css">
 	<link rel="stylesheet" href="./assets/css/globals.css">
     <link rel="stylesheet" href="./assets/css/header.css">
 	<link rel="stylesheet" href="./assets/css/main.css">
@@ -29,10 +31,10 @@
 </head>
 <body>
     <header>
-        <h1>Ferramentas Financeiras</h1>
-        <h2>gelocci.com.br</h2>
+        <h1 class="fadeInDown" data-anime="200">Ferramentas Financeiras</h1>
+        <h2 class="fadeInUp" data-anime="200">gelocci.com.br</h2>
     </header>
-    <nav>
+    <nav class="navegacao">
         <ul>
             <li><a href="./index.html" class="inicio">Início</a></li>
             <li><a href="./quem-somos/index.html">Quem Somos</a></li>
@@ -52,5 +54,6 @@
     
     <!-- Placeholder para o footer -->
     <div id="footer-placeholder"></div>
+    <script src="plugins/simple-anime.js"></script>
 </body>
 </html>

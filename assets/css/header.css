@@ -21,93 +21,31 @@ header h2 {
     font-size: clamp(1.2rem, 3.5vw, 1.5rem); /* Responsivo: 24px no máximo */
     color: #b0b0b0; /* Cor cinza clara */
     margin-bottom: 20px;
+    font-family: var(--font-family-alt); /* Fonte alternativa para subtítulos */    
 }
 
 /* =====================================
    Navegação
 ===================================== */
-nav {
-    width: 100%;
-    max-width: 900px;
-    margin: auto;
-    padding: 10px;
+nav{
+    display: flex;
+    justify-content: center;
+    padding: 10px 0px;
+}
+nav ul{
+    display: flex;
+    gap: 25px;
+    list-style-type: none;
+    font-size: 1.127rem;
+    position: relative;
 }
 
-nav ul {
-    list-style: none; /* Remove os marcadores padrão */
-    display: flex; /* Exibe os itens horizontalmente */
-    justify-content: center; /* Centraliza os itens */
-    gap: 30px; /* Espaçamento entre os itens */
-    flex-wrap: wrap; /* Permite quebra em múltiplas linhas em telas menores */
-}
-
-nav ul li {
-    font-size: 1.125rem; /* 18px */
-}
-
-nav ul li a {
-    color: var(--primary-color); /* Usa a variável de cor primária */
-    text-decoration: none; /* Remove sublinhado */
-    transition: color 0.3s; /* Animação suave */
-}
-
-nav ul li a:hover,
-nav ul li a:focus {
-    color: var(--primary-hover); /* Cor ao passar o mouse ou focar */
-}
-
-nav ul li a:focus {
-    outline: 2px dashed var(--primary-color); /* Indica foco para acessibilidade */
-    outline-offset: 4px;
-}
-
-/* =====================================
-   Link Específico: Início
-===================================== */
-nav ul li a.inicio {
-    background-color: var(--primary-color);
-    color: #000; /* Texto preto */
-    padding: 8px 15px; /* Aumenta o tamanho com mais espaçamento */
-    border-radius: 5px; /* Bordas arredondadas */
-    font-weight: bold; /* Destaque no texto */
-    font-size: 1.125rem; /* Aumenta a fonte para 18px */
-    transition: background-color 0.3s, color 0.3s; /* Transição suave */
-}
-
-nav ul li a.inicio:hover,
-nav ul li a.inicio:focus {
-    background-color: var(--primary-hover); /* Fundo em verde mais claro */
-    color: #333; /* Texto escurecido */
-}
-
-/* =====================================
-   Estilo para Links Ativos no Menu
-===================================== */
-nav ul li a[aria-current="page"] {
-    font-weight: bold; /* Destaca visualmente o texto */
-    color: var(--primary-color); /* Cor diferenciada */
-    text-decoration: underline; /* Ou outra indicação visual */
-}
-
-nav ul li a[aria-current="page"]:hover,
-nav ul li a[aria-current="page"]:focus {
-    text-decoration: none; /* Remova o underline no hover/focus se preferir */
-}
-
-/* =====================================
-   Link Específico: Início (Ativo)
-===================================== */
-nav ul li a.inicio[aria-current="page"] {
-    background-color: var(--primary-hover); /* Fundo mais claro */
-    color: #000; /* Texto preto */
-    font-weight: bold; /* Mantém o destaque */
-    text-decoration: none; /* Remove sublinhado */
-    border: 2px solid var(--primary-color); /* Adiciona borda */
-    transition: background-color 0.3s, border-color 0.3s;
-}
-
-nav ul li a.inicio[aria-current="page"]:hover,
-nav ul li a.inicio[aria-current="page"]:focus {
-    background-color: var(--primary-color); /* Fundo volta ao verde principal */
-    color: #333; /* Texto levemente mais escuro */
+@media (max-width: 690px) {
+    nav{
+        justify-content: start;
+        padding: 0px 12px;
+        flex-direction: column;
+        
+    }
+    
 }

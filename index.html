@@ -9,9 +9,14 @@
 	  gtag('js', new Date());
 
 	  gtag('config', 'G-H3WXX5RDYY');
+      document.documentElement.classList.add('js')
 	</script>
     <meta charset="UTF-8">
     <title>Gelocci - Página Inicial</title>
+    <link rel="stylesheet" href="assets/css/animate.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./assets/css/globals.css">
     <link rel="stylesheet" href="./assets/css/header.css">
     <link rel="stylesheet" href="./assets/css/main.css">
@@ -37,12 +42,12 @@
 </head>
 <body>
     <header>
-        <h1>Ferramentas Financeiras</h1>
-        <h2>gelocci.com.br</h2>
+        <h1 class="fadeInDown" data-anime="200">Ferramentas Financeiras<span style="color:#4CAF50;">.</span></h1>
+        <h2 class="fadeInUp" data-anime="200">gelocci.com.br</h2>
     </header>
-    <nav>
+    <nav class="navegacao" data-anime="400">
         <ul>
-            <li><a href="./index.html" aria-current="page" class="inicio">Início</a></li>
+            <li><a href="./index.html" aria-current="page" class="inicio active">Início</a></li>
             <li><a href="./quem-somos/index.html">Quem Somos</a></li>
             <li><a href="./politica-de-privacidade/index.html">Política de Privacidade</a></li>
             <li><a href="./termos-de-uso/index.html">Termos de Uso</a></li>
@@ -50,27 +55,27 @@
         </ul>
     </nav>
     <main>
-        <h2 class="titulo-principal">Finanças em Foco</h2>
-        <p class="frase-destaque">Recursos e calculadoras para você dominar suas finanças.</p>
+        <h2 class="titulo-principal fadeIn" data-anime="450">Finanças em Foco</h2>
+        <p class="frase-destaque" data-anime="500"><i>Recursos e calculadoras para você dominar suas finanças.</i></p>
 
         <!-- Cards das ferramentas -->
         <section class="ferramentas">
             <!-- Card de Juros Compostos -->
-            <a href="./calculadoras/juros-compostos/index.html" class="ferramenta" aria-label="Ferramenta de Juros Compostos">
+            <a href="./calculadoras/juros-compostos/index.html" class="ferramenta fadeInLeft" data-anime="200" aria-label="Ferramenta de Juros Compostos">
                 <i class="fa-solid fa-coins"></i>
                 <h3>Juros Compostos</h3>
                 <p>Calcule o crescimento do seu investimento ao longo do tempo.</p>
                 <button>Acesse Agora</button>
             </a>
             <!-- Card de Opções de Derivativos -->
-            <a href="./calculadoras/derivativos/index.html" class="ferramenta" aria-label="Ferramenta de Opções de Derivativos">
+            <a href="./calculadoras/derivativos/index.html" class="ferramenta" data-anime="200" aria-label="Ferramenta de Opções de Derivativos">
                 <i class="fa-solid fa-chart-line"></i>
                 <h3>Opções de Derivativos</h3>
                 <p>Saiba o preço de suas opções com o modelo Black-Scholes.</p>
                 <button>Acesse Agora</button>
             </a>
             <!-- Novo Card de Equivalência de Taxas -->
-            <a href="./calculadoras/equivalencia-de-taxas/index.html" class="ferramenta" aria-label="Ferramenta de Equivalência de Taxas">
+            <a href="./calculadoras/equivalencia-de-taxas/index.html" class="ferramenta fadeInRight" data-anime="200" aria-label="Ferramenta de Equivalência de Taxas">
                 <i class="fa-solid fa-exchange-alt"></i>
                 <h3>Equivalência de Taxas</h3>
                 <p>Converta taxas de juros entre diferentes períodos.</p>
@@ -80,5 +85,6 @@
     </main>
     <!-- Placeholder para o footer -->
     <div id="footer-placeholder"></div>
+    <script src="plugins/simple-anime.js"></script>
 </body>
 </html>

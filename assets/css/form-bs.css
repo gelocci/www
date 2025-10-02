@@ -60,6 +60,16 @@ input[type="date"] {
     text-align: left;
 }
 
+input[type="text"]:focus,
+input[type="date"]:focus,
+input[type="number"]:focus,
+select:focus {
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 0 5px var(--primary-color);
+    outline: none;
+
+} 
+
 /* Estilizando o seletor de data (calendário) para garantir que o usuário veja a interação */
 input[type="date"]::-webkit-calendar-picker-indicator {
     background-color: #4CAF50; /* Cor de fundo do ícone de calendário */
