@@ -1,13 +1,16 @@
 /* =====================================
    Calculadora - Ajustes
 ===================================== */
-
+ main{
+    display: flex;
+    justify-content: center;
+} 
 .calculator {
     background-color: var(--secondary-bg);
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 600px;
+   
     max-width: 1200px; /* Diminuímos a largura para compactar um pouco mais */
     margin: 20px auto;
 }
@@ -93,6 +96,7 @@ section .form-container{
     border-radius: 4px;
     height: 340.78px;
     align-content: center;
+    height: 300px;
     
     
 }
@@ -135,3 +139,4 @@ section canvas{
     height: 400px !important;
     grid-column: 1/-1;
 }
+

@@ -112,7 +112,7 @@
 }
 
 /* Telas maiores que 1200px (Grandes Monitores) */
-@media (min-width: 1200px) {
+/*@media (min-width: 1200px) {*/
     /* Header */
     header {
         max-width: 1100px; /* Aumenta a largura máxima */
@@ -134,7 +134,7 @@
         padding: 30px; /* Mais espaço interno para cards */
       
     }
-}
+
 
 /* ===========================
    Responsividade
@@ -150,5 +150,15 @@
 
     .converter button {
         font-size: 1.5rem; /* Aumenta o tamanho do botão em telas menores */
+    }
+}
+
+@media (max-width:950px){
+    section .form-container{
+        display: block;
+    }
+
+    section canvas{
+        object-fit: contain;
     }
 }
