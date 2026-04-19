@@ -124,6 +124,9 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:1.4rem
 .tool-card p{color:var(--muted-1);font-size:0.85rem;line-height:1.6;font-weight:300;}
 .tool-card-arrow{margin-top:1.2rem;color:var(--green);font-size:0.8rem;opacity:0;transition:opacity 0.3s;}
 .tool-card:hover .tool-card-arrow{opacity:1;}
+.glossary-hint{margin-top:1.5rem;text-align:center;font-size:0.82rem;color:var(--muted-2);}
+.glossary-hint a{color:var(--green);text-decoration:none;transition:opacity 0.2s;}
+.glossary-hint a:hover{opacity:0.8;}
 
 .trust-section{padding:6rem 2.5rem;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;}
 .trust-left p{color:var(--muted-1);font-size:0.95rem;line-height:1.8;font-weight:300;margin-bottom:2rem;}
@@ -186,6 +189,7 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
   <a href="/" class="logo">Gelocci<div class="logo-dot"></div></a>
   <ul class="nav-links">
     <li><a href="#ferramentas">Ferramentas</a></li>
+    <li><a href="/glossario/">Glossário</a></li>
     <li><a href="/quem-somos/">Sobre</a></li>
     <li><a href="/contato/">Contato</a></li>
   </ul>
@@ -196,6 +200,7 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
 
 <div class="nav-mobile-menu" id="mobileMenu">
   <a href="#ferramentas" onclick="closeMobileMenu()">Ferramentas</a>
+  <a href="/glossario/" onclick="closeMobileMenu()">Glossário</a>
   <a href="/quem-somos/" onclick="closeMobileMenu()">Sobre</a>
   <a href="/contato/" onclick="closeMobileMenu()">Contato</a>
 </div>
@@ -288,6 +293,9 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
       <div class="tool-card-arrow">Acessar →</div>
     </a>
   </div>
+  <div class="glossary-hint">
+    Não conhece algum termo? Consulte nosso <a href="/glossario/">Glossário Financeiro →</a>
+  </div>
 </section>
 
 <section class="trust-section">
@@ -328,6 +336,7 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
     <a href="/quem-somos/">Quem Somos</a>
     <a href="/politica-de-privacidade/">Privacidade</a>
     <a href="/termos-de-uso/">Termos</a>
+    <a href="/glossario/">Glossário</a>
     <a href="/contato/">Contato</a>
   </div>
   <div class="footer-copy">© 2026 gelocci.com.br</div>
