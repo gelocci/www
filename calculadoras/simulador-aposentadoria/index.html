@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-H3WXX5RDYY"></script>
@@ -107,22 +107,7 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
 </head>
 <body>
 
-<nav>
-  <a href="/" class="logo">Gelocci<div class="logo-dot"></div></a>
-  <ul class="nav-links">
-    <li><a href="/#ferramentas">Ferramentas</a></li>
-    <li><a href="/quem-somos/">Sobre</a></li>
-    <li><a href="/contato/">Contato</a></li>
-  </ul>
-  <a href="/" class="nav-back">← Voltar</a>
-  <button class="nav-hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
-</nav>
-
-<div class="nav-mobile-menu" id="mobileMenu">
-  <a href="/#ferramentas" onclick="closeMobileMenu()">Ferramentas</a>
-  <a href="/quem-somos/" onclick="closeMobileMenu()">Sobre</a>
-  <a href="/contato/" onclick="closeMobileMenu()">Contato</a>
-</div>
+<div id="site-header"></div>
 
 <div class="page-header">
   <div class="page-eyebrow"><div class="eyebrow-line"></div>Calculadora</div>
@@ -266,22 +251,9 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
   </div>
 </div>
 
-<footer>
-  <a href="/" class="logo" style="font-size:1.2rem;">Gelocci<div class="logo-dot" style="width:5px;height:5px;"></div></a>
-  <div class="footer-links">
-    <a href="/quem-somos/">Quem Somos</a>
-    <a href="/politica-de-privacidade/">Privacidade</a>
-    <a href="/termos-de-uso/">Termos</a>
-    <a href="/contato/">Contato</a>
-  </div>
-  <div class="footer-copy">© 2026 gelocci.com.br</div>
-</footer>
+<div id="site-footer"></div>
 
 <script>
-  const hamburger=document.getElementById('hamburger');
-  const mobileMenu=document.getElementById('mobileMenu');
-  hamburger.addEventListener('click',()=>{hamburger.classList.toggle('open');mobileMenu.classList.toggle('open');});
-  function closeMobileMenu(){hamburger.classList.remove('open');mobileMenu.classList.remove('open');}
 
   $(document).ready(function(){
     $('#desiredIncome').mask('000.000.000,00',{reverse:true});
@@ -449,5 +421,6 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
   }
 </script>
 
+<script src="/assets/js/components.js"></script>
 </body>
 </html>
