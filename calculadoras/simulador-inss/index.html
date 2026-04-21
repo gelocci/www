@@ -579,6 +579,30 @@ footer {
   .form-grid-3 { grid-template-columns:1fr; }
   .extrato-stats { gap:1rem; }
 }
+
+.regra-card-back {
+  background:var(--bg-card); border:1px solid var(--muted-3);
+  border-radius:var(--radius-lg); overflow:hidden; cursor:pointer;
+  transition:background 0.2s;
+}
+.regra-card-back:hover { background:var(--bg-hover); }
+.regra-card-back.melhor { border-color:var(--green-border); }
+.regra-back-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:1rem 1.25rem; gap:1rem; flex-wrap:wrap;
+}
+.regra-back-nome {
+  font-size:0.9rem; font-weight:600;
+  color:var(--white); flex-shrink:0;
+  display:block !important; visibility:visible !important;
+}
+.regra-back-rmi { font-family:var(--font-display); font-size:1rem; font-weight:700; color:var(--white); }
+.regra-back-detalhe { padding:0 1.25rem 1rem; border-top:1px solid var(--muted-3); margin-top:0.5rem; }
+
+
+.regra-back-status { font-size:0.8rem; font-weight:600; white-space:nowrap; }
+.regra-back-status.elegivel { color:var(--green); }
+.regra-back-status.nao-elegivel { color:var(--danger); }
 </style>
 </head>
 <body>
@@ -808,14 +832,17 @@ footer {
         </div>
       </div>
 
-      <div id="extrasLista"></div>
-
-      <div class="extras-actions">
+      <!-- Botão calcular ACIMA da lista — sempre visível -->
+      <div class="extras-actions" style="margin-bottom:1rem;">
         <button class="btn-primary" onclick="calcularResultados()">
           📊 Calcular Aposentadoria
         </button>
         <button class="btn-ghost" onclick="voltarParaCnis()">← Carregar outro CNIS</button>
       </div>
+
+      <div id="extrasLista" style="max-height:420px;overflow-y:auto;padding-right:4px;"></div>
+
+
     </div>
   </div>
 
@@ -833,6 +860,25 @@ footer {
     <div id="blocoComparativo" class="hidden">
       <div class="comparativo-grid" id="comparativoGrid"></div>
     </div>
+
+    <!-- Melhor Opção -->
+    <div id="blocoMelhorOpcao" class="hidden" style="margin-bottom:1.5rem;">
+      <div style="background:linear-gradient(135deg,#0E1F15,#0A1A11);border:1px solid var(--green-border);border-radius:var(--radius-xl);padding:2rem;">
+        <div style="font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:0.5rem;">📅 Aposentadoria mais próxima identificada</div>
+        <div id="melhorOpcaoNome" style="font-family:var(--font-display);font-size:1.4rem;font-weight:700;margin-bottom:0.25rem;"></div>
+        <div id="melhorOpcaoFalta" style="font-size:0.9rem;color:var(--muted-1);margin-bottom:1rem;"></div>
+        <div style="display:flex;align-items:baseline;gap:0.5rem;">
+          <div id="melhorOpcaoRMI" style="font-family:var(--font-display);font-size:2rem;font-weight:700;color:var(--green);"></div>
+          <div id="melhorOpcaoRMISub" style="font-size:0.8rem;color:var(--muted-2);"></div>
+        </div>
+        <div style="margin-top:1rem;padding:0.75rem;background:rgba(255,179,0,0.08);border:1px solid rgba(255,179,0,0.2);border-radius:var(--radius-md);font-size:0.78rem;color:var(--warning);">
+          ⚠ Esta é uma simulação baseada nos dados do seu CNIS. Os valores são estimativas e não garantem direito ao benefício. Consulte sempre o <strong>Meu INSS</strong> ou um especialista previdenciário. A regra destacada acima é a que permite aposentadoria em <strong>menor tempo</strong> — não necessariamente a de maior benefício. A regra destacada acima é a que permite aposentadoria em <strong>menor tempo</strong> — não necessariamente a de maior benefício.
+        </div>
+      </div>
+    </div>
+
+    <!-- Regras do back (expansíveis) -->
+    <div id="regrasGridBack" style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1.5rem;"></div>
 
     <!-- Cards por regra -->
     <div class="regras-grid" id="regrasGrid"></div>
@@ -853,7 +899,7 @@ footer {
      ============================================================ -->
 <script>
 // ─── CONFIG ───────────────────────────────────────────────────
-const BACKEND_URL = 'https://inss-api.gelocci.com.br';
+const BACKEND_URL = 'http://localhost:8080'; // DEV
 const LINHAS_POR_PAGINA = 10;
 
 // ─── STATE ────────────────────────────────────────────────────
@@ -1076,6 +1122,68 @@ function confirmarLote() {
   if (somadas > 0) msg.push(`⊕ ${somadas} competência${somadas>1?'s':''} somada${somadas>1?'s':''} a existentes`);
   if (bloqueadas > 0) msg.push(`⚠ ${bloqueadas} competência${bloqueadas>1?'s':''} ignorada${bloqueadas>1?'s':''} (já existe no CNIS)`);
   alert(msg.join('\n'));
+}
+
+
+// ─── HELPERS REGRAS BACK ─────────────────────────────────
+function formatarNomeRegra(nome) {
+  const nomes = {
+    'Regra Geral Pos-2019': 'Regra Geral Pós-2019',
+    'Aposentadoria por Idade': 'Aposentadoria por Idade',
+    'Transicao - Pontos (Art. 15)': 'Transição — Pontos',
+    'Transicao - Idade Progressiva (Art. 16)': 'Transição — Idade Progressiva',
+    'Transicao - Aposentadoria por Idade (Art. 18)': 'Transição — Por Idade',
+    'Transicao - Pedagio 100% (Art. 20)': 'Transição — Pedágio 100%',
+    'Transicao - Pedagio 50% (Art. 17)': 'Transição — Pedágio 50%',
+  };
+  // Tenta match parcial
+  for (const [key, val] of Object.entries(nomes)) {
+    if (nome && nome.includes(key.split(' ')[0]) && nome.includes(key.split(' ')[2] || '')) return val;
+    if (nome === key) return val;
+  }
+  // Fallback: limpa encoding
+  return nome ? nome.replace('PÃ³s', 'Pós').replace('Ã§Ã£o', 'ção') : nome;
+}
+
+function mesesParaTextoSimples(m) {
+  if (m <= 0) return 'Elegível agora!';
+  m = Math.round(m);
+  const a = Math.floor(m/12), ms = m%12;
+  let s = '';
+  if (a > 0) s += a + ' ano' + (a>1?'s':'');
+  if (a > 0 && ms > 0) s += ' e ';
+  if (ms > 0) s += ms + (ms > 1 ? ' meses' : ' mês');
+  return s;
+}
+
+function renderDetalheRegra(r) {
+  const e = r.elegibilidade || {};
+  const rmi = r.rmi || {};
+  const linhas = [];
+
+  if (e.contribMinimaMeses) linhas.push(['Contribuição mínima', Math.round(e.contribMinimaMeses/12) + ' anos', e.faltaContribMeses === 0]);
+  if (e.idadeMinima) linhas.push(['Idade mínima', e.idadeMinima + ' anos', e.faltaIdadeMeses === 0]);
+  if (e.pontuacaoNecessaria) linhas.push(['Pontuação necessária', e.pontuacaoNecessaria + ' pts', false]);
+  if (e.pontuacaoAtual) linhas.push(['Sua pontuação atual', e.pontuacaoAtual.toFixed(1) + ' pts', false]);
+  if (e.pedagogioMeses) linhas.push(['Pedágio', mesesParaTextoSimples(e.pedagogioMeses), false]);
+  if (rmi.percentual) linhas.push(['Alíquota', rmi.percentual + '% da média', true]);
+  if (rmi.rmi) linhas.push(['RMI estimado', fmtBRL(rmi.rmi), true]);
+  if (rmi.obs) linhas.push(['Obs', rmi.obs, true]);
+
+  return linhas.map(([k, v, ok]) => `
+    <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid var(--muted-4);font-size:0.82rem;">
+      <span style="color:var(--muted-2);">${k}</span>
+      <span style="color:${ok ? 'var(--green)' : 'var(--white)'};">${v}</span>
+    </div>`).join('');
+}
+
+function toggleRegraDetalhe(el) {
+  const detalhe = el.querySelector('.regra-back-detalhe');
+  const arrow = el.querySelector('.regra-back-arrow');
+  if (detalhe) {
+    detalhe.classList.toggle('hidden');
+    if (arrow) arrow.textContent = detalhe.classList.contains('hidden') ? '▼' : '▲';
+  }
 }
 
 // ─── HELPERS ──────────────────────────────────────────────────
@@ -1469,7 +1577,19 @@ async function calcularResultados() {
       dadosSemExtras = await respSem.json();
     }
 
-    exibirResultados(dadosComExtras, dadosSemExtras);
+    // Chama calcular-beneficio com todos os lançamentos
+    const respBeneficio = await fetch(
+      BACKEND_URL + '/api/cnis/calcular-beneficio?sexo=' + state.segurado.sexo +
+      '&dataNascimento=' + state.segurado.dataNascimento,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      }
+    );
+    const dadosBeneficio = respBeneficio.ok ? await respBeneficio.json() : null;
+
+    exibirResultados(dadosComExtras, dadosSemExtras, dadosBeneficio);
 
     document.getElementById('bloco-extrato').classList.add('hidden');
     document.getElementById('bloco-resultados').classList.remove('hidden');
@@ -1578,7 +1698,7 @@ function calcularMetricas(registros, segurado) {
 }
 
 // ─── EXIBIR RESULTADOS ────────────────────────────────────────
-function exibirResultados(dadosComExtras, dadosSemExtras) {
+function exibirResultados(dadosComExtras, dadosSemExtras, dadosBeneficio) {
   const metricas = calcularMetricas(dadosComExtras, state.segurado);
   const temExtras = dadosSemExtras !== null;
 
@@ -1633,6 +1753,69 @@ function exibirResultados(dadosComExtras, dadosSemExtras) {
     `;
   } else {
     blocoComp.classList.add('hidden');
+  }
+
+  // ── Melhor Opção (do back) ────────────────────────────────
+  const blocoMelhor = document.getElementById('blocoMelhorOpcao');
+  if (dadosBeneficio && dadosBeneficio.regras) {
+    blocoMelhor.classList.remove('hidden');
+    const regrasElegiveis = dadosBeneficio.regras.filter(r =>
+      r.elegibilidade && r.elegibilidade.elegivel === true
+    );
+    const todasRegras = dadosBeneficio.regras.filter(r =>
+      r.rmi && r.rmi.rmi > 0 && r.elegibilidade && r.elegibilidade.faltaTotalMeses !== undefined
+    );
+    // Ordena por menor tempo de espera
+    todasRegras.sort((a, b) =>
+      (a.elegibilidade.faltaTotalMeses || 0) - (b.elegibilidade.faltaTotalMeses || 0)
+    );
+    const melhor = todasRegras[0];
+
+    if (melhor) {
+      const faltaMeses = melhor.elegibilidade.faltaTotalMeses || 0;
+      const faltaTexto = faltaMeses > 0 ? mesesParaTextoSimples(faltaMeses) : 'Elegível agora!';
+      const rmi = melhor.rmi.rmi || 0;
+      const elegivel = faltaMeses === 0;
+
+      document.getElementById('melhorOpcaoNome').textContent = formatarNomeRegra(melhor.regra);
+      document.getElementById('melhorOpcaoFalta').textContent = elegivel ? '✓ Elegível agora!' : 'Falta ' + faltaTexto + ' (com contribuição contínua)';
+      document.getElementById('melhorOpcaoRMI').textContent = fmtBRL(rmi);
+      document.getElementById('melhorOpcaoRMISub').textContent = `${melhor.rmi.percentual || 0}% da média salarial corrigida`;
+    }
+
+    // Renderiza cards de todas as regras do back
+    const gridBack = document.getElementById('regrasGridBack');
+    gridBack.innerHTML = todasRegras.map(r => {
+      const falta = r.elegibilidade.faltaTotalMeses || 0;
+      const elegivel = falta === 0;
+      const rmiVal = r.rmi.rmi || 0;
+      const faltaTexto = falta > 0 ? mesesParaTextoSimples(falta) : 'Elegível agora!';
+      const isMelhor = r === melhor;
+
+      return `
+        <div class="regra-card-back ${isMelhor ? 'melhor' : ''}" onclick="toggleRegraDetalhe(this)">
+          <div class="regra-back-header">
+            <div class="regra-back-esquerda">
+              ${isMelhor ? '<span class="badge-melhor">MELHOR</span>' : ''}
+              <span class="regra-back-nome">${formatarNomeRegra(r.regra)}</span>
+            </div>
+            <div class="regra-back-direita">
+              <span class="regra-back-status ${elegivel ? 'elegivel' : 'nao-elegivel'}">
+                ${elegivel ? '✓ Elegível' : '✗ Não elegível'}
+              </span>
+              ${!elegivel ? `<span class="regra-back-tempo">${faltaTexto}</span>` : ''}
+              <span class="regra-back-rmi">${fmtBRL(rmiVal)}</span>
+              <span class="regra-back-arrow">▼</span>
+            </div>
+          </div>
+          <div class="regra-back-detalhe hidden">
+            <div style="font-size:0.8rem;color:var(--muted-2);margin-bottom:0.75rem;">${r.descricao}</div>
+            ${renderDetalheRegra(r)}
+          </div>
+        </div>`;
+    }).join('');
+  } else {
+    blocoMelhor.classList.add('hidden');
   }
 
   // ── Cards por Regra ───────────────────────────────────────
