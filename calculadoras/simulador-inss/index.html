@@ -852,7 +852,7 @@ footer {
      ============================================================ -->
 <script>
 // ─── CONFIG ───────────────────────────────────────────────────
-const BACKEND_URL = 'http://localhost:8080'; // DEV
+const BACKEND_URL = 'https://inss-api.gelocci.com.br';
 const LINHAS_POR_PAGINA = 10;
 
 // ─── STATE ────────────────────────────────────────────────────
@@ -864,17 +864,7 @@ let state = {
   idxExtraContador: 0,
 };
 
-// ─── NAV ──────────────────────────────────────────────────────
-const hamburger = document.getElementById('hamburger');
-const mobileMenu = document.getElementById('mobileMenu');
-hamburger.addEventListener('click', () => {
-  hamburger.classList.toggle('open');
-  mobileMenu.classList.toggle('open');
-});
-function closeMobileMenu() {
-  hamburger.classList.remove('open');
-  mobileMenu.classList.remove('open');
-}
+// ─── NAV (gerenciado pelo components.js) ───────────────────
 
 // ─── STEPPER ──────────────────────────────────────────────────
 function setStep(n) {
