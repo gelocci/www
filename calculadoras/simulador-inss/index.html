@@ -372,8 +372,9 @@ select.input option { background:var(--bg-card); color:var(--white); }
 .table-wrap {
   background:var(--bg-card); border:1px solid var(--muted-3);
   border-radius:var(--radius-xl); overflow:hidden;
+  overflow-x:auto; -webkit-overflow-scrolling:touch;
 }
-table { width:100%; border-collapse:collapse; }
+table { width:100%; border-collapse:collapse; min-width:600px; }
 thead th {
   background:var(--bg-2); padding:0.85rem 1rem;
   font-size:0.7rem; letter-spacing:1.5px; text-transform:uppercase;
@@ -921,14 +922,44 @@ function getTetoAtual() {
 }
 
 // ─── MODAL LOTE ──────────────────────────────────────────────
+
+// ─── HELPER: última competência global (originais + extras) ──
+function ultimaCompetenciaGlobal() {
+  const todos = [
+    ...state.registrosOriginais,
+    ...state.extras.filter(e => e.confirmado).map(e => ({ competencia: e.competencia, somaRemuneracoes: parseFloat(e.remuneracao) }))
+  ].filter(r => r.competencia && /^\d{2}\/\d{4}$/.test(r.competencia));
+  if (!todos.length) return null;
+  return todos.sort((a, b) => {
+    const [ma, aa] = a.competencia.split('/').map(Number);
+    const [mb, ab] = b.competencia.split('/').map(Number);
+    return (ab - aa) || (mb - ma);
+  })[0];
+}
+
+// ─── HELPER: máscara de competência mm/aaaa ───────────────────
+function aplicarMascaraCompetencia(input) {
+  input.addEventListener('input', function() {
+    let v = this.value.replace(/\D/g, '');
+    if (v.length > 6) v = v.slice(0, 6);
+    if (v.length > 2) v = v.slice(0, 2) + '/' + v.slice(2);
+    this.value = v;
+    if (typeof atualizarInfoLote === 'function') atualizarInfoLote();
+  });
+}
+
 function abrirModalLote() {
-  const ultimo = ultimaCompetencia(state.registrosOriginais) ||
-                 ultimaCompetencia(state.extras.filter(e=>e.confirmado));
-  if (ultimo) {
-    document.getElementById('loteCompIni').value = proximaCompetencia(ultimo.competencia);
-    document.getElementById('loteRem').value = ultimo.somaRemuneracoes || '';
-  }
+  const ultimo = ultimaCompetenciaGlobal();
+  document.getElementById('loteCompIni').value = ultimo ? proximaCompetencia(ultimo.competencia) : '';
+  document.getElementById('loteCompFim').value = '';
+  document.getElementById('loteRem').value = ultimo ? (ultimo.somaRemuneracoes || '') : '';
+  document.getElementById('loteInfo').textContent = '';
   document.getElementById('modalLote').style.display = 'flex';
+
+  // Aplica máscara nos campos de competência
+  aplicarMascaraCompetencia(document.getElementById('loteCompIni'));
+  aplicarMascaraCompetencia(document.getElementById('loteCompFim'));
+
   atualizarInfoLote();
 }
 
@@ -968,6 +999,48 @@ function gerarCompetencias(ini, fim) {
   return comps;
 }
 
+
+// ─── VALIDAÇÃO DE COMPETÊNCIAS DUPLICADAS ────────────────────
+function competenciaExisteNoCnis(comp) {
+  return state.registrosOriginais.some(r => r.competencia === comp);
+}
+
+function competenciaExisteNosExtras(comp) {
+  return state.extras.filter(e => e.confirmado && e.competencia === comp);
+}
+
+function adicionarOuSomarExtra(comp, rem, emp, teto, valorUtilizado, valorCorrigido) {
+  // Bloqueia se existe no CNIS
+  if (competenciaExisteNoCnis(comp)) return 'cnis';
+
+  // Soma se já existe nos extras
+  const existentes = competenciaExisteNosExtras(comp);
+  if (existentes.length > 0) {
+    const idx = state.extras.findIndex(e => e.confirmado && e.competencia === comp);
+    const novaRem = parseFloat(state.extras[idx].remuneracao) + rem;
+    const novoValorUtilizado = Math.min(novaRem, teto);
+    state.extras[idx].remuneracao = novaRem;
+    state.extras[idx].valorAntesCorrecao = novoValorUtilizado;
+    state.extras[idx].valorCorrigido = novoValorUtilizado;
+    state.extras[idx].multiplas = true;
+    return 'somado';
+  }
+
+  // Adiciona novo
+  state.extras.push({
+    id: ++state.idxExtraContador,
+    competencia: comp,
+    remuneracao: rem,
+    empregador: emp,
+    confirmado: true,
+    teto: teto,
+    valorAntesCorrecao: valorUtilizado,
+    valorCorrigido: valorCorrigido,
+    multiplas: false,
+  });
+  return 'novo';
+}
+
 function confirmarLote() {
   const ini = document.getElementById('loteCompIni').value;
   const fim = document.getElementById('loteCompFim').value;
@@ -987,23 +1060,22 @@ function confirmarLote() {
   // Fator = 1 para contribuições futuras (ainda não há correção)
   const valorCorrigido = valorUtilizado;
 
+  let adicionadas = 0, somadas = 0, bloqueadas = 0;
   comps.forEach(comp => {
-    state.extras.push({
-      id: ++state.idxExtraContador,
-      competencia: comp,
-      remuneracao: rem,
-      empregador: emp,
-      confirmado: true,
-      // Campos já calculados para exibição na tabela
-      teto: teto,
-      valorAntesCorrecao: valorUtilizado,
-      valorCorrigido: valorCorrigido,
-    });
+    const resultado = adicionarOuSomarExtra(comp, rem, emp, teto, valorUtilizado, valorCorrigido);
+    if (resultado === 'novo') adicionadas++;
+    else if (resultado === 'somado') somadas++;
+    else if (resultado === 'cnis') bloqueadas++;
   });
 
   fecharModalLote();
   mostrarExtrato();
-  alert(`✓ ${comps.length} competências adicionadas! Teto utilizado: R$ ${teto.toLocaleString('pt-BR', {minimumFractionDigits:2})}`);
+
+  let msg = [];
+  if (adicionadas > 0) msg.push(`✓ ${adicionadas} competência${adicionadas>1?'s':''} adicionada${adicionadas>1?'s':''}`);
+  if (somadas > 0) msg.push(`⊕ ${somadas} competência${somadas>1?'s':''} somada${somadas>1?'s':''} a existentes`);
+  if (bloqueadas > 0) msg.push(`⚠ ${bloqueadas} competência${bloqueadas>1?'s':''} ignorada${bloqueadas>1?'s':''} (já existe no CNIS)`);
+  alert(msg.join('\n'));
 }
 
 // ─── HELPERS ──────────────────────────────────────────────────
@@ -1138,6 +1210,7 @@ function todosRegistros() {
       valorCorrigido: e.valorCorrigido || Math.min(parseFloat(e.remuneracao), getTetoAtual()),
       nomeEmpregador: e.empregador || '',
       _extra: true,
+      _multiplas: e.multiplas || false,
     }))
   ].sort((a,b) => {
     const [ma,aa] = a.competencia.split('/').map(Number);
@@ -1232,8 +1305,7 @@ function renderTabela(todos) {
 
 // ─── EXTRAS ──────────────────────────────────────────────────
 function adicionarExtra() {
-  const ultimo = ultimaCompetencia(state.registrosOriginais) ||
-                 ultimaCompetencia(state.extras.filter(e=>e.confirmado));
+  const ultimo = ultimaCompetenciaGlobal();
   const proxComp = ultimo ? proximaCompetencia(ultimo.competencia) : '';
   const proxRem  = ultimo ? (ultimo.somaRemuneracoes || '') : '';
 
@@ -1262,7 +1334,25 @@ function confirmarExtra(id) {
     alert('Informe uma remuneração válida.'); return;
   }
 
-  state.extras[idx] = { ...state.extras[idx], competencia:comp, remuneracao:rem, empregador:emp, confirmado:true };
+  // Verifica se a competência já existe no CNIS
+  if (competenciaExisteNoCnis(comp)) {
+    alert('Esta competência já existe no seu CNIS e não pode ser alterada.');
+    return;
+  }
+  // Verifica se já existe em outro extra (diferente do atual)
+  const duplicado = state.extras.find(e => e.id !== id && e.confirmado && e.competencia === comp);
+  if (duplicado) {
+    // Soma ao existente e remove o atual
+    const novaRem = parseFloat(duplicado.remuneracao) + parseFloat(rem);
+    const teto = getTetoAtual();
+    duplicado.remuneracao = novaRem;
+    duplicado.valorAntesCorrecao = Math.min(novaRem, teto);
+    duplicado.valorCorrigido = Math.min(novaRem, teto);
+    duplicado.multiplas = true;
+    state.extras = state.extras.filter(e => e.id !== id);
+  } else {
+    state.extras[idx] = { ...state.extras[idx], competencia:comp, remuneracao:rem, empregador:emp, confirmado:true };
+  }
   renderExtras();
   renderTabela(todosRegistros());
 }
