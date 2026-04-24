@@ -539,12 +539,107 @@ footer {
 .extrato-table tr.simulado td { color:rgba(201,168,76,0.85); }
 
 /* ============================================================
-   PASSO 4 — RESULTADO (placeholder)
+   PASSO 3 — RESULTADO
    ============================================================ */
-.resultado-placeholder {
-  text-align:center; padding:4rem 2rem;
+.resultado-header { margin-bottom:1.5rem; }
+.resultado-nome {
+  font-family:var(--font-display); font-size:1.3rem;
+  font-weight:700; color:var(--white); margin-bottom:1rem;
 }
-.resultado-placeholder p { color:var(--muted-2); font-size:0.9rem; margin-top:0.5rem; }
+.resultado-metrics {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:8px;
+}
+.res-metric {
+  background:var(--bg-2); border:0.5px solid var(--muted-3);
+  border-radius:var(--radius-md); padding:10px 12px;
+}
+.res-metric-label {
+  font-size:10px; text-transform:uppercase; letter-spacing:0.8px;
+  color:var(--muted-2); margin-bottom:4px;
+}
+.res-metric-val {
+  font-size:1.1rem; font-weight:500; color:var(--white);
+}
+.res-metric-val.green { color:var(--green); }
+
+/* Seções de regras */
+.regras-secao { margin-bottom:1.25rem; }
+.regras-secao-label {
+  font-size:10px; text-transform:uppercase; letter-spacing:1.5px;
+  color:var(--muted-2); font-weight:500;
+  margin-bottom:0.6rem; padding-left:2px;
+}
+
+/* Acordeon */
+.acord {
+  border:0.5px solid var(--muted-3); border-radius:var(--radius-lg);
+  overflow:hidden; margin-bottom:8px;
+}
+.acord-header {
+  display:flex; align-items:center; gap:12px;
+  padding:14px 16px; cursor:pointer;
+  background:var(--bg-card); transition:background 0.2s;
+}
+.acord-header:hover { background:var(--bg-hover); }
+.acord-status {
+  width:22px; height:22px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px; font-weight:700; flex-shrink:0;
+}
+.status-ok  { background:rgba(0,200,83,0.15); color:var(--green); border:1px solid rgba(0,200,83,0.3); }
+.status-no  { background:rgba(255,77,77,0.12); color:#FF4D4D; border:1px solid rgba(255,77,77,0.25); }
+.acord-title { flex:1; font-size:13px; font-weight:500; color:var(--white); }
+.acord-chevron { color:var(--muted-2); font-size:11px; transition:transform 0.25s; flex-shrink:0; }
+.acord.open .acord-chevron { transform:rotate(180deg); }
+.acord-body {
+  display:none; background:var(--bg-2);
+  border-top:0.5px solid var(--muted-3);
+}
+.acord.open .acord-body { display:block; }
+.acord-veredicto {
+  padding:12px 16px; font-size:12px; line-height:1.6;
+  color:var(--muted-1); border-bottom:0.5px solid var(--muted-3);
+}
+.acord-veredicto strong { color:var(--white); }
+.acord-veredicto .nao { color:#FF4D4D; font-weight:600; }
+.acord-veredicto .sim { color:var(--green); font-weight:600; }
+
+/* Requisitos */
+.req-table { width:100%; border-collapse:collapse; }
+.req-table td {
+  padding:8px 16px; font-size:12px;
+  border-bottom:0.5px solid var(--muted-4);
+}
+.req-table tr:last-child td { border-bottom:none; }
+.req-nome { color:var(--muted-2); width:35%; }
+.req-exigido { color:var(--muted-2); font-size:11px; width:30%; }
+.req-atual { font-weight:500; text-align:right; }
+.req-atual.ok { color:var(--green); }
+.req-atual.no { color:#FF4D4D; }
+.req-falta { font-size:10px; color:rgba(255,77,77,0.7); text-align:right; padding-top:0; }
+.req-obs { font-size:10px; color:var(--muted-2); padding:6px 16px 10px; font-style:italic; }
+
+/* CTA simulação */
+.sim-cta {
+  margin-top:1.25rem; border:0.5px dashed rgba(0,200,83,0.3);
+  border-radius:var(--radius-lg); padding:14px 16px;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px; background:rgba(0,200,83,0.04);
+}
+.sim-cta-text { font-size:12px; color:var(--muted-1); line-height:1.5; }
+.sim-cta-text strong { color:var(--white); display:block; margin-bottom:2px; font-size:13px; }
+
+/* Aviso */
+.aviso-resultado {
+  font-size:11px; color:var(--muted-2); text-align:center;
+  margin-top:1.25rem; line-height:1.5;
+}
+
+/* Responsive resultado */
+@media (max-width:640px) {
+  .resultado-metrics { grid-template-columns:repeat(2,1fr); }
+  .sim-cta { flex-direction:column; align-items:flex-start; }
+}
 
 /* ============================================================
    BOTÕES
@@ -673,12 +768,6 @@ footer {
     <div class="step-connector" id="conn-2"></div>
     <div class="step pending" id="step-3">
       <div class="step-dot">3</div>
-      <div class="step-label">Extrato</div>
-      <div class="step-sublabel">Revise os dados</div>
-    </div>
-    <div class="step-connector" id="conn-3"></div>
-    <div class="step pending" id="step-4">
-      <div class="step-dot">4</div>
       <div class="step-label">Resultado</div>
       <div class="step-sublabel">Regras e benefício</div>
     </div>
@@ -786,8 +875,8 @@ footer {
 
       <div class="btn-row">
         <button class="btn-secondary" onclick="irPara(1)">← Voltar</button>
-        <button class="btn-primary" id="btn-proximo-2pdf" onclick="irPara(3)" disabled>
-          Ver extrato →
+        <button class="btn-primary" id="btn-proximo-2pdf" onclick="calcularPdf()" disabled>
+          Calcular aposentadoria →
         </button>
       </div>
     </div>
@@ -887,152 +976,56 @@ footer {
   </div>
 
   <!-- ═══════════════════════════════════════════
-       PASSO 3 — Extrato
+       PASSO 3 — Resultado
   ═══════════════════════════════════════════ -->
   <div class="step-panel" id="panel-3">
     <div class="panel-card">
-      <div class="extrato-header">
-        <div class="panel-header" style="margin-bottom:0">
-          <h2>Extrato de contribuições</h2>
-          <p>Revise os dados antes de calcular.</p>
-        </div>
-        <div class="extrato-stats">
-          <div class="extrato-stat">
-            <span class="extrato-stat-val" id="stat-comp">—</span>
-            <span class="extrato-stat-label">Competências</span>
-          </div>
-          <div class="extrato-stat">
-            <span class="extrato-stat-val" id="stat-media">—</span>
-            <span class="extrato-stat-label">Média corrigida</span>
-          </div>
-          <div class="extrato-stat">
-            <span class="extrato-stat-val" id="stat-data-cnis">—</span>
-            <span class="extrato-stat-label">Data do CNIS</span>
-          </div>
-        </div>
+
+      <!-- Loading -->
+      <div id="resultado-loading" style="text-align:center;padding:3rem 1rem">
+        <div class="spinner" style="margin:0 auto 1rem"></div>
+        <p style="color:var(--muted-1)">Calculando sua aposentadoria...</p>
       </div>
 
-      <div class="extrato-table-wrap">
-        <table class="extrato-table">
-          <thead>
-            <tr>
-              <th>Competência</th>
-              <th>Remuneração</th>
-              <th>Teto</th>
-              <th>Val. utilizado</th>
-              <th>Val. corrigido</th>
-              <th>Empregador</th>
-            </tr>
-          </thead>
-          <tbody id="extrato-tbody">
-          </tbody>
-        </table>
-      </div>
+      <!-- Conteúdo do resultado (oculto até carregar) -->
+      <div id="resultado-conteudo" style="display:none">
 
-      <!-- SEÇÃO DE SIMULAÇÕES -->
-      <div class="sim-section">
-        <div class="sim-section-title">⚡ Simular contribuições futuras</div>
-
-        <!-- Ajuste de tempo — aparece quando CNIS está desatualizado -->
-        <div class="ajuste-tempo" id="ajusteTempo">
-          <div class="ajuste-tempo-info">
-            ⚠️ <span id="ajusteTempoMsg">Seu CNIS pode estar desatualizado. Informe o tempo adicional para completar até hoje.</span>
-          </div>
-          <div class="ajuste-tempo-grid">
-            <div class="form-group">
-              <label>Anos</label>
-              <input type="number" id="ajuste-anos" min="0" value="0" oninput="atualizarSimulacao()">
-            </div>
-            <div class="form-group">
-              <label>Meses</label>
-              <input type="number" id="ajuste-meses" min="0" max="11" value="0" oninput="atualizarSimulacao()">
-            </div>
-            <div class="form-group">
-              <label>Dias</label>
-              <input type="number" id="ajuste-dias" min="0" max="29" value="0" oninput="atualizarSimulacao()">
-            </div>
-          </div>
+        <!-- Métricas do segurado -->
+        <div class="resultado-header">
+          <div class="resultado-nome" id="res-nome">—</div>
+          <div class="resultado-metrics" id="res-metrics"></div>
         </div>
 
-        <!-- Modos de simulação -->
-        <div class="sim-modos">
-          <button class="sim-modo-btn active" id="modo-const"    onclick="selecionarModoSim('CONST')">Contribuição contínua</button>
-          <button class="sim-modo-btn"        id="modo-qualidade" onclick="selecionarModoSim('QUALIDADE')">Qualidade (1x/6 meses)</button>
-          <button class="sim-modo-btn"        id="modo-parar"    onclick="selecionarModoSim('PARAR')">Parar contribuições</button>
+        <!-- Seção: Regras Antigas (pré-2019) -->
+        <div class="regras-secao" id="secao-pre2019" style="display:none">
+          <div class="regras-secao-label">Regras antigas (pré-2019)</div>
+          <div id="acordeons-pre2019"></div>
         </div>
 
-        <div class="sim-modo-desc" id="simModoDesc">
-          Simula contribuições mensais com valor fixo a partir da data do CNIS.
+        <!-- Seção: Regras de Transição (pós-2019) -->
+        <div class="regras-secao" id="secao-pos2019" style="display:none">
+          <div class="regras-secao-label">Regras de transição (pós-2019)</div>
+          <div id="acordeons-pos2019"></div>
         </div>
 
-        <!-- Campos por modo -->
-        <div id="sim-campos-const" class="sim-campos">
-          <div class="form-group">
-            <label>Valor da contribuição futura (R$)</label>
-            <input type="text" id="sim-valor-const" placeholder="Ex: 8.475,55" oninput="atualizarSimulacao()">
-            <span class="form-hint">Deixe em branco para usar o último salário do CNIS</span>
+        <!-- CTA Simulação -->
+        <div class="sim-cta" id="simCta" style="display:none">
+          <div class="sim-cta-text">
+            <strong>Quer ver como ficaria se continuasse contribuindo?</strong>
+            Simule contribuições futuras e veja quando cada regra seria atingida.
           </div>
-          <div class="form-group">
-            <label>Quantidade de meses a simular</label>
-            <input type="number" id="sim-meses-const" min="1" max="600" placeholder="Ex: 36" oninput="atualizarSimulacao()">
-          </div>
+          <button class="btn-primary" onclick="abrirSimulacao()" style="white-space:nowrap;font-size:0.85rem;padding:0.6rem 1.25rem">
+            Simular →
+          </button>
         </div>
 
-        <div id="sim-campos-qualidade" class="sim-campos" style="display:none">
-          <div class="form-group">
-            <label>Valor da contribuição (R$)</label>
-            <input type="text" id="sim-valor-qualidade" placeholder="Ex: 1.518,00 (salário mínimo)" oninput="atualizarSimulacao()">
-            <span class="form-hint">Contribuição mínima a cada 6 meses para manter qualidade</span>
-          </div>
-          <div class="form-group">
-            <label>Quantidade de meses a simular</label>
-            <input type="number" id="sim-meses-qualidade" min="1" max="600" placeholder="Ex: 60" oninput="atualizarSimulacao()">
-          </div>
-        </div>
+        <!-- Aviso -->
+        <div class="aviso-resultado" id="res-aviso"></div>
 
-        <div id="sim-campos-parar" class="sim-campos single" style="display:none">
-          <div class="form-group">
-            <label>Parar contribuições agora</label>
-            <input type="text" disabled value="Sem novas contribuições a partir da data do CNIS"
-              style="opacity:0.5;cursor:not-allowed;">
-            <span class="form-hint">Calcula elegibilidade e RMI apenas com as contribuições já realizadas</span>
-          </div>
-        </div>
+      </div><!-- /resultado-conteudo -->
 
-        <!-- Resumo da simulação em tempo real -->
-        <div class="media-realtime" id="simResumo" style="margin-top:1rem">
-          <div>
-            <div class="media-realtime-label">Contribuições simuladas adicionadas</div>
-            <div style="font-size:0.72rem;color:var(--muted-2);margin-top:0.15rem" id="simResumoDetalhe">—</div>
-          </div>
-          <div class="media-realtime-value" id="simResumoVal">0 meses</div>
-        </div>
-      </div>
-
-      <div class="btn-row">
-        <button class="btn-secondary" onclick="voltarStep3()">← Voltar</button>
-        <button class="btn-primary" id="btn-calcular" onclick="calcularBeneficio()">
-          Calcular aposentadoria →
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══════════════════════════════════════════
-       PASSO 4 — Resultado (placeholder)
-  ═══════════════════════════════════════════ -->
-  <div class="step-panel" id="panel-4">
-    <div class="panel-card">
-      <div class="panel-header">
-        <h2>Resultado da simulação</h2>
-        <p>Análise completa por todas as regras de aposentadoria.</p>
-      </div>
-      <div class="resultado-placeholder" id="resultado-content">
-        <div style="font-size:2rem;margin-bottom:1rem">⏳</div>
-        <p>Calculando... aguarde.</p>
-      </div>
-      <div class="btn-row" style="margin-top:1rem">
-        <button class="btn-secondary" onclick="voltarStep3()">← Voltar ao extrato</button>
+      <div class="btn-row" style="margin-top:1.5rem">
+        <button class="btn-secondary" onclick="irPara(2)">← Voltar</button>
       </div>
     </div>
   </div>
@@ -1058,32 +1051,32 @@ const state = {
   lancamentosSimulados: [],
   ultimoSalario: 0,
   mesesDesatualizado: 0,
-  teto2026: 8475.55
+  teto2026: 8475.55,
+  resultadoAtual: null
 };
 
-// ─── STEPPER ───────────────────────────────────────────────
+// ─── STEPPER (3 steps) ─────────────────────────────────────
 function irPara(step) {
   if (step === 3 && state.modo === 'manual') {
     if (!validarManual()) return;
-    montarExtratoManual();
+    calcularManual();
+    return;
   }
 
   // Atualiza steps e conectores
-  for (let i = 1; i <= 4; i++) {
+  for (let i = 1; i <= 3; i++) {
     const el = document.getElementById('step-' + i);
     el.className = 'step ' + (i < step ? 'done' : i === step ? 'active' : 'pending');
     el.querySelector('.step-dot').textContent = i < step ? '✓' : i;
   }
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 1; i <= 2; i++) {
     const c = document.getElementById('conn-' + i);
     c.className = 'step-connector' + (i < step ? ' done' : '');
   }
 
-  // Esconde todos os painéis
   document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
   state.stepAtual = step;
 
-  // Mostra o painel correto
   if (step === 1) {
     document.getElementById('panel-1').classList.add('active');
   } else if (step === 2) {
@@ -1091,16 +1084,9 @@ function irPara(step) {
     document.getElementById(painel).classList.add('active');
   } else if (step === 3) {
     document.getElementById('panel-3').classList.add('active');
-    state.extratoBase = [...state.extrato];
-    state.lancamentosSimulados = [];
-    renderizarExtrato();
-    selecionarModoSim('CONST');
-  } else if (step === 4) {
-    document.getElementById('panel-4').classList.add('active');
   }
 
-  // Scroll suave ao topo do simulador
-  document.querySelector('.stepper').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelector('.stepper').scrollIntoView({ behavior:'smooth', block:'start' });
 }
 
 // ─── PASSO 1: MODO ─────────────────────────────────────────
@@ -1111,7 +1097,199 @@ function selecionarModo(modo) {
   document.getElementById('btn-proximo-1').disabled = false;
 }
 
-// ─── PASSO 2A: PDF ─────────────────────────────────────────
+// ─── PASSO 2A: PDF → CALCULAR DIRETO ──────────────────────
+async function calcularPdf() {
+  const file = document.getElementById('inputPdf').files[0];
+  if (!file || !state.sexoPdf) return;
+
+  irPara(3);
+  document.getElementById('resultado-loading').style.display = 'block';
+  document.getElementById('resultado-conteudo').style.display = 'none';
+
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('sexo', state.sexoPdf);
+
+    const res = await fetch('http://localhost:8080/api/cnis/extrair-e-calcular', {
+      method: 'POST', body: formData
+    });
+    if (!res.ok) throw new Error('Erro no cálculo: ' + res.status);
+    const data = await res.json();
+    state.resultadoAtual = data;
+    renderizarResultado(data);
+  } catch(e) {
+    console.error('Erro calcularPdf:', e);
+    document.getElementById('resultado-loading').innerHTML = `
+      <p style="color:#FF4D4D">Erro: ${e.message}</p>
+    `;
+  }
+}
+
+// ─── PASSO 2B: MANUAL → CALCULAR ──────────────────────────
+async function calcularManual() {
+  if (!validarManual()) return;
+
+  irPara(3);
+  document.getElementById('resultado-loading').style.display = 'block';
+  document.getElementById('resultado-conteudo').style.display = 'none';
+
+  const nasc = document.getElementById('manual-nasc').value;
+  const nome = document.getElementById('manual-nome').value.trim();
+
+  const seguradoPayload = {
+    nome: nome || 'Não identificado',
+    sexo: state.sexoManual,
+    dataNascimento: nasc.split('-').reverse().join('/')
+  };
+
+  const lancamentos = [];
+  if (state.modoContrib === 'um-a-um') {
+    document.querySelectorAll('#contrib-tbody tr').forEach(tr => {
+      const comp = tr.querySelectorAll('input')[0].value.trim();
+      const val  = strToFloat(tr.querySelectorAll('input')[1].value);
+      if (comp && val > 0) lancamentos.push({ competencia:comp, remuneracao:val, nomeEmpregador:'', simulado:false });
+    });
+  } else {
+    document.getElementById('lote-texto').value.trim().split('\n').forEach(l => {
+      const parts = l.trim().split(/\s+/);
+      if (parts.length >= 2) {
+        const comp = parts[0];
+        const val  = strToFloat(parts.slice(1).join(''));
+        if (comp && val > 0) lancamentos.push({ competencia:comp, remuneracao:val, nomeEmpregador:'', simulado:false });
+      }
+    });
+  }
+
+  try {
+    const res = await fetch('http://localhost:8080/api/cnis/calcular', {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json' },
+      body: JSON.stringify({
+        segurado: seguradoPayload,
+        lancamentos,
+        dataCnis: new Date().toLocaleDateString('pt-BR')
+      })
+    });
+    if (!res.ok) throw new Error('Erro');
+    const data = await res.json();
+    state.resultadoAtual = data;
+    renderizarResultado(data);
+  } catch(e) {
+    document.getElementById('resultado-loading').innerHTML = `
+      <p style="color:#FF4D4D">Erro ao calcular. Verifique se o servidor está disponível.</p>
+    `;
+  }
+}
+
+// ─── RENDERIZAR RESULTADO ──────────────────────────────────
+function renderizarResultado(data) {
+  document.getElementById('resultado-loading').style.display = 'none';
+  document.getElementById('resultado-conteudo').style.display = 'block';
+
+  const seg = data.segurado;
+  const con = data.contribuicao;
+  const med = data.mediaSalarial;
+
+  // Nome
+  const elNome = document.getElementById('res-nome');
+  if (!elNome) { console.error('res-nome nao encontrado'); return; }
+  elNome.textContent = seg.nome || 'Segurado';
+
+  // Métricas
+  document.getElementById('res-metrics').innerHTML = `
+    <div class="res-metric">
+      <div class="res-metric-label">Idade (CNIS)</div>
+      <div class="res-metric-val green">${seg.idadeTexto}</div>
+    </div>
+    <div class="res-metric">
+      <div class="res-metric-label">Tempo total</div>
+      <div class="res-metric-val">${con.textoFormatado}</div>
+    </div>
+    <div class="res-metric">
+      <div class="res-metric-label">Média salarial (80%)</div>
+      <div class="res-metric-val">${fmtBRL(med.media80pct)}</div>
+    </div>
+    <div class="res-metric">
+      <div class="res-metric-label">Data do CNIS</div>
+      <div class="res-metric-val">${seg.dataCnis}</div>
+    </div>
+  `;
+
+  // Regras
+  const pre  = data.regras.filter(r => r.grupo === 'PRE_2019');
+  const pos  = data.regras.filter(r => r.grupo === 'POS_2019');
+
+  if (pre.length > 0) {
+    document.getElementById('secao-pre2019').style.display = 'block';
+    document.getElementById('acordeons-pre2019').innerHTML = pre.map(r => montarAcordeon(r)).join('');
+  }
+  if (pos.length > 0) {
+    document.getElementById('secao-pos2019').style.display = 'block';
+    document.getElementById('acordeons-pos2019').innerHTML = pos.map(r => montarAcordeon(r)).join('');
+  }
+
+  // CTA simulação
+  document.getElementById('simCta').style.display = 'flex';
+
+  // Aviso
+  document.getElementById('res-aviso').textContent =
+    `Simulação com base no extrato de ${seg.dataCnis}. Este resultado não garante direito ao benefício.`;
+}
+
+function montarAcordeon(regra) {
+  const statusClass = regra.elegivel ? 'status-ok' : 'status-no';
+  const statusIcon  = regra.elegivel ? '✓' : '✕';
+
+  const requisitosHtml = regra.requisitos.map(req => `
+    <tr>
+      <td class="req-nome">
+        <span style="color:${req.ok ? 'var(--green)' : '#FF4D4D'};margin-right:6px;font-size:13px">${req.ok ? '✓' : '✕'}</span>${req.nome}
+      </td>
+      <td class="req-exigido">${req.exigidoTexto}</td>
+      <td class="req-atual ${req.ok ? 'ok' : 'no'}">${req.atualTexto}</td>
+    </tr>
+  `).join('');
+
+  const obsHtml = regra.observacaoDataReferencia
+    ? `<div class="req-obs">* ${regra.observacaoDataReferencia}</div>` : '';
+
+  const veredicto = regra.elegivel
+    ? `Você <span class="sim">possui direito</span> a esta modalidade.`
+    : `De acordo com as regras da <strong>${regra.nome}</strong>, você <span class="nao">não possui</span> direito.`;
+
+  const rmiHtml = regra.elegivel && regra.rmi
+    ? `<div style="padding:10px 16px;border-top:0.5px solid var(--muted-3);font-size:12px;color:var(--muted-1)">
+        Benefício estimado: <strong style="color:var(--green);font-size:1rem">${fmtBRL(regra.rmi)}</strong>
+       </div>` : '';
+
+  return `
+    <div class="acord" onclick="toggleAcord(this)">
+      <div class="acord-header">
+        <div class="acord-status ${statusClass}">${statusIcon}</div>
+        <div class="acord-title">${regra.nome}</div>
+        <div class="acord-chevron">▼</div>
+      </div>
+      <div class="acord-body">
+        <div class="acord-veredicto">${veredicto}</div>
+        <table class="req-table"><tbody>${requisitosHtml}</tbody></table>
+        ${obsHtml}
+        ${rmiHtml}
+      </div>
+    </div>
+  `;
+}
+
+function toggleAcord(el) {
+  el.classList.toggle('open');
+}
+
+function abrirSimulacao() {
+  // TODO: implementar simulação futura
+  alert('Em breve: simulação de contribuições futuras!');
+}
+
+// ─── PASSO 2A: EXTRAÇÃO DO CNIS (exibe dados no passo 2) ───
 async function processarPdf(input) {
   if (!input.files || !input.files[0]) return;
   const file = input.files[0];
@@ -1564,18 +1742,6 @@ async function calcularBeneficio() {
       <p style="color:var(--danger)">Erro ao calcular. Verifique se o servidor está disponível.</p>
     `;
   }
-}
-
-function renderizarResultado(data) {
-  const el = document.getElementById('resultado-content');
-  el.innerHTML = `
-    <div style="text-align:left">
-      <p style="color:var(--muted-1);font-size:0.85rem;margin-bottom:1rem">
-        Resultado recebido. A renderização detalhada por regra será implementada no próximo passo.
-      </p>
-      <pre style="background:var(--bg-2);border:1px solid var(--muted-3);border-radius:var(--radius-md);padding:1rem;font-size:0.72rem;color:var(--muted-1);overflow-x:auto;max-height:400px">${JSON.stringify(data, null, 2)}</pre>
-    </div>
-  `;
 }
 
 // ─── DRAG & DROP na upload zone ────────────────────────────
