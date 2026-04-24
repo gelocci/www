@@ -437,11 +437,11 @@ footer {
    PASSO 3 — EXTRATO
    ============================================================ */
 .extrato-header {
-  display:flex; justify-content:space-between; align-items:center;
-  margin-bottom:1.25rem; flex-wrap:wrap; gap:1rem;
+  display:flex; justify-content:space-between; align-items:flex-start;
+  margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;
 }
 .extrato-stats {
-  display:flex; gap:1.5rem; flex-wrap:wrap;
+  display:flex; gap:2rem; flex-wrap:wrap;
 }
 .extrato-stat { text-align:center; }
 .extrato-stat-val {
@@ -451,33 +451,87 @@ footer {
 .extrato-stat-label { font-size:0.7rem; color:var(--muted-2); text-transform:uppercase; letter-spacing:0.8px; }
 
 .extrato-table-wrap {
-  max-height:420px; overflow-y:auto; border-radius:var(--radius-lg);
-  border:1px solid var(--muted-3);
+  max-height:360px; overflow-y:auto; overflow-x:auto;
+  border-radius:var(--radius-lg); border:1px solid var(--muted-3);
 }
 .extrato-table {
-  width:100%; border-collapse:collapse; font-size:0.85rem;
+  width:100%; border-collapse:collapse; font-size:0.875rem;
+  min-width:580px;
 }
 .extrato-table thead th {
   position:sticky; top:0; z-index:2;
-  background:var(--bg-card); padding:0.65rem 1rem;
+  background:var(--bg-card); padding:0.75rem 1.25rem;
   text-align:left; color:var(--muted-2); font-size:0.7rem;
   font-weight:500; text-transform:uppercase; letter-spacing:0.8px;
-  border-bottom:1px solid var(--muted-3);
+  border-bottom:1px solid var(--muted-3); white-space:nowrap;
 }
 .extrato-table tbody td {
-  padding:0.6rem 1rem; border-bottom:1px solid var(--muted-4);
-  color:var(--muted-1);
+  padding:0.7rem 1.25rem; border-bottom:1px solid var(--muted-4);
+  color:var(--muted-1); white-space:nowrap;
 }
 .extrato-table tbody tr:last-child td { border-bottom:none; }
 .extrato-table tbody tr:hover td { background:var(--bg-hover); color:var(--white); }
-.extrato-table .val-corrigido { color:var(--green); font-weight:500; }
-.extrato-table .empregador { color:var(--muted-2); font-size:0.78rem; }
+.extrato-table .val-corrigido { color:var(--green); font-weight:600; }
+.extrato-table .empregador {
+  color:var(--muted-2); font-size:0.78rem;
+  max-width:120px; overflow:hidden; text-overflow:ellipsis;
+}
 .badge-sim {
   display:inline-block; padding:0.15rem 0.5rem;
   background:rgba(201,168,76,0.15); border:1px solid rgba(201,168,76,0.3);
   color:var(--gold); border-radius:var(--radius-full);
   font-size:0.65rem; font-weight:600; letter-spacing:0.5px;
 }
+
+/* ============================================================
+   PASSO 3 — SIMULAÇÕES
+   ============================================================ */
+.sim-section {
+  margin-top:1.5rem; border-top:1px solid var(--muted-3);
+  padding-top:1.5rem;
+}
+.sim-section-title {
+  font-size:0.72rem; text-transform:uppercase; letter-spacing:1.5px;
+  color:var(--green); font-weight:500; margin-bottom:1.25rem;
+  display:flex; align-items:center; gap:0.5rem;
+}
+
+/* Ajuste de tempo */
+.ajuste-tempo {
+  background:var(--bg-2); border:1px solid var(--muted-3);
+  border-radius:var(--radius-lg); padding:1.25rem;
+  margin-bottom:1.25rem; display:none;
+}
+.ajuste-tempo.visible { display:block; }
+.ajuste-tempo-info {
+  font-size:0.82rem; color:var(--warning);
+  margin-bottom:1rem; display:flex; align-items:flex-start; gap:0.5rem;
+  background:rgba(255,179,0,0.08); border:1px solid rgba(255,179,0,0.2);
+  border-radius:var(--radius-md); padding:0.75rem;
+}
+.ajuste-tempo-grid {
+  display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.75rem;
+}
+
+/* Modos de simulação */
+.sim-modos { display:flex; gap:0.5rem; margin-bottom:1.25rem; flex-wrap:wrap; }
+.sim-modo-btn {
+  padding:0.45rem 1rem; border-radius:var(--radius-full);
+  font-size:0.8rem; font-weight:500; cursor:pointer;
+  border:1px solid var(--muted-3); background:transparent;
+  color:var(--muted-1); transition:all 0.2s; font-family:var(--font-body);
+}
+.sim-modo-btn.active {
+  background:var(--green-glow); border-color:var(--green-border); color:var(--green);
+}
+.sim-modo-desc {
+  font-size:0.8rem; color:var(--muted-2); margin-bottom:1rem; line-height:1.5;
+}
+.sim-campos { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+.sim-campos.single { grid-template-columns:1fr; }
+
+/* Contribuições simuladas na tabela */
+.extrato-table tr.simulado td { color:rgba(201,168,76,0.85); }
 
 /* ============================================================
    PASSO 4 — RESULTADO (placeholder)
@@ -569,6 +623,18 @@ footer {
   .step-label { font-size:0.62rem; }
   .btn-row { flex-direction:column-reverse; }
   .btn-primary, .btn-secondary { width:100%; justify-content:center; }
+  .extrato-stats { gap:1rem; }
+  .extrato-stat-val { font-size:1.1rem; }
+  .extrato-table thead th:nth-child(2),
+  .extrato-table thead th:nth-child(3),
+  .extrato-table thead th:nth-child(4),
+  .extrato-table tbody td:nth-child(2),
+  .extrato-table tbody td:nth-child(3),
+  .extrato-table tbody td:nth-child(4) { display:none; }
+  .ajuste-tempo-grid { grid-template-columns:1fr 1fr 1fr; gap:0.5rem; }
+  .sim-campos { grid-template-columns:1fr; }
+  footer { flex-direction:column; align-items:flex-start; padding:2rem 1.25rem; }
+  .footer-links { flex-wrap:wrap; gap:1rem; }
 }
 </style>
 </head>
@@ -848,14 +914,94 @@ footer {
               <th>Competência</th>
               <th>Remuneração</th>
               <th>Teto</th>
-              <th>Valor utilizado</th>
-              <th>Valor corrigido</th>
+              <th>Val. utilizado</th>
+              <th>Val. corrigido</th>
               <th>Empregador</th>
             </tr>
           </thead>
           <tbody id="extrato-tbody">
           </tbody>
         </table>
+      </div>
+
+      <!-- SEÇÃO DE SIMULAÇÕES -->
+      <div class="sim-section">
+        <div class="sim-section-title">⚡ Simular contribuições futuras</div>
+
+        <!-- Ajuste de tempo — aparece quando CNIS está desatualizado -->
+        <div class="ajuste-tempo" id="ajusteTempo">
+          <div class="ajuste-tempo-info">
+            ⚠️ <span id="ajusteTempoMsg">Seu CNIS pode estar desatualizado. Informe o tempo adicional para completar até hoje.</span>
+          </div>
+          <div class="ajuste-tempo-grid">
+            <div class="form-group">
+              <label>Anos</label>
+              <input type="number" id="ajuste-anos" min="0" value="0" oninput="atualizarSimulacao()">
+            </div>
+            <div class="form-group">
+              <label>Meses</label>
+              <input type="number" id="ajuste-meses" min="0" max="11" value="0" oninput="atualizarSimulacao()">
+            </div>
+            <div class="form-group">
+              <label>Dias</label>
+              <input type="number" id="ajuste-dias" min="0" max="29" value="0" oninput="atualizarSimulacao()">
+            </div>
+          </div>
+        </div>
+
+        <!-- Modos de simulação -->
+        <div class="sim-modos">
+          <button class="sim-modo-btn active" id="modo-const"    onclick="selecionarModoSim('CONST')">Contribuição contínua</button>
+          <button class="sim-modo-btn"        id="modo-qualidade" onclick="selecionarModoSim('QUALIDADE')">Qualidade (1x/6 meses)</button>
+          <button class="sim-modo-btn"        id="modo-parar"    onclick="selecionarModoSim('PARAR')">Parar contribuições</button>
+        </div>
+
+        <div class="sim-modo-desc" id="simModoDesc">
+          Simula contribuições mensais com valor fixo a partir da data do CNIS.
+        </div>
+
+        <!-- Campos por modo -->
+        <div id="sim-campos-const" class="sim-campos">
+          <div class="form-group">
+            <label>Valor da contribuição futura (R$)</label>
+            <input type="text" id="sim-valor-const" placeholder="Ex: 8.475,55" oninput="atualizarSimulacao()">
+            <span class="form-hint">Deixe em branco para usar o último salário do CNIS</span>
+          </div>
+          <div class="form-group">
+            <label>Quantidade de meses a simular</label>
+            <input type="number" id="sim-meses-const" min="1" max="600" placeholder="Ex: 36" oninput="atualizarSimulacao()">
+          </div>
+        </div>
+
+        <div id="sim-campos-qualidade" class="sim-campos" style="display:none">
+          <div class="form-group">
+            <label>Valor da contribuição (R$)</label>
+            <input type="text" id="sim-valor-qualidade" placeholder="Ex: 1.518,00 (salário mínimo)" oninput="atualizarSimulacao()">
+            <span class="form-hint">Contribuição mínima a cada 6 meses para manter qualidade</span>
+          </div>
+          <div class="form-group">
+            <label>Quantidade de meses a simular</label>
+            <input type="number" id="sim-meses-qualidade" min="1" max="600" placeholder="Ex: 60" oninput="atualizarSimulacao()">
+          </div>
+        </div>
+
+        <div id="sim-campos-parar" class="sim-campos single" style="display:none">
+          <div class="form-group">
+            <label>Parar contribuições agora</label>
+            <input type="text" disabled value="Sem novas contribuições a partir da data do CNIS"
+              style="opacity:0.5;cursor:not-allowed;">
+            <span class="form-hint">Calcula elegibilidade e RMI apenas com as contribuições já realizadas</span>
+          </div>
+        </div>
+
+        <!-- Resumo da simulação em tempo real -->
+        <div class="media-realtime" id="simResumo" style="margin-top:1rem">
+          <div>
+            <div class="media-realtime-label">Contribuições simuladas adicionadas</div>
+            <div style="font-size:0.72rem;color:var(--muted-2);margin-top:0.15rem" id="simResumoDetalhe">—</div>
+          </div>
+          <div class="media-realtime-value" id="simResumoVal">0 meses</div>
+        </div>
       </div>
 
       <div class="btn-row">
@@ -895,14 +1041,19 @@ footer {
 <script>
 // ─── ESTADO GLOBAL ─────────────────────────────────────────
 const state = {
-  modo: null,         // 'pdf' | 'manual'
+  modo: null,
   stepAtual: 1,
   segurado: {},
   extrato: [],
+  extratoBase: [],
   sexoPdf: null,
   sexoManual: null,
   modoContrib: 'um-a-um',
-  teto2026: 8475.55   // usado para estimativa da média em tempo real
+  modoSim: 'CONST',
+  lancamentosSimulados: [],
+  ultimoSalario: 0,
+  mesesDesatualizado: 0,
+  teto2026: 8475.55
 };
 
 // ─── STEPPER ───────────────────────────────────────────────
@@ -935,7 +1086,10 @@ function irPara(step) {
     document.getElementById(painel).classList.add('active');
   } else if (step === 3) {
     document.getElementById('panel-3').classList.add('active');
+    state.extratoBase = [...state.extrato];
+    state.lancamentosSimulados = [];
     renderizarExtrato();
+    selecionarModoSim('CONST');
   } else if (step === 4) {
     document.getElementById('panel-4').classList.add('active');
   }
@@ -1185,6 +1339,11 @@ async function calcularManual() {
 }
 
 // ─── PASSO 3: EXTRATO ──────────────────────────────────────
+function fmtEmpregador(nome) {
+  if (!nome || nome === '—' || nome.trim() === '') return '—';
+  return nome.length > 10 ? nome.substring(0, 10) + '...' : nome;
+}
+
 function renderizarExtrato() {
   const tbody = document.getElementById('extrato-tbody');
   tbody.innerHTML = '';
@@ -1193,13 +1352,14 @@ function renderizarExtrato() {
   state.extrato.forEach(r => {
     somaCorrigida += r.valorCorrigido || 0;
     const tr = document.createElement('tr');
+    if (r.simulado) tr.classList.add('simulado');
     tr.innerHTML = `
-      <td><strong>${r.competencia}</strong></td>
+      <td><strong>${r.competencia}</strong>${r.simulado ? ' <span class="badge-sim">SIM</span>' : ''}</td>
       <td>${fmtBRL(r.somaRemuneracoes)}</td>
       <td>${fmtBRL(r.teto)}</td>
       <td>${fmtBRL(r.valorAntesCorrecao)}</td>
       <td class="val-corrigido">${fmtBRL(r.valorCorrigido)}</td>
-      <td class="empregador">${r.nomeEmpregador || '—'}${r.simulado ? ' <span class="badge-sim">SIM</span>' : ''}</td>
+      <td class="empregador" title="${r.nomeEmpregador || ''}">${fmtEmpregador(r.nomeEmpregador)}</td>
     `;
     tbody.appendChild(tr);
   });
@@ -1208,6 +1368,141 @@ function renderizarExtrato() {
   document.getElementById('stat-comp').textContent  = state.extrato.length;
   document.getElementById('stat-media').textContent = fmtBRL(media);
   document.getElementById('stat-data-cnis').textContent = state.segurado.dataCnis || '—';
+
+  // Verifica se CNIS está desatualizado
+  verificarDesatualizacao();
+}
+
+function verificarDesatualizacao() {
+  const dataCnis = state.segurado.dataCnis;
+  if (!dataCnis) return;
+
+  try {
+    const partes = dataCnis.split('/');
+    const dtCnis = new Date(parseInt(partes[2]), parseInt(partes[1]) - 1, parseInt(partes[0]));
+    const hoje   = new Date();
+    const diffMs = hoje - dtCnis;
+    const diffDias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const diffMeses = Math.floor(diffDias / 30);
+
+    state.mesesDesatualizado = diffMeses;
+    state.ultimoSalario = state.extrato.length > 0 ? state.extrato[0].somaRemuneracoes : 0;
+
+    const el = document.getElementById('ajusteTempo');
+    if (diffMeses > 0) {
+      el.classList.add('visible');
+      const anos  = Math.floor(diffMeses / 12);
+      const meses = diffMeses % 12;
+      document.getElementById('ajusteTempoMsg').textContent =
+        `Seu CNIS é de ${dataCnis}. Já se passaram aprox. ${anos > 0 ? anos + 'a ' : ''}${meses}m desde então. Informe o tempo adicional para ajustar o cálculo.`;
+      document.getElementById('ajuste-anos').value  = anos;
+      document.getElementById('ajuste-meses').value = meses;
+      document.getElementById('ajuste-dias').value  = 0;
+    } else {
+      el.classList.remove('visible');
+    }
+  } catch(e) {}
+}
+
+// ─── SIMULAÇÕES ────────────────────────────────────────────
+const modoDescs = {
+  CONST:     'Simula contribuições mensais com valor fixo a partir da data do CNIS.',
+  QUALIDADE: 'Contribui o mínimo a cada 6 meses para manter a qualidade de segurado (reduz custo, mantém tempo).',
+  PARAR:     'Calcula elegibilidade e RMI apenas com as contribuições já realizadas — sem novas contribuições.'
+};
+
+function selecionarModoSim(modo) {
+  state.modoSim = modo;
+  ['CONST','QUALIDADE','PARAR'].forEach(m => {
+    document.getElementById('modo-' + m.toLowerCase()).classList.toggle('active', m === modo);
+    const campos = document.getElementById('sim-campos-' + m.toLowerCase());
+    if (campos) campos.style.display = m === modo ? (m === 'PARAR' ? 'grid' : 'grid') : 'none';
+  });
+  document.getElementById('simModoDesc').textContent = modoDescs[modo];
+  atualizarSimulacao();
+}
+
+function atualizarSimulacao() {
+  // Gera lançamentos simulados conforme modo e adiciona ao extrato base
+  const modo   = state.modoSim || 'CONST';
+  const extrato = state.extratoBase || state.extrato;
+
+  // Calcula data de início da simulação (última competência + 1 mês)
+  let ultimaComp = extrato.length > 0 ? extrato[0].competencia : null;
+  if (!ultimaComp) { esconderResumoSim(); return; }
+
+  const ajusteAnos  = parseInt(document.getElementById('ajuste-anos')?.value  || 0);
+  const ajusteMeses = parseInt(document.getElementById('ajuste-meses')?.value || 0);
+  const ajusteDias  = parseInt(document.getElementById('ajuste-dias')?.value  || 0);
+
+  // Lançamentos de ajuste (meses entre CNIS e hoje com último salário)
+  const lancAjuste = [];
+  const totalAjusteMeses = ajusteAnos * 12 + ajusteMeses;
+  if (totalAjusteMeses > 0) {
+    let [mm, aaaa] = ultimaComp.split('/').map(Number);
+    for (let i = 0; i < totalAjusteMeses; i++) {
+      mm++; if (mm > 12) { mm = 1; aaaa++; }
+      const comp = String(mm).padStart(2,'0') + '/' + aaaa;
+      lancAjuste.push({
+        competencia: comp,
+        remuneracao: state.ultimoSalario || state.teto2026,
+        nomeEmpregador: '', simulado: true,
+        somaRemuneracoes: state.ultimoSalario || state.teto2026,
+        teto: state.teto2026,
+        valorAntesCorrecao: Math.min(state.ultimoSalario || state.teto2026, state.teto2026),
+        valorCorrigido: Math.min(state.ultimoSalario || state.teto2026, state.teto2026)
+      });
+    }
+    ultimaComp = lancAjuste[lancAjuste.length - 1].competencia;
+  }
+
+  // Lançamentos de simulação futura
+  const lancSim = [];
+  if (modo !== 'PARAR') {
+    const campoValor = modo === 'CONST' ? 'sim-valor-const' : 'sim-valor-qualidade';
+    const campoMeses = modo === 'CONST' ? 'sim-meses-const' : 'sim-meses-qualidade';
+    const valorInput = strToFloat(document.getElementById(campoValor)?.value);
+    const mesesSim   = parseInt(document.getElementById(campoMeses)?.value || 0);
+    const valor = valorInput > 0 ? valorInput : (state.ultimoSalario || state.teto2026);
+
+    if (mesesSim > 0) {
+      let [mm, aaaa] = ultimaComp.split('/').map(Number);
+      for (let i = 0; i < mesesSim; i++) {
+        mm++; if (mm > 12) { mm = 1; aaaa++; }
+        if (modo === 'QUALIDADE' && i % 6 !== 0) continue;
+        const comp = String(mm).padStart(2,'0') + '/' + aaaa;
+        lancSim.push({
+          competencia: comp,
+          remuneracao: valor,
+          nomeEmpregador: '', simulado: true,
+          somaRemuneracoes: valor,
+          teto: state.teto2026,
+          valorAntesCorrecao: Math.min(valor, state.teto2026),
+          valorCorrigido: Math.min(valor, state.teto2026)
+        });
+      }
+    }
+  }
+
+  // Monta extrato com base + ajuste + simulados
+  state.lancamentosSimulados = [...lancAjuste, ...lancSim];
+  const totalSimulados = state.lancamentosSimulados.length;
+
+  if (totalSimulados > 0) {
+    const el = document.getElementById('simResumo');
+    el.classList.add('visible');
+    document.getElementById('simResumoVal').textContent = totalSimulados + ' meses';
+    document.getElementById('simResumoDetalhe').textContent =
+      lancAjuste.length > 0
+        ? `${lancAjuste.length} de ajuste + ${lancSim.length} simulados`
+        : `${lancSim.length} contribuições futuras simuladas`;
+  } else {
+    esconderResumoSim();
+  }
+}
+
+function esconderResumoSim() {
+  document.getElementById('simResumo').classList.remove('visible');
 }
 
 function voltarStep3() {
@@ -1222,17 +1517,26 @@ async function calcularBeneficio() {
     <p>Calculando... aguarde.</p>
   `;
 
-  // Monta os lançamentos para enviar ao back
-  const lancamentos = state.modo === 'pdf'
+  // Lançamentos base (do CNIS ou manual)
+  const lancamentosBase = state.modo === 'pdf'
     ? state.extrato.map(r => ({
         competencia: r.competencia,
         remuneracao: r.somaRemuneracoes,
         nomeEmpregador: r.nomeEmpregador || '',
-        simulado: r.simulado || false
+        simulado: false
       }))
     : state.extratoManualLancamentos || [];
 
-  // Garante que o back recebe a data no formato dd/MM/yyyy
+  // Adiciona simulados (ajuste + futuros)
+  const lancamentosSimulados = (state.lancamentosSimulados || []).map(r => ({
+    competencia: r.competencia,
+    remuneracao: r.remuneracao,
+    nomeEmpregador: '',
+    simulado: true
+  }));
+
+  const lancamentos = [...lancamentosBase, ...lancamentosSimulados];
+
   const seguradoPayload = {
     nome: state.segurado.nome || '',
     sexo: state.segurado.sexo || state.sexoPdf || state.sexoManual,
@@ -1258,7 +1562,6 @@ async function calcularBeneficio() {
 }
 
 function renderizarResultado(data) {
-  // Placeholder — será expandido no Passo 5
   const el = document.getElementById('resultado-content');
   el.innerHTML = `
     <div style="text-align:left">
