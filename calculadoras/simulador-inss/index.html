@@ -547,7 +547,7 @@ footer {
   font-weight:700; color:var(--white); margin-bottom:1rem;
 }
 .resultado-metrics {
-  display:grid; grid-template-columns:repeat(4,1fr); gap:8px;
+  display:grid; grid-template-columns:repeat(3,1fr); gap:8px;
 }
 .res-metric {
   background:var(--bg-2); border:0.5px solid var(--muted-3);
@@ -637,7 +637,7 @@ footer {
 
 /* Responsive resultado */
 @media (max-width:640px) {
-  .resultado-metrics { grid-template-columns:repeat(2,1fr); }
+  .resultado-metrics { grid-template-columns:repeat(3,1fr); }
   .sim-cta { flex-direction:column; align-items:flex-start; }
 }
 
@@ -1205,10 +1205,6 @@ function renderizarResultado(data) {
     <div class="res-metric">
       <div class="res-metric-label">Tempo total</div>
       <div class="res-metric-val">${con.textoFormatado}</div>
-    </div>
-    <div class="res-metric">
-      <div class="res-metric-label">Média salarial (80%)</div>
-      <div class="res-metric-val">${fmtBRL(med.media80pct)}</div>
     </div>
     <div class="res-metric">
       <div class="res-metric-label">Data do CNIS</div>
