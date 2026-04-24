@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <!-- Google tag (gtag.js) -->
@@ -185,25 +185,7 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
 </head>
 <body>
 
-<nav>
-  <a href="/" class="logo">Gelocci<div class="logo-dot"></div></a>
-  <ul class="nav-links">
-    <li><a href="#ferramentas">Ferramentas</a></li>
-    <li><a href="/glossario/">Glossário</a></li>
-    <li><a href="/quem-somos/">Sobre</a></li>
-    <li><a href="/contato/">Contato</a></li>
-  </ul>
-  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
-
-<div class="nav-mobile-menu" id="mobileMenu">
-  <a href="#ferramentas" onclick="closeMobileMenu()">Ferramentas</a>
-  <a href="/glossario/" onclick="closeMobileMenu()">Glossário</a>
-  <a href="/quem-somos/" onclick="closeMobileMenu()">Sobre</a>
-  <a href="/contato/" onclick="closeMobileMenu()">Contato</a>
-</div>
+<div id="site-header"></div>
 
 <section class="hero">
   <div class="hero-left">
@@ -215,7 +197,7 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
       <a href="#ferramentas" class="btn-ghost">Ver como funciona →</a>
     </div>
     <div class="hero-stats">
-      <div class="stat"><div class="stat-n">4+</div><div class="stat-l">Ferramentas</div></div>
+      <div class="stat"><div class="stat-n">5+</div><div class="stat-l">Ferramentas</div></div>
       <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Gratuito</div></div>
       <div class="stat"><div class="stat-n">0</div><div class="stat-l">Cadastro</div></div>
     </div>
@@ -292,6 +274,17 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
       <p>Converta taxas de juros entre diferentes períodos com facilidade.</p>
       <div class="tool-card-arrow">Acessar →</div>
     </a>
+    <a href="/calculadoras/simulador-inss/" class="tool-card">
+      <div class="tool-card-icon">📋</div>
+      <h3>Simulador de Aposentadoria INSS</h3>
+      <p>Carregue seu CNIS e descubra quando você pode se aposentar e quanto vai receber pelo INSS.</p>
+      <div class="tool-card-arrow">Acessar →</div>
+    </a>
+    <div class="tool-card" style="cursor:default;background:var(--bg-card);pointer-events:none;">
+      <div class="tool-card-icon" style="border:1px dashed var(--muted-3);background:transparent;opacity:0.5;">✦</div>
+      <h3 style="color:var(--muted-2);">Mais em breve</h3>
+      <p style="color:var(--muted-2);">Novas ferramentas financeiras chegando em breve. Fique de olho!</p>
+    </div>
   </div>
   <div class="glossary-hint">
     Não conhece algum termo? Consulte nosso <a href="/glossario/">Glossário Financeiro →</a>
@@ -330,29 +323,9 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
   </div>
 </div>
 
-<footer>
-  <a href="/" class="logo" style="font-size:1.2rem;">Gelocci<div class="logo-dot" style="width:5px;height:5px;"></div></a>
-  <div class="footer-links">
-    <a href="/quem-somos/">Quem Somos</a>
-    <a href="/politica-de-privacidade/">Privacidade</a>
-    <a href="/termos-de-uso/">Termos</a>
-    <a href="/glossario/">Glossário</a>
-    <a href="/contato/">Contato</a>
-  </div>
-  <div class="footer-copy">© 2026 gelocci.com.br</div>
-</footer>
+<div id="site-footer"></div>
 
-<script>
-  const hamburger = document.getElementById('hamburger');
-  const mobileMenu = document.getElementById('mobileMenu');
-  hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('open');
-    mobileMenu.classList.toggle('open');
-  });
-  function closeMobileMenu() {
-    hamburger.classList.remove('open');
-    mobileMenu.classList.remove('open');
-  }
-</script>
+
+<script src="/assets/js/components.js"></script>
 </body>
 </html>
