@@ -116,7 +116,107 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
 
 <div id="site-footer"></div>
 
+<script>
+  
 
+  const termos=[
+    {letra:'A',nome:'Aporte',categoria:'Fundamentos',def:'Valor investido periodicamente, seja de forma mensal, trimestral ou anual. Quanto maior e mais frequente o aporte, maior o patrimônio acumulado ao longo do tempo.',exemplo:'Investir R$ 500 todo mês em um fundo é fazer aportes mensais de R$ 500.'},
+    {letra:'A',nome:'ATM (At The Money)',categoria:'Opções',def:'Classificação de uma opção cujo preço de exercício (strike) é igual ou muito próximo ao preço atual do ativo subjacente.',exemplo:'Se a ação vale R$ 25 e o strike da opção é R$ 25, ela está ATM.',link:'/calculadoras/derivativos/'},
+    {letra:'B',nome:'Black-Scholes',categoria:'Opções',def:'Modelo matemático para precificação de opções financeiras, desenvolvido por Fischer Black e Myron Scholes em 1973. É a referência global para cálculo do preço justo de opções.',exemplo:'Uma call com ação a R$ 25, volatilidade de 30% e vencimento em 30 dias vale R$ 1,25 pelo modelo Black-Scholes.',link:'/calculadoras/derivativos/'},
+    {letra:'C',nome:'Call',categoria:'Opções',def:'Opção de compra. Dá ao titular o direito, mas não a obrigação, de comprar um ativo a um preço predeterminado (strike) até a data de vencimento.',exemplo:'Comprar uma call de PETR4 com strike R$ 30 dá o direito de comprar PETR4 por R$ 30, independente do preço de mercado.',link:'/calculadoras/derivativos/'},
+    {letra:'C',nome:'Capital',categoria:'Fundamentos',def:'Valor inicial disponível para investimento ou o patrimônio total acumulado. É a base sobre a qual os juros incidem.',exemplo:'Aplicar R$ 10.000 em um CDB significa que o capital inicial é R$ 10.000.'},
+    {letra:'C',nome:'Capitalização',categoria:'Fundamentos',def:'Processo de incorporação dos juros ao capital, que passa a render sobre o novo total. Na capitalização composta, os juros rendem juros.',exemplo:'R$ 1.000 a 1% ao mês: após o 1º mês vira R$ 1.010 e o 2º mês rende sobre R$ 1.010, não sobre R$ 1.000.'},
+    {letra:'C',nome:'CDI',categoria:'Indicadores',def:'Certificado de Depósito Interbancário. Taxa de juros usada como referência para a maioria dos investimentos de renda fixa no Brasil. Fica muito próxima à taxa Selic.',exemplo:'Um CDB que rende 100% do CDI acompanha de perto a taxa básica de juros da economia.'},
+    {letra:'C',nome:'CDB',categoria:'Investimentos',def:'Certificado de Depósito Bancário. Título emitido por bancos para captar recursos. O investidor empresta dinheiro ao banco e recebe juros em troca.',exemplo:'CDB do Banco XYZ a 110% do CDI por 1 ano: o investidor recebe 110% da variação do CDI no período.'},
+    {letra:'D',nome:'Diversificação',categoria:'Investimentos',def:'Estratégia de distribuir investimentos entre diferentes ativos para reduzir o risco. Se um ativo cai, os outros podem compensar.',exemplo:'Investir em ações, renda fixa e fundos imobiliários ao mesmo tempo é diversificar.'},
+    {letra:'D',nome:'Dividend Yield',categoria:'Investimentos',def:'Percentual dos dividendos pagos por uma empresa em relação ao preço da ação. Indica o retorno em proventos de um investimento.',exemplo:'Ação a R$ 20 que paga R$ 2 de dividendos por ano tem Dividend Yield de 10%.'},
+    {letra:'F',nome:'FIRE',categoria:'Planejamento',def:'Financial Independence, Retire Early — movimento que propõe acumular patrimônio suficiente para viver dos rendimentos e se aposentar muito antes da idade convencional.',exemplo:'Acumular R$ 1,5 milhão investido a 4% a.a. de retorno real gera R$ 5.000/mês — princípio básico do FIRE.',link:'/calculadoras/simulador-aposentadoria/'},
+    {letra:'F',nome:'FII',categoria:'Investimentos',def:'Fundo de Investimento Imobiliário. Fundo que investe em imóveis ou títulos do setor imobiliário. Distribui rendimentos mensais isentos de IR para pessoas físicas.',exemplo:'XPML11 é um FII de shopping centers que distribui rendimentos mensais aos cotistas.'},
+    {letra:'I',nome:'IGP-M',categoria:'Indicadores',def:'Índice Geral de Preços do Mercado. Índice de inflação calculado pela FGV, muito utilizado em reajustes de contratos de aluguel.',exemplo:'Um contrato de aluguel reajustado pelo IGP-M de 8% ao ano aumenta de R$ 1.000 para R$ 1.080.'},
+    {letra:'I',nome:'INSS',categoria:'Planejamento',def:'Instituto Nacional do Seguro Social. Órgão responsável pela previdência social pública no Brasil. Os trabalhadores contribuem mensalmente e têm direito à aposentadoria.',exemplo:'Um trabalhador CLT que contribui por 35 anos pode solicitar aposentadoria por tempo de contribuição.'},
+    {letra:'I',nome:'IPCA',categoria:'Indicadores',def:'Índice de Preços ao Consumidor Amplo. Índice oficial de inflação do Brasil, calculado pelo IBGE. É o termômetro da inflação para o público em geral.',exemplo:'IPCA de 4,5% ao ano significa que uma cesta de produtos que custava R$ 1.000 passou a custar R$ 1.045.'},
+    {letra:'I',nome:'ITM (In The Money)',categoria:'Opções',def:'Opção com valor intrínseco positivo. Uma call está ITM quando o preço da ação está acima do strike. Uma put está ITM quando o preço está abaixo do strike.',exemplo:'Call com strike R$ 25 e ação a R$ 28 está ITM — tem valor intrínseco de R$ 3.',link:'/calculadoras/derivativos/'},
+    {letra:'I',nome:'Independência Financeira',categoria:'Planejamento',def:'Estado em que o patrimônio acumulado gera renda passiva suficiente para cobrir todos os gastos, sem necessidade de trabalhar por renda ativa.',link:'/calculadoras/simulador-aposentadoria/'},
+    {letra:'J',nome:'Juros Compostos',categoria:'Fundamentos',def:'Regime de juros em que os rendimentos são incorporados ao capital e passam a render juros também — o famoso "juros sobre juros". Gera crescimento exponencial ao longo do tempo.',exemplo:'R$ 1.000 a 1% ao mês: em 10 anos vira R$ 3.300. Com juros simples seria apenas R$ 2.200.',link:'/calculadoras/juros-compostos/'},
+    {letra:'J',nome:'Juros Simples',categoria:'Fundamentos',def:'Regime de juros em que os rendimentos são calculados sempre sobre o capital inicial, sem incorporação ao montante. Gera crescimento linear.',exemplo:'R$ 1.000 a 10% ao ano em juros simples: rende sempre R$ 100/ano, independente do tempo.'},
+    {letra:'L',nome:'LCI / LCA',categoria:'Investimentos',def:'Letra de Crédito Imobiliário e do Agronegócio. Títulos emitidos por bancos com isenção de IR para pessoas físicas. Geralmente rendem um percentual do CDI.',exemplo:'LCI a 92% do CDI isenta de IR pode ser mais rentável que um CDB a 100% do CDI tributado.'},
+    {letra:'L',nome:'Liquidez',categoria:'Fundamentos',def:'Facilidade e velocidade com que um ativo pode ser convertido em dinheiro sem perda significativa de valor.',exemplo:'A poupança tem liquidez diária — você pode sacar a qualquer momento. Um imóvel tem baixa liquidez.'},
+    {letra:'M',nome:'Montante',categoria:'Fundamentos',def:'Valor total acumulado ao final de um período de investimento, incluindo o capital inicial e todos os juros incorporados.',exemplo:'R$ 1.000 investidos a 10% ao ano por 3 anos têm montante de R$ 1.331.'},
+    {letra:'O',nome:'OTM (Out of The Money)',categoria:'Opções',def:'Opção sem valor intrínseco. Uma call está OTM quando o strike é maior que o preço da ação. Uma put está OTM quando o strike é menor que o preço.',exemplo:'Call com strike R$ 30 e ação a R$ 25 está OTM — não faz sentido exercê-la agora.',link:'/calculadoras/derivativos/'},
+    {letra:'P',nome:'PGBL / VGBL',categoria:'Planejamento',def:'Planos de previdência privada. O PGBL permite deduzir contribuições no IR (indicado para quem faz declaração completa). O VGBL não permite dedução, mas o IR incide só sobre os rendimentos.'},
+    {letra:'P',nome:'Previdência Privada',categoria:'Planejamento',def:'Plano de acumulação de longo prazo com benefícios fiscais, complementar à previdência pública (INSS). Permite acumular patrimônio para a aposentadoria.'},
+    {letra:'P',nome:'Put',categoria:'Opções',def:'Opção de venda. Dá ao titular o direito, mas não a obrigação, de vender um ativo a um preço predeterminado (strike) até a data de vencimento.',exemplo:'Comprar uma put de PETR4 com strike R$ 25 protege o investidor caso a ação caia abaixo de R$ 25.',link:'/calculadoras/derivativos/'},
+    {letra:'R',nome:'Renda Fixa',categoria:'Investimentos',def:'Classe de investimentos com regras de remuneração definidas no momento da aplicação. O investidor sabe previamente como será remunerado.',exemplo:'CDB, Tesouro Direto, LCI e LCA são exemplos de renda fixa.'},
+    {letra:'R',nome:'Renda Variável',categoria:'Investimentos',def:'Classe de investimentos sem remuneração predefinida. O retorno depende do desempenho do ativo no mercado.',exemplo:'Ações, fundos imobiliários e opções são exemplos de renda variável.'},
+    {letra:'R',nome:'Rentabilidade',categoria:'Fundamentos',def:'Percentual de retorno de um investimento em relação ao capital aplicado em um determinado período.',exemplo:'Investir R$ 1.000 e resgatar R$ 1.120 representa rentabilidade de 12% no período.'},
+    {letra:'S',nome:'Selic',categoria:'Indicadores',def:'Taxa básica de juros da economia brasileira, definida pelo Banco Central a cada 45 dias. Serve de referência para todos os outros juros da economia.',exemplo:'Com Selic a 13,75% ao ano, o Tesouro Selic rende aproximadamente esse percentual.'},
+    {letra:'S',nome:'Strike',categoria:'Opções',def:'Preço de exercício de uma opção. É o preço pelo qual o titular pode comprar (call) ou vender (put) o ativo subjacente.',exemplo:'Uma call de PETR4 com strike R$ 30 permite comprar PETR4 por R$ 30, independente do preço de mercado.',link:'/calculadoras/derivativos/'},
+    {letra:'T',nome:'Taxa Real',categoria:'Indicadores',def:'Taxa de juros descontada a inflação do período. Representa o ganho efetivo de poder de compra do investidor.',exemplo:'Investimento a 12% ao ano com inflação de 5%: taxa real ≈ 6,67% ao ano (fórmula de Fisher).',link:'/calculadoras/equivalencia-de-taxas/'},
+    {letra:'T',nome:'Tesouro Direto',categoria:'Investimentos',def:'Programa do governo federal para venda de títulos públicos a pessoas físicas pela internet. É considerado o investimento mais seguro do Brasil.',exemplo:'Tesouro IPCA+ 2035 paga IPCA mais uma taxa prefixada, protegendo o investidor da inflação.'},
+    {letra:'V',nome:'Valor Extrínseco',categoria:'Opções',def:'Parte do prêmio de uma opção que excede o valor intrínseco. Representa o valor do tempo e da incerteza. Vai a zero no vencimento.',exemplo:'Call com strike R$ 25, ação a R$ 27, prêmio R$ 2,80: valor intrínseco = R$ 2, extrínseco = R$ 0,80.',link:'/calculadoras/derivativos/'},
+    {letra:'V',nome:'Valor Intrínseco',categoria:'Opções',def:'Parte do prêmio de uma opção que representa o ganho imediato se exercida agora. Para calls: max(S-K, 0). Para puts: max(K-S, 0).',exemplo:'Call com strike R$ 25 e ação a R$ 28 tem valor intrínseco de R$ 3.',link:'/calculadoras/derivativos/'},
+    {letra:'V',nome:'Volatilidade',categoria:'Fundamentos',def:'Medida de quanto o preço de um ativo oscila ao longo do tempo. Alta volatilidade significa grandes variações de preço — maior risco e maior potencial de retorno.',exemplo:'Uma ação que varia 30% ao ano tem volatilidade bem maior que o Tesouro Selic, que é estável.',link:'/calculadoras/derivativos/'},
+    {letra:'V',nome:'Volatilidade Implícita',categoria:'Opções',def:'Volatilidade futura esperada pelo mercado, extraída do preço das opções. Indica o "medo" ou expectativa de oscilação dos participantes do mercado.',link:'/calculadoras/derivativos/'},
+  ];
+
+  function agrupar(lista){
+    const grupos={};
+    lista.forEach(t=>{if(!grupos[t.letra])grupos[t.letra]=[];grupos[t.letra].push(t);});
+    return grupos;
+  }
+
+  const todasLetras=[...new Set(termos.map(t=>t.letra))].sort();
+
+  function renderAlphaNav(ativas){
+    document.getElementById('alphaNav').innerHTML=todasLetras.map(l=>{
+      const has=ativas.includes(l);
+      return `<a href="#letra-${l}" class="alpha-btn ${has?'':'disabled'}" onclick="scrollToLetter('${l}');return false;">${l}</a>`;
+    }).join('');
+  }
+
+  function scrollToLetter(l){
+    const el=document.getElementById('letra-'+l);
+    if(el) el.scrollIntoView({behavior:'smooth'});
+  }
+
+  function render(lista){
+    const content=document.getElementById('glossaryContent');
+    const noResults=document.getElementById('noResults');
+    const countEl=document.getElementById('searchCount');
+    const grupos=agrupar(lista);
+    const letras=Object.keys(grupos).sort();
+    if(lista.length===0){
+      content.innerHTML='';noResults.style.display='block';countEl.textContent='';return;
+    }
+    noResults.style.display='none';
+    countEl.textContent=lista.length+' termo'+(lista.length!==1?'s':'')+' encontrado'+(lista.length!==1?'s':'');
+    content.innerHTML=letras.map(letra=>{
+      const cards=grupos[letra].map(t=>`
+        <div class="term-card">
+          <div class="term-category">${t.categoria}</div>
+          <div class="term-name">${t.nome}</div>
+          <div class="term-def">${t.def}</div>
+          ${t.exemplo?`<div class="term-example">Exemplo: ${t.exemplo}</div>`:''}
+          ${t.link?`<a href="${t.link}" class="term-link">Ver calculadora →</a>`:''}
+        </div>`).join('');
+      return `<div class="letter-section"><span class="letter-anchor" id="letra-${letra}"></span><div class="letter-heading">${letra}</div><div class="terms-grid">${cards}</div></div>`;
+    }).join('');
+    renderAlphaNav(letras);
+  }
+
+  document.getElementById('searchInput').addEventListener('input',function(){
+    const q=this.value.toLowerCase().trim();
+    if(!q){render(termos);return;}
+    render(termos.filter(t=>
+      t.nome.toLowerCase().includes(q)||
+      t.def.toLowerCase().includes(q)||
+      t.categoria.toLowerCase().includes(q)||
+      (t.exemplo&&t.exemplo.toLowerCase().includes(q))
+    ));
+  });
+
+  render(termos);
+</script>
 <script src="/assets/js/components.js"></script>
 </body>
 </html>
