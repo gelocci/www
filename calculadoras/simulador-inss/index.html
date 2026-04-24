@@ -63,50 +63,6 @@ body::before {
 }
 
 /* ============================================================
-   NAV
-   ============================================================ */
-nav {
-  display:flex; justify-content:space-between; align-items:center;
-  padding:1.4rem 2.5rem;
-  position:fixed; top:0; left:0; right:0; z-index:100;
-  background:rgba(8,11,10,0.92);
-  backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--muted-3);
-}
-.logo {
-  font-family:var(--font-display); font-weight:700; font-size:1.5rem;
-  color:var(--white); letter-spacing:-0.5px;
-  display:flex; align-items:center; gap:0.5rem; text-decoration:none;
-}
-.logo-dot {
-  width:7px; height:7px; background:var(--green);
-  border-radius:50%; box-shadow:0 0 10px var(--green);
-  animation:pulse 2s infinite; flex-shrink:0;
-}
-@keyframes pulse {
-  0%,100%{box-shadow:0 0 8px var(--green);}
-  50%{box-shadow:0 0 18px var(--green);}
-}
-.nav-links { display:flex; gap:2.5rem; list-style:none; }
-.nav-links a { color:var(--muted-1); text-decoration:none; font-size:0.875rem; font-weight:400; transition:color 0.2s; }
-.nav-links a:hover { color:var(--white); }
-.nav-back { color:var(--muted-1); text-decoration:none; font-size:0.875rem; display:flex; align-items:center; gap:0.4rem; transition:color 0.2s; }
-.nav-back:hover { color:var(--white); }
-.nav-hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:4px; background:none; border:none; }
-.nav-hamburger span { display:block; width:22px; height:2px; background:var(--white); border-radius:2px; transition:transform 0.25s, opacity 0.25s; }
-.nav-hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
-.nav-hamburger.open span:nth-child(2) { opacity:0; }
-.nav-hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
-.nav-mobile-menu {
-  display:none; position:fixed; top:57px; left:0; right:0;
-  background:rgba(8,11,10,0.97); backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--muted-3); padding:1.5rem 1.25rem; z-index:99; flex-direction:column;
-}
-.nav-mobile-menu.open { display:flex; }
-.nav-mobile-menu a { color:var(--muted-1); text-decoration:none; font-size:1rem; padding:0.9rem 0; border-bottom:1px solid var(--muted-3); transition:color 0.2s; }
-.nav-mobile-menu a:last-child { border-bottom:none; }
-
-/* ============================================================
    PAGE HEADER
    ============================================================ */
 .page-header {
@@ -561,25 +517,7 @@ nav {
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <a href="/" class="logo">Gelocci <div class="logo-dot"></div></a>
-  <ul class="nav-links">
-    <li><a href="/calculadoras/">Ferramentas</a></li>
-    <li><a href="/glossario/">Glossário</a></li>
-    <li><a href="/quem-somos/">Sobre</a></li>
-    <li><a href="/contato/">Contato</a></li>
-  </ul>
-  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
-<div class="nav-mobile-menu" id="mobileMenu">
-  <a href="/calculadoras/" onclick="closeMobileMenu()">Ferramentas</a>
-  <a href="/glossario/" onclick="closeMobileMenu()">Glossário</a>
-  <a href="/quem-somos/" onclick="closeMobileMenu()">Sobre</a>
-  <a href="/contato/" onclick="closeMobileMenu()">Contato</a>
-</div>
+<div id="site-header"></div>
 
 <!-- PAGE HEADER -->
 <div class="page-header">
@@ -892,6 +830,8 @@ nav {
   </div>
 
 </div><!-- /sim-wrapper -->
+
+<div id="site-footer"></div>
 
 <script src="/assets/js/components.js"></script>
 
@@ -1271,16 +1211,6 @@ function renderizarResultado(data) {
       <pre style="background:var(--bg-2);border:1px solid var(--muted-3);border-radius:var(--radius-md);padding:1rem;font-size:0.72rem;color:var(--muted-1);overflow-x:auto;max-height:400px">${JSON.stringify(data, null, 2)}</pre>
     </div>
   `;
-}
-
-// ─── NAV HAMBURGER ─────────────────────────────────────────
-document.getElementById('hamburger').addEventListener('click', () => {
-  document.getElementById('hamburger').classList.toggle('open');
-  document.getElementById('mobileMenu').classList.toggle('open');
-});
-function closeMobileMenu() {
-  document.getElementById('hamburger').classList.remove('open');
-  document.getElementById('mobileMenu').classList.remove('open');
 }
 
 // ─── DRAG & DROP na upload zone ────────────────────────────
