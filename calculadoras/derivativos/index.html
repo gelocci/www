@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-H3WXX5RDYY"></script>
@@ -105,22 +105,7 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
 </head>
 <body>
 
-<nav>
-  <a href="/" class="logo">Gelocci<div class="logo-dot"></div></a>
-  <ul class="nav-links">
-    <li><a href="/#ferramentas">Ferramentas</a></li>
-    <li><a href="/quem-somos/">Sobre</a></li>
-    <li><a href="/contato/">Contato</a></li>
-  </ul>
-  <a href="/" class="nav-back">← Voltar</a>
-  <button class="nav-hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
-</nav>
-
-<div class="nav-mobile-menu" id="mobileMenu">
-  <a href="/#ferramentas" onclick="closeMobileMenu()">Ferramentas</a>
-  <a href="/quem-somos/" onclick="closeMobileMenu()">Sobre</a>
-  <a href="/contato/" onclick="closeMobileMenu()">Contato</a>
-</div>
+<div id="site-header"></div>
 
 <div class="page-header">
   <div class="page-eyebrow"><div class="eyebrow-line"></div>Calculadora</div>
@@ -221,180 +206,10 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
   </div>
 </div>
 
-<footer>
-  <a href="/" class="logo" style="font-size:1.2rem;">Gelocci<div class="logo-dot" style="width:5px;height:5px;"></div></a>
-  <div class="footer-links">
-    <a href="/quem-somos/">Quem Somos</a>
-    <a href="/politica-de-privacidade/">Privacidade</a>
-    <a href="/termos-de-uso/">Termos</a>
-    <a href="/contato/">Contato</a>
-  </div>
-  <div class="footer-copy">© 2026 gelocci.com.br</div>
-</footer>
+<div id="site-footer"></div>
 
-<script>
-  const hamburger=document.getElementById('hamburger');
-  const mobileMenu=document.getElementById('mobileMenu');
-  hamburger.addEventListener('click',()=>{hamburger.classList.toggle('open');mobileMenu.classList.toggle('open');});
-  function closeMobileMenu(){hamburger.classList.remove('open');mobileMenu.classList.remove('open');}
 
-  function showError(msg){var b=document.getElementById('errorBanner');b.textContent=msg;b.classList.add('show');}
-  function clearError(){var b=document.getElementById('errorBanner');b.textContent='';b.classList.remove('show');}
 
-  $(document).ready(function(){
-    $('#currentPrice').mask('000.000,00',{reverse:true});
-    $('#volatility').mask('##0,00',{reverse:true});
-    $('#interestRate').mask('##0,00',{reverse:true});
-    $('#strikeInterval').mask('000,00',{reverse:true});
-    var tomorrow=new Date();
-    tomorrow.setDate(tomorrow.getDate()+1);
-    var yyyy=tomorrow.getFullYear();
-    var mm=String(tomorrow.getMonth()+1).padStart(2,'0');
-    var dd=String(tomorrow.getDate()).padStart(2,'0');
-    document.getElementById('timeToMaturity').min=yyyy+'-'+mm+'-'+dd;
-  });
-
-  function normalCDF(x){
-    var t=1/(1+0.3275911*Math.abs(x));
-    var d=1.061405429*t-1.453152027*t*t+1.421413741*t*t*t-0.284496736*t*t*t*t+0.254465821*t*t*t*t*t;
-    return 0.5+0.5*Math.sign(x)*(1-Math.exp(-x*x/2)*d);
-  }
-  function blackScholesCall(S,K,T,r,sigma){
-    if(T<=0) return Math.max(S-K,0);
-    var d1=(Math.log(S/K)+(r+(sigma*sigma)/2)*T)/(sigma*Math.sqrt(T));
-    var d2=d1-sigma*Math.sqrt(T);
-    return S*normalCDF(d1)-K*Math.exp(-r*T)*normalCDF(d2);
-  }
-  function blackScholesPut(S,K,T,r,sigma){
-    if(T<=0) return Math.max(K-S,0);
-    var d1=(Math.log(S/K)+(r+(sigma*sigma)/2)*T)/(sigma*Math.sqrt(T));
-    var d2=d1-sigma*Math.sqrt(T);
-    return K*Math.exp(-r*T)*normalCDF(-d2)-S*normalCDF(-d1);
-  }
-  function fmt(v){return v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
-  function parseField(id){return parseFloat(document.getElementById(id).value.replace(/\./g,'').replace(',','.'));}
-
-  function extrinsecoBg(extrinsico, maxAbs){
-    if(maxAbs===0) return 'transparent';
-    var ratio=extrinsico/maxAbs;
-    if(Math.abs(ratio)<0.02) return 'transparent';
-    if(ratio>0){
-      var alpha=Math.min(0.55,ratio*0.55);
-      return 'rgba(0,200,83,'+alpha.toFixed(3)+')';
-    } else {
-      var alpha=Math.min(0.55,Math.abs(ratio)*0.55);
-      return 'rgba(220,60,40,'+alpha.toFixed(3)+')';
-    }
-  }
-
-  function calcularCadeia(){
-    clearError();
-    var S=parseField('currentPrice');
-    var sigma=parseField('volatility')/100;
-    var r=parseField('interestRate')/100;
-    var interval=parseField('strikeInterval');
-    var n=parseInt(document.getElementById('strikeCount').value);
-    var dateValue=document.getElementById('timeToMaturity').value;
-
-    if(isNaN(S)||S<=0){showError('⚠ Informe um preço da ação válido.');return;}
-    if(isNaN(sigma)||sigma<=0){showError('⚠ Informe uma volatilidade válida.');return;}
-    if(isNaN(r)){showError('⚠ Informe uma taxa de juros válida.');return;}
-    if(!dateValue){showError('⚠ Selecione a data de vencimento — deve ser uma data posterior a hoje.');return;}
-    if(isNaN(interval)||interval<=0){showError('⚠ Informe um intervalo entre strikes válido.');return;}
-    if(!n||n<1){showError('⚠ Informe a quantidade de strikes de cada lado (mínimo 1).');return;}
-
-    var parts=dateValue.split('-');
-    var maturityDate=new Date(parseInt(parts[0]),parseInt(parts[1])-1,parseInt(parts[2]));
-    var todayNorm=new Date();
-    todayNorm=new Date(todayNorm.getFullYear(),todayNorm.getMonth(),todayNorm.getDate());
-    var days=Math.round((maturityDate-todayNorm)/(1000*3600*24));
-    var T=days/365;
-
-    if(days<=0){
-      showError('⚠ A data de vencimento deve ser posterior a hoje. Selecione uma data futura no campo "Data de Vencimento" acima.');
-      return;
-    }
-
-    document.getElementById('sumPreco').textContent='R$ '+fmt(S);
-    document.getElementById('sumVol').textContent=fmt(sigma*100)+'%';
-    document.getElementById('sumDias').textContent=days+' dias';
-    document.getElementById('sumJuros').textContent=fmt(r*100)+'%';
-
-    // ATM = arredonda o preço para o múltiplo de intervalo mais próximo
-    var atmStrike=Math.round(S/interval)*interval;
-    atmStrike=parseFloat(atmStrike.toFixed(10));
-
-    // Gera strikes: n abaixo + ATM + n acima
-    var strikes=[];
-    for(var i=-n;i<=n;i++){
-      strikes.push(parseFloat((atmStrike+i*interval).toFixed(10)));
-    }
-
-    // Primeira passagem: calcula tudo e acha o maxAbs do extrínseco
-    var rows=[];
-    var maxAbsCall=0,maxAbsPut=0;
-
-    for(var i=0;i<strikes.length;i++){
-      var K=strikes[i];
-      var callVal=blackScholesCall(S,K,T,r,sigma);
-      var putVal=blackScholesPut(S,K,T,r,sigma);
-      var callIntrinsic=Math.max(S-K,0);
-      var callExtrinsic=callVal-callIntrinsic;
-      var putIntrinsic=Math.max(K-S,0);
-      var putExtrinsic=putVal-putIntrinsic;
-      var isAtm=(Math.abs(K-atmStrike)<0.0001);
-
-      if(Math.abs(callExtrinsic)>maxAbsCall) maxAbsCall=Math.abs(callExtrinsic);
-      if(Math.abs(putExtrinsic)>maxAbsPut) maxAbsPut=Math.abs(putExtrinsic);
-
-      var callOAI,putOAI,callBadge,putBadge;
-      if(isAtm){
-        callOAI='ATM';putOAI='ATM';
-        callBadge='badge badge-atm';putBadge='badge badge-atm';
-      } else if(K<S){
-        callOAI='ITM';putOAI='OTM';
-        callBadge='badge badge-itm-call';putBadge='badge badge-otm';
-      } else {
-        callOAI='OTM';putOAI='ITM';
-        callBadge='badge badge-otm';putBadge='badge badge-itm-put';
-      }
-      rows.push({K,callVal,putVal,callIntrinsic,callExtrinsic,putIntrinsic,putExtrinsic,isAtm,callOAI,putOAI,callBadge,putBadge});
-    }
-
-    // Segunda passagem: renderiza com degradê correto
-    var tbody=document.getElementById('tableBody');
-    tbody.innerHTML='';
-
-    for(var i=0;i<rows.length;i++){
-      var row=rows[i];
-      var cBg=extrinsecoBg(row.callExtrinsic,maxAbsCall);
-      var pBg=extrinsecoBg(row.putExtrinsic,maxAbsPut);
-      var cText=(row.callExtrinsic<-0.3)?'color:#FFB0A0;':'';
-      var pText=(row.putExtrinsic<-0.3)?'color:#FFB0A0;':'';
-
-      var tr=document.createElement('tr');
-      if(row.isAtm) tr.classList.add('atm');
-
-      tr.innerHTML=
-        '<td class="strike-col">R$ '+fmt(row.K)+'</td>'+
-        '<td class="call-border-l" style="background:'+cBg+'"><span class="'+row.callBadge+'">'+row.callOAI+'</span></td>'+
-        '<td class="val" style="background:'+cBg+';'+cText+'">R$ '+fmt(row.callVal)+'</td>'+
-        '<td style="background:'+cBg+';'+cText+'">R$ '+fmt(row.callIntrinsic)+'</td>'+
-        '<td class="call-border-r" style="background:'+cBg+';'+cText+'">R$ '+fmt(row.callExtrinsic)+'</td>'+
-        '<td class="put-border-l" style="background:'+pBg+'"><span class="'+row.putBadge+'">'+row.putOAI+'</span></td>'+
-        '<td class="val" style="background:'+pBg+';'+pText+'">R$ '+fmt(row.putVal)+'</td>'+
-        '<td style="background:'+pBg+';'+pText+'">R$ '+fmt(row.putIntrinsic)+'</td>'+
-        '<td style="background:'+pBg+';'+pText+'">R$ '+fmt(row.putExtrinsic)+'</td>';
-
-      tbody.appendChild(tr);
-    }
-
-    var resultsSection=document.getElementById('resultsSection');
-    resultsSection.style.display='block';
-    var offset=resultsSection.getBoundingClientRect().top+window.scrollY-80;
-    window.scrollTo({top:offset,behavior:'smooth'});
-  }
-</script>
-
+<script src="/assets/js/components.js"></script>
 </body>
 </html>
