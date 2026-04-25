@@ -1,10 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-H3WXX5RDYY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-H3WXX5RDYY');
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gelocci — Simulador de Aposentadoria INSS</title>
-  <meta name="description" content="Simule sua aposentadoria pelo INSS. Carregue seu CNIS ou informe manualmente e descubra quando você pode se aposentar e quanto vai receber.">
+  <meta name="description" content="Simule sua aposentadoria pelo INSS. Carregue seu CNIS, veja quanto tempo falta e simule contribuições futuras.">
+  <meta name="keywords" content="simulador aposentadoria, INSS, CNIS, previdência social, tempo de contribuição, RMI">
+  <meta name="author" content="Gerson Locci">
+  <meta property="og:title" content="Gelocci — Simulador de Aposentadoria INSS">
+  <meta property="og:description" content="Carregue seu CNIS e descubra quando você pode se aposentar e quanto vai receber.">
+  <meta property="og:url" content="https://gelocci.com.br/calculadoras/simulador-aposentadoria/">
+  <meta property="og:type" content="website">
   <link rel="icon" href="../../assets/imagens/favicon.ico" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
@@ -31,6 +45,7 @@
   --danger-glow:  rgba(255,77,77,0.12);
   --danger-border:rgba(255,77,77,0.25);
   --warning:      #FFB300;
+  --warning-glow: rgba(255,179,0,0.12);
   --font-display: 'Playfair Display', Georgia, serif;
   --font-body:    'Outfit', system-ui, sans-serif;
   --radius-sm:  4px;
@@ -46,6 +61,9 @@
   --ease-out: cubic-bezier(0.16,1,0.3,1);
 }
 
+/* ============================================================
+   BASE
+   ============================================================ */
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html { scroll-behavior: smooth; }
 body {
@@ -90,6 +108,8 @@ nav {
 .nav-links { display:flex; gap:2.5rem; list-style:none; }
 .nav-links a { color:var(--muted-1); text-decoration:none; font-size:0.875rem; font-weight:400; transition:color 0.2s; }
 .nav-links a:hover { color:var(--white); }
+.nav-back { color:var(--muted-1); text-decoration:none; font-size:0.875rem; display:flex; align-items:center; gap:0.4rem; transition:color 0.2s; }
+.nav-back:hover { color:var(--white); }
 .nav-hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:4px; background:none; border:none; }
 .nav-hamburger span { display:block; width:22px; height:2px; background:var(--white); border-radius:2px; transition:transform 0.25s, opacity 0.25s; }
 .nav-hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
@@ -103,21 +123,6 @@ nav {
 .nav-mobile-menu.open { display:flex; }
 .nav-mobile-menu a { color:var(--muted-1); text-decoration:none; font-size:1rem; padding:0.9rem 0; border-bottom:1px solid var(--muted-3); transition:color 0.2s; }
 .nav-mobile-menu a:last-child { border-bottom:none; }
-
-/* ============================================================
-   FOOTER
-   ============================================================ */
-footer {
-  border-top:1px solid var(--muted-3);
-  padding:2rem 2.5rem;
-  display:flex; justify-content:space-between; align-items:center;
-  flex-wrap:wrap; gap:1rem;
-  max-width:1200px; margin:0 auto;
-}
-.footer-links { display:flex; gap:1.5rem; }
-.footer-links a { color:var(--muted-2); text-decoration:none; font-size:0.8rem; transition:color 0.2s; }
-.footer-links a:hover { color:var(--green); }
-.footer-copy { color:var(--muted-2); font-size:0.75rem; }
 
 /* ============================================================
    PAGE HEADER
@@ -141,1627 +146,1709 @@ footer {
 .page-header p { color:var(--muted-1); font-size:0.95rem; font-weight:300; max-width:560px; line-height:1.7; }
 
 /* ============================================================
-   WRAPPER
+   WRAPPER GERAL
    ============================================================ */
-.sim-wrapper { max-width:900px; margin:0 auto; padding:0 2.5rem 6rem; }
+.sim-wrapper { max-width:1200px; margin:0 auto; padding:0 2.5rem 6rem; }
 
 /* ============================================================
-   STEPPER — ESTILO 1 (dots com linha conectora)
+   STEPPER
    ============================================================ */
 .stepper {
-  display:flex; align-items:center;
-  background:var(--bg-card); border:1px solid var(--muted-3);
-  border-radius:var(--radius-xl); padding:1.5rem 2rem;
+  display:flex; align-items:center; gap:0;
   margin-bottom:2.5rem;
+  background:var(--bg-card); border:1px solid var(--muted-3);
+  border-radius:var(--radius-xl); padding:1.25rem 2rem;
 }
 .step {
-  display:flex; flex-direction:column; align-items:center;
-  gap:8px; flex-shrink:0;
+  display:flex; align-items:center; gap:0.75rem;
+  flex:1; position:relative;
 }
-.step-connector {
-  flex:1; height:1px; background:var(--muted-3);
-  position:relative; top:-18px;
-  transition:background 0.4s;
+.step:not(:last-child)::after {
+  content:'';
+  position:absolute; right:0; top:50%; transform:translateY(-50%);
+  width:1px; height:24px; background:var(--muted-3);
 }
-.step-connector.done { background:var(--green); }
-
-.step-dot {
+.step-number {
   width:32px; height:32px; border-radius:50%;
   display:flex; align-items:center; justify-content:center;
-  font-size:0.8rem; font-weight:700;
-  position:relative; z-index:1; flex-shrink:0;
-  transition:all 0.35s var(--ease-out);
-}
-.step.pending .step-dot {
-  background:var(--bg-card);
-  border:1.5px solid var(--muted-3);
-  color:var(--muted-2);
-}
-.step.active .step-dot {
-  background:var(--bg-card);
-  border:2px solid var(--green);
-  color:var(--green);
-  box-shadow:0 0 0 4px var(--green-glow);
-}
-.step.done .step-dot {
-  background:var(--green);
-  border:2px solid var(--green);
-  color:#040F09;
-}
-.step-label {
-  font-size:0.72rem; font-weight:500; text-align:center;
-  text-transform:uppercase; letter-spacing:0.8px;
-  transition:color 0.3s;
-}
-.step.pending .step-label { color:rgba(240,244,242,0.3); }
-.step.active .step-label  { color:var(--green); }
-.step.done .step-label    { color:var(--muted-1); }
-.step-sublabel {
-  font-size:0.68rem; color:var(--muted-2); text-align:center;
-  display:none;
-}
-.step.active .step-sublabel { display:block; }
-
-/* ============================================================
-   PAINEL DE CADA PASSO
-   ============================================================ */
-.step-panel { display:none; animation:fadeUp 0.35s var(--ease-out); }
-.step-panel.active { display:block; }
-
-@keyframes fadeUp {
-  from { opacity:0; transform:translateY(16px); }
-  to   { opacity:1; transform:translateY(0); }
-}
-
-.panel-card {
-  background:var(--bg-card);
-  border:1px solid var(--muted-3);
-  border-radius:var(--radius-2xl);
-  padding:2rem 2.5rem;
-}
-
-/* ============================================================
-   PASSO 1 — ESCOLHA DO MODO
-   ============================================================ */
-.modo-grid {
-  display:grid; grid-template-columns:1fr 1fr; gap:1rem;
-  margin-top:1.5rem;
-}
-.modo-card {
-  border:1px solid var(--muted-3);
-  border-radius:var(--radius-xl);
-  padding:1.75rem 1.5rem;
-  cursor:pointer;
-  transition:all 0.25s;
-  background:var(--bg-2);
-  text-align:center;
-}
-.modo-card:hover { border-color:var(--green-border); background:var(--bg-hover); }
-.modo-card.selected {
-  border-color:var(--green);
-  background:var(--green-glow);
-  box-shadow:var(--shadow-green);
-}
-.modo-icon {
-  width:48px; height:48px; border-radius:var(--radius-md);
+  font-size:0.8rem; font-weight:700; flex-shrink:0;
   background:var(--muted-4); border:1px solid var(--muted-3);
-  display:flex; align-items:center; justify-content:center;
-  margin:0 auto 1rem; font-size:1.4rem;
-  transition:all 0.25s;
+  color:var(--muted-2); transition:all 0.3s;
 }
-.modo-card.selected .modo-icon {
+.step.active .step-number {
   background:var(--green-glow); border-color:var(--green-border);
+  color:var(--green);
 }
-.modo-card h3 { font-size:1rem; font-weight:600; margin-bottom:0.4rem; }
-.modo-card p  { font-size:0.82rem; color:var(--muted-2); line-height:1.5; }
+.step.done .step-number {
+  background:var(--green); border-color:var(--green);
+  color:var(--bg);
+}
+.step-info { flex:1; }
+.step-label {
+  font-size:0.7rem; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--muted-2); font-weight:500;
+}
+.step.active .step-label { color:var(--green); }
+.step.done .step-label { color:var(--muted-1); }
+.step-title { font-size:0.875rem; font-weight:600; color:var(--muted-2); margin-top:0.15rem; }
+.step.active .step-title, .step.done .step-title { color:var(--white); }
 
 /* ============================================================
-   PASSO 2A — UPLOAD DO PDF
+   FORM CARDS
+   ============================================================ */
+.form-card {
+  background:var(--bg-card); border:1px solid var(--muted-3);
+  border-radius:var(--radius-xl); padding:2.5rem; margin-bottom:1.5rem;
+  animation:fadeUp 0.4s var(--ease-out) both;
+}
+.form-card-header {
+  display:flex; align-items:center; gap:1rem; margin-bottom:2rem;
+}
+.form-card-icon {
+  width:44px; height:44px; border-radius:var(--radius-md);
+  background:var(--green-glow); border:1px solid var(--green-border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.2rem; flex-shrink:0;
+}
+.form-card-title {
+  font-family:var(--font-display); font-size:1.1rem; font-weight:700; letter-spacing:-0.3px;
+}
+.form-card-desc { font-size:0.82rem; color:var(--muted-2); margin-top:0.2rem; font-weight:300; }
+
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+.form-grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.5rem; }
+.form-group { display:flex; flex-direction:column; gap:0.5rem; }
+.form-group.full { grid-column:1/-1; }
+
+.input-label { font-size:0.8rem; color:var(--muted-2); font-weight:500; letter-spacing:0.3px; }
+.input {
+  background:var(--bg-2); border:1px solid var(--muted-3);
+  border-radius:var(--radius-md); padding:0.85rem 1rem;
+  color:var(--white); font-family:var(--font-body); font-size:0.95rem;
+  transition:border-color 0.2s, box-shadow 0.2s; outline:none; width:100%;
+}
+.input::placeholder { color:var(--muted-2); }
+.input:focus { border-color:var(--green-border); box-shadow:0 0 0 3px var(--green-glow); }
+.input:disabled { opacity:0.5; cursor:not-allowed; }
+.input-error { border-color:var(--danger-border) !important; }
+.input-error:focus { box-shadow:0 0 0 3px var(--danger-glow) !important; }
+
+.input-prefix-wrap { position:relative; }
+.input-prefix {
+  position:absolute; left:1rem; top:50%; transform:translateY(-50%);
+  color:var(--muted-2); font-size:0.85rem; font-weight:500; pointer-events:none;
+}
+.input-prefix-wrap .input { padding-left:2.5rem; }
+
+.input-hint { font-size:0.75rem; color:var(--muted-2); }
+.input-hint.error { color:var(--danger); }
+
+select.input { cursor:pointer; }
+select.input option { background:var(--bg-card); color:var(--white); }
+
+/* ============================================================
+   UPLOAD ZONE
    ============================================================ */
 .upload-zone {
-  border:2px dashed var(--muted-3);
-  border-radius:var(--radius-xl);
-  padding:3rem 2rem;
-  text-align:center;
-  cursor:pointer;
-  transition:all 0.25s;
-  margin-top:1.5rem;
-  position:relative;
+  border:2px dashed var(--muted-3); border-radius:var(--radius-xl);
+  padding:3rem 2rem; text-align:center; cursor:pointer;
+  transition:all 0.3s var(--ease-out); position:relative; overflow:hidden;
+  background:var(--muted-4);
 }
 .upload-zone:hover, .upload-zone.drag-over {
-  border-color:var(--green);
-  background:var(--green-glow);
+  border-color:var(--green-border); background:var(--green-glow);
 }
 .upload-zone input[type="file"] {
   position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%;
 }
-.upload-icon { font-size:2.5rem; margin-bottom:1rem; }
-.upload-zone h3 { font-size:1rem; font-weight:600; margin-bottom:0.5rem; }
-.upload-zone p  { font-size:0.82rem; color:var(--muted-2); }
-
-.upload-status {
-  margin-top:1rem; padding:1rem 1.25rem;
-  border-radius:var(--radius-lg);
-  font-size:0.85rem; display:none; align-items:center; gap:0.75rem;
-}
-.upload-status.loading { display:flex; background:var(--muted-4); border:1px solid var(--muted-3); color:var(--muted-1); }
-.upload-status.success { display:flex; background:var(--green-glow); border:1px solid var(--green-border); color:var(--green); }
-.upload-status.error   { display:flex; background:var(--danger-glow); border:1px solid var(--danger-border); color:var(--danger); }
-
-.spinner {
-  width:16px; height:16px; border:2px solid var(--muted-3);
-  border-top-color:var(--green); border-radius:50%;
-  animation:spin 0.8s linear infinite; flex-shrink:0;
-}
-@keyframes spin { to { transform:rotate(360deg); } }
-
-/* ============================================================
-   DADOS EXTRAÍDOS DO CNIS
-   ============================================================ */
-.dados-extraidos {
-  margin-top:1.5rem; display:none;
+.upload-icon { font-size:2.5rem; margin-bottom:1rem; display:block; }
+.upload-title { font-family:var(--font-display); font-size:1.05rem; font-weight:700; margin-bottom:0.5rem; }
+.upload-desc { font-size:0.85rem; color:var(--muted-2); font-weight:300; }
+.upload-badge {
+  display:inline-block; margin-top:1rem;
   background:var(--green-glow); border:1px solid var(--green-border);
-  border-radius:var(--radius-xl); padding:1.25rem 1.5rem;
+  color:var(--green); font-size:0.7rem; padding:0.25rem 0.75rem;
+  border-radius:var(--radius-full); letter-spacing:1px; text-transform:uppercase;
 }
-.dados-extraidos.visible { display:block; }
-.dados-extraidos-title {
-  font-size:0.72rem; text-transform:uppercase; letter-spacing:1.5px;
-  color:var(--green); font-weight:500; margin-bottom:1rem;
-  display:flex; align-items:center; gap:0.5rem;
+.upload-zone.has-file { border-color:var(--green-border); background:var(--green-glow); }
+.upload-zone.has-file .upload-icon::after { content:''; }
+.file-name {
+  display:none; margin-top:1rem; font-size:0.85rem;
+  color:var(--green); font-weight:500; align-items:center; gap:0.5rem; justify-content:center;
 }
-.dados-grid {
-  display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));
-  gap:0.75rem;
-}
-.dado-item label { font-size:0.7rem; color:var(--muted-2); text-transform:uppercase; letter-spacing:0.8px; display:block; margin-bottom:0.2rem; }
-.dado-item span  { font-size:0.95rem; font-weight:600; color:var(--white); }
-
-/* Aviso de sexo não disponível no CNIS */
-.sexo-aviso {
-  margin-top:1rem; padding:0.75rem 1rem;
-  background:var(--muted-4); border:1px solid var(--muted-3);
-  border-radius:var(--radius-md); font-size:0.82rem; color:var(--muted-1);
-  display:none;
-}
-.sexo-aviso.visible { display:block; }
-
-/* ============================================================
-   PASSO 2B — ENTRADA MANUAL
-   ============================================================ */
-.form-section { margin-top:1.5rem; }
-.form-section-title {
-  font-size:0.72rem; text-transform:uppercase; letter-spacing:1.5px;
-  color:var(--green); font-weight:500; margin-bottom:1rem;
-  padding-bottom:0.5rem; border-bottom:1px solid var(--muted-3);
-}
-
-.form-row { display:grid; gap:1rem; margin-bottom:1rem; }
-.form-row.cols-2 { grid-template-columns:1fr 1fr; }
-.form-row.cols-3 { grid-template-columns:1fr 1fr 1fr; }
-
-.form-group { display:flex; flex-direction:column; gap:0.4rem; }
-.form-group label { font-size:0.75rem; color:var(--muted-2); font-weight:500; }
-.form-group input, .form-group select {
-  background:var(--bg-2); border:1px solid var(--muted-3);
-  border-radius:var(--radius-md); padding:0.65rem 0.85rem;
-  color:var(--white); font-family:var(--font-body); font-size:0.9rem;
-  transition:border-color 0.2s;
-  outline:none;
-}
-.form-group input:focus, .form-group select:focus {
-  border-color:var(--green);
-  box-shadow:0 0 0 3px var(--green-glow);
-}
-.form-group input::placeholder { color:var(--muted-2); }
-.form-group select option { background:var(--bg-card); }
-.form-hint { font-size:0.72rem; color:var(--muted-2); }
-
-/* Tabs de modo de entrada das contribuições */
-.contrib-tabs {
-  display:flex; gap:0.5rem; margin-bottom:1.25rem;
-}
-.contrib-tab {
-  padding:0.45rem 1rem; border-radius:var(--radius-full);
-  font-size:0.8rem; font-weight:500; cursor:pointer;
-  border:1px solid var(--muted-3); background:transparent;
-  color:var(--muted-1); transition:all 0.2s;
-}
-.contrib-tab.active {
-  background:var(--green-glow); border-color:var(--green-border);
-  color:var(--green);
-}
-
-/* Tabela de contribuições manuais */
-.contrib-table-wrap { overflow-x:auto; margin-top:0.75rem; }
-.contrib-table {
-  width:100%; border-collapse:collapse; font-size:0.85rem;
-}
-.contrib-table th {
-  text-align:left; padding:0.5rem 0.75rem;
-  color:var(--muted-2); font-size:0.7rem; font-weight:500;
-  text-transform:uppercase; letter-spacing:0.8px;
-  border-bottom:1px solid var(--muted-3);
-}
-.contrib-table td {
-  padding:0.6rem 0.75rem; border-bottom:1px solid var(--muted-4);
-  vertical-align:middle;
-}
-.contrib-table tr:last-child td { border-bottom:none; }
-.contrib-table tr:hover td { background:var(--bg-hover); }
-.contrib-table input {
-  background:transparent; border:none; color:var(--white);
-  font-family:var(--font-body); font-size:0.85rem; width:100%;
-  outline:none; padding:0.1rem 0;
-}
-.contrib-table input:focus { border-bottom:1px solid var(--green); }
-.btn-remove-row {
-  background:none; border:none; cursor:pointer;
-  color:var(--muted-2); font-size:1rem; padding:0.2rem 0.4rem;
-  border-radius:var(--radius-sm); transition:all 0.2s;
-}
-.btn-remove-row:hover { color:var(--danger); background:var(--danger-glow); }
-
-.btn-add-row {
-  margin-top:0.75rem; background:none; border:1px dashed var(--muted-3);
-  color:var(--muted-1); padding:0.5rem 1rem; border-radius:var(--radius-md);
-  font-size:0.82rem; cursor:pointer; transition:all 0.2s; font-family:var(--font-body);
-  display:inline-flex; align-items:center; gap:0.4rem;
-}
-.btn-add-row:hover { border-color:var(--green); color:var(--green); background:var(--green-glow); }
-
-/* Textarea de lote */
-.lote-textarea {
-  width:100%; background:var(--bg-2); border:1px solid var(--muted-3);
-  border-radius:var(--radius-md); padding:0.85rem; color:var(--white);
-  font-family:'Courier New', monospace; font-size:0.85rem; resize:vertical;
-  min-height:160px; outline:none; transition:border-color 0.2s; line-height:1.6;
-}
-.lote-textarea:focus { border-color:var(--green); box-shadow:0 0 0 3px var(--green-glow); }
-.lote-textarea::placeholder { color:var(--muted-2); }
-
-/* Média em tempo real */
-.media-realtime {
-  margin-top:1rem; padding:1rem 1.25rem;
-  background:var(--bg-2); border:1px solid var(--muted-3);
-  border-radius:var(--radius-lg); display:none;
-  justify-content:space-between; align-items:center;
-}
-.media-realtime.visible { display:flex; }
-.media-realtime-label { font-size:0.78rem; color:var(--muted-2); }
-.media-realtime-value {
-  font-family:var(--font-display); font-size:1.3rem;
-  font-weight:700; color:var(--green);
-}
-
-/* ============================================================
-   PASSO 3 — EXTRATO
-   ============================================================ */
-.extrato-header {
-  display:flex; justify-content:space-between; align-items:flex-start;
-  margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;
-}
-.extrato-stats {
-  display:flex; gap:2rem; flex-wrap:wrap;
-}
-.extrato-stat { text-align:center; }
-.extrato-stat-val {
-  font-family:var(--font-display); font-size:1.5rem;
-  font-weight:700; color:var(--white); display:block;
-}
-.extrato-stat-label { font-size:0.7rem; color:var(--muted-2); text-transform:uppercase; letter-spacing:0.8px; }
-
-.extrato-table-wrap {
-  max-height:360px; overflow-y:auto; overflow-x:auto;
-  border-radius:var(--radius-lg); border:1px solid var(--muted-3);
-}
-.extrato-table {
-  width:100%; border-collapse:collapse; font-size:0.875rem;
-  table-layout:fixed;
-}
-.extrato-table thead th {
-  position:sticky; top:0; z-index:2;
-  background:var(--bg-card); padding:0.75rem 1rem;
-  text-align:left; color:var(--muted-2); font-size:0.7rem;
-  font-weight:500; text-transform:uppercase; letter-spacing:0.8px;
-  border-bottom:1px solid var(--muted-3); white-space:nowrap;
-  overflow:hidden; text-overflow:ellipsis;
-}
-.extrato-table thead th:nth-child(1) { width:12%; }
-.extrato-table thead th:nth-child(2) { width:18%; }
-.extrato-table thead th:nth-child(3) { width:16%; }
-.extrato-table thead th:nth-child(4) { width:16%; }
-.extrato-table thead th:nth-child(5) { width:18%; }
-.extrato-table thead th:nth-child(6) { width:20%; }
-.extrato-table tbody td {
-  padding:0.7rem 1rem; border-bottom:1px solid var(--muted-4);
-  color:var(--muted-1); white-space:nowrap;
-  overflow:hidden; text-overflow:ellipsis;
-}
-.extrato-table tbody tr:last-child td { border-bottom:none; }
-.extrato-table tbody tr:hover td { background:var(--bg-hover); color:var(--white); }
-.extrato-table .val-corrigido { color:var(--green); font-weight:600; }
-.extrato-table .empregador { color:var(--muted-2); font-size:0.78rem; }
-.badge-sim {
-  display:inline-block; padding:0.15rem 0.5rem;
-  background:rgba(201,168,76,0.15); border:1px solid rgba(201,168,76,0.3);
-  color:var(--gold); border-radius:var(--radius-full);
-  font-size:0.65rem; font-weight:600; letter-spacing:0.5px;
-}
-
-/* ============================================================
-   PASSO 3 — SIMULAÇÕES
-   ============================================================ */
-.sim-section {
-  margin-top:1.5rem; border-top:1px solid var(--muted-3);
-  padding-top:1.5rem;
-}
-.sim-section-title {
-  font-size:0.72rem; text-transform:uppercase; letter-spacing:1.5px;
-  color:var(--green); font-weight:500; margin-bottom:1.25rem;
-  display:flex; align-items:center; gap:0.5rem;
-}
-
-/* Ajuste de tempo */
-.ajuste-tempo {
-  background:var(--bg-2); border:1px solid var(--muted-3);
-  border-radius:var(--radius-lg); padding:1.25rem;
-  margin-bottom:1.25rem; display:none;
-}
-.ajuste-tempo.visible { display:block; }
-.ajuste-tempo-info {
-  font-size:0.82rem; color:var(--warning);
-  margin-bottom:1rem; display:flex; align-items:flex-start; gap:0.5rem;
-  background:rgba(255,179,0,0.08); border:1px solid rgba(255,179,0,0.2);
-  border-radius:var(--radius-md); padding:0.75rem;
-}
-.ajuste-tempo-grid {
-  display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.75rem;
-}
-
-/* Modos de simulação */
-.sim-modos { display:flex; gap:0.5rem; margin-bottom:1.25rem; flex-wrap:wrap; }
-.sim-modo-btn {
-  padding:0.45rem 1rem; border-radius:var(--radius-full);
-  font-size:0.8rem; font-weight:500; cursor:pointer;
-  border:1px solid var(--muted-3); background:transparent;
-  color:var(--muted-1); transition:all 0.2s; font-family:var(--font-body);
-}
-.sim-modo-btn.active {
-  background:var(--green-glow); border-color:var(--green-border); color:var(--green);
-}
-.sim-modo-desc {
-  font-size:0.8rem; color:var(--muted-2); margin-bottom:1rem; line-height:1.5;
-}
-.sim-campos { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
-.sim-campos.single { grid-template-columns:1fr; }
-
-/* Contribuições simuladas na tabela */
-.extrato-table tr.simulado td { color:rgba(201,168,76,0.85); }
-
-/* ============================================================
-   PASSO 3 — RESULTADO
-   ============================================================ */
-.resultado-header { margin-bottom:1.5rem; }
-.resultado-nome {
-  font-family:var(--font-display); font-size:1.3rem;
-  font-weight:700; color:var(--white); margin-bottom:1rem;
-}
-.resultado-metrics {
-  display:grid; grid-template-columns:repeat(3,1fr); gap:8px;
-}
-.res-metric {
-  background:var(--bg-2); border:0.5px solid var(--muted-3);
-  border-radius:var(--radius-md); padding:10px 12px;
-}
-.res-metric-label {
-  font-size:10px; text-transform:uppercase; letter-spacing:0.8px;
-  color:var(--muted-2); margin-bottom:4px;
-}
-.res-metric-val {
-  font-size:1.1rem; font-weight:500; color:var(--white);
-}
-.res-metric-val.green { color:var(--green); }
-
-/* Seções de regras */
-.regras-secao { margin-bottom:1.25rem; }
-.regras-secao-label {
-  font-size:10px; text-transform:uppercase; letter-spacing:1.5px;
-  color:var(--muted-2); font-weight:500;
-  margin-bottom:0.6rem; padding-left:2px;
-}
-
-/* Acordeon */
-.acord {
-  border:0.5px solid var(--muted-3); border-radius:var(--radius-lg);
-  overflow:hidden; margin-bottom:8px;
-}
-.acord-header {
-  display:flex; align-items:center; gap:12px;
-  padding:14px 16px; cursor:pointer;
-  background:var(--bg-card); transition:background 0.2s;
-}
-.acord-header:hover { background:var(--bg-hover); }
-.acord-status {
-  width:22px; height:22px; border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  font-size:11px; font-weight:700; flex-shrink:0;
-}
-.status-ok  { background:rgba(0,200,83,0.15); color:var(--green); border:1px solid rgba(0,200,83,0.3); }
-.status-no  { background:rgba(255,77,77,0.12); color:#FF4D4D; border:1px solid rgba(255,77,77,0.25); }
-.acord-title { flex:1; font-size:13px; font-weight:500; color:var(--white); }
-.acord-chevron { color:var(--muted-2); font-size:11px; transition:transform 0.25s; flex-shrink:0; }
-.acord.open .acord-chevron { transform:rotate(180deg); }
-.acord-body {
-  display:none; background:var(--bg-2);
-  border-top:0.5px solid var(--muted-3);
-}
-.acord.open .acord-body { display:block; }
-.acord-veredicto {
-  padding:12px 16px; font-size:12px; line-height:1.6;
-  color:var(--muted-1); border-bottom:0.5px solid var(--muted-3);
-}
-.acord-veredicto strong { color:var(--white); }
-.acord-veredicto .nao { color:#FF4D4D; font-weight:600; }
-.acord-veredicto .sim { color:var(--green); font-weight:600; }
-
-/* Requisitos */
-.req-table { width:100%; border-collapse:collapse; }
-.req-table td {
-  padding:8px 16px; font-size:12px;
-  border-bottom:0.5px solid var(--muted-4);
-}
-.req-table tr:last-child td { border-bottom:none; }
-.req-nome { color:var(--muted-2); width:35%; }
-.req-exigido { color:var(--muted-2); font-size:11px; width:30%; }
-.req-atual { font-weight:500; text-align:right; }
-.req-atual.ok { color:var(--green); }
-.req-atual.no { color:#FF4D4D; }
-.req-falta { font-size:10px; color:rgba(255,77,77,0.7); text-align:right; padding-top:0; }
-.req-obs { font-size:10px; color:var(--muted-2); padding:6px 16px 10px; font-style:italic; }
-
-/* CTA simulação */
-.sim-cta {
-  margin-top:1.25rem; border:0.5px dashed rgba(0,200,83,0.3);
-  border-radius:var(--radius-lg); padding:14px 16px;
-  display:flex; align-items:center; justify-content:space-between;
-  gap:12px; background:rgba(0,200,83,0.04);
-}
-.sim-cta-text { font-size:12px; color:var(--muted-1); line-height:1.5; }
-.sim-cta-text strong { color:var(--white); display:block; margin-bottom:2px; font-size:13px; }
-
-/* Aviso */
-.aviso-resultado {
-  font-size:11px; color:var(--muted-2); text-align:center;
-  margin-top:1.25rem; line-height:1.5;
-}
-
-/* Responsive resultado */
-@media (max-width:640px) {
-  .resultado-metrics { grid-template-columns:repeat(3,1fr); }
-  .sim-cta { flex-direction:column; align-items:flex-start; }
-}
+.file-name.visible { display:flex; }
 
 /* ============================================================
    BOTÕES
    ============================================================ */
 .btn-primary {
-  background:var(--green); color:#040F09;
-  border:none; border-radius:var(--radius-sm);
-  padding:0.75rem 1.75rem; font-family:var(--font-body);
-  font-size:0.9rem; font-weight:700; cursor:pointer;
-  transition:all 0.2s; letter-spacing:0.3px;
-  display:inline-flex; align-items:center; gap:0.5rem;
+  background:var(--green); color:var(--bg); border:none;
+  padding:0.85rem 2rem; border-radius:var(--radius-sm);
+  font-family:var(--font-body); font-weight:700; font-size:0.95rem;
+  cursor:pointer; transition:transform 0.15s var(--ease-out), box-shadow 0.15s;
+  letter-spacing:0.3px; text-decoration:none; display:inline-flex;
+  align-items:center; gap:0.5rem;
 }
-.btn-primary:hover { background:var(--green-dim); box-shadow:var(--shadow-green); }
-.btn-primary:disabled { opacity:0.4; cursor:not-allowed; box-shadow:none; }
+.btn-primary:hover { transform:translateY(-1px); box-shadow:var(--shadow-green); }
+.btn-primary:active { transform:translateY(0); }
+.btn-primary:disabled { opacity:0.5; cursor:not-allowed; transform:none; box-shadow:none; }
 
 .btn-secondary {
-  background:transparent; color:var(--muted-1);
-  border:1px solid var(--muted-3); border-radius:var(--radius-sm);
-  padding:0.75rem 1.5rem; font-family:var(--font-body);
-  font-size:0.875rem; font-weight:500; cursor:pointer;
-  transition:all 0.2s;
-  display:inline-flex; align-items:center; gap:0.5rem;
+  background:transparent; color:var(--green);
+  border:1px solid var(--green-border);
+  padding:0.85rem 2rem; border-radius:var(--radius-sm);
+  font-family:var(--font-body); font-weight:500; font-size:0.95rem;
+  cursor:pointer; transition:background 0.15s; letter-spacing:0.3px;
+  display:inline-flex; align-items:center; gap:0.5rem; text-decoration:none;
 }
-.btn-secondary:hover { border-color:var(--muted-2); color:var(--white); }
+.btn-secondary:hover { background:var(--green-glow); }
 
-.btn-row {
-  display:flex; gap:0.75rem; margin-top:1.75rem;
-  justify-content:flex-end; align-items:center;
+.btn-ghost {
+  background:transparent; color:var(--muted-1); border:none;
+  padding:0.85rem 0; font-family:var(--font-body); font-size:0.9rem;
+  cursor:pointer; display:inline-flex; align-items:center; gap:0.4rem;
+  transition:color 0.15s; text-decoration:none;
+}
+.btn-ghost:hover { color:var(--white); }
+
+.btn-danger {
+  background:transparent; color:var(--danger);
+  border:1px solid var(--danger-border);
+  padding:0.5rem 1rem; border-radius:var(--radius-sm);
+  font-family:var(--font-body); font-weight:500; font-size:0.8rem;
+  cursor:pointer; transition:background 0.15s;
+}
+.btn-danger:hover { background:var(--danger-glow); }
+
+.btn-sm { padding:0.45rem 1rem; font-size:0.8rem; }
+.btn-full { width:100%; justify-content:center; }
+
+/* ============================================================
+   LOADING / SPINNER
+   ============================================================ */
+.spinner-overlay {
+  display:none; position:fixed; inset:0; z-index:200;
+  background:rgba(8,11,10,0.85); backdrop-filter:blur(8px);
+  align-items:center; justify-content:center; flex-direction:column; gap:1.5rem;
+}
+.spinner-overlay.visible { display:flex; }
+.spinner {
+  width:48px; height:48px; border:3px solid var(--muted-3);
+  border-top-color:var(--green); border-radius:50%;
+  animation:spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+.spinner-text { font-size:0.9rem; color:var(--muted-1); font-weight:300; }
+
+/* ============================================================
+   BADGES
+   ============================================================ */
+.badge {
+  display:inline-flex; align-items:center; gap:0.4rem;
+  font-size:0.7rem; padding:0.25rem 0.65rem; border-radius:var(--radius-full);
+  letter-spacing:0.8px; font-weight:500; text-transform:uppercase;
+}
+.badge-green { background:var(--green-glow); border:1px solid var(--green-border); color:var(--green); }
+.badge-gold { background:rgba(201,168,76,0.12); border:1px solid rgba(201,168,76,0.25); color:var(--gold); }
+.badge-neutral { background:var(--muted-4); border:1px solid var(--muted-3); color:var(--muted-2); }
+.badge-dot { width:5px; height:5px; border-radius:50%; background:currentColor; animation:pulse 2s infinite; }
+
+/* ============================================================
+   TABELA DO EXTRATO
+   ============================================================ */
+.extrato-header {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;
+}
+.extrato-stats {
+  display:flex; gap:2rem; flex-wrap:wrap;
+}
+.extrato-stat-n {
+  font-family:var(--font-display); font-size:1.5rem; font-weight:700; line-height:1;
+}
+.extrato-stat-n.green { color:var(--green); }
+.extrato-stat-l { font-size:0.7rem; color:var(--muted-2); margin-top:0.2rem; letter-spacing:0.5px; text-transform:uppercase; }
+
+.table-wrap {
+  background:var(--bg-card); border:1px solid var(--muted-3);
+  border-radius:var(--radius-xl); overflow:hidden;
+  overflow-x:auto; -webkit-overflow-scrolling:touch;
+}
+table { width:100%; border-collapse:collapse; min-width:600px; }
+thead th {
+  background:var(--bg-2); padding:0.85rem 1rem;
+  font-size:0.7rem; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--green); font-weight:600; text-align:left;
+  border-bottom:1px solid var(--muted-3);
+}
+tbody td {
+  padding:0.85rem 1rem; font-size:0.875rem;
+  border-bottom:1px solid var(--muted-4); color:var(--muted-1);
+  transition:background 0.15s;
+}
+tbody tr:last-child td { border-bottom:none; }
+tbody tr:hover td { background:var(--bg-hover); }
+tbody tr.fora-media td { opacity:0.45; }
+tbody tr.extra td { background:rgba(0,200,83,0.04); }
+tbody tr.extra td:first-child { border-left:2px solid var(--green); }
+td.valor-corrigido { color:var(--white); font-weight:600; }
+td.competencia { font-family:monospace; font-size:0.8rem; color:var(--muted-2); }
+.out-of-range-badge {
+  display:inline-block; font-size:0.6rem; padding:0.1rem 0.4rem;
+  border-radius:var(--radius-full); background:var(--warning-glow);
+  border:1px solid rgba(255,179,0,0.25); color:var(--warning);
+  letter-spacing:0.5px; margin-left:0.4rem; vertical-align:middle;
+}
+
+/* Paginação */
+.pagination {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:1rem 1.25rem; border-top:1px solid var(--muted-3);
+  flex-wrap:wrap; gap:0.75rem;
+}
+.pagination-info { font-size:0.8rem; color:var(--muted-2); }
+.pagination-controls { display:flex; gap:0.4rem; align-items:center; }
+.page-btn {
+  width:32px; height:32px; border-radius:var(--radius-md);
+  background:var(--muted-4); border:1px solid var(--muted-3);
+  color:var(--muted-1); font-size:0.8rem; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:all 0.15s; font-family:var(--font-body);
+}
+.page-btn:hover:not(:disabled) { background:var(--green-glow); border-color:var(--green-border); color:var(--green); }
+.page-btn:disabled { opacity:0.35; cursor:not-allowed; }
+.page-btn.active { background:var(--green-glow); border-color:var(--green-border); color:var(--green); font-weight:600; }
+.page-current { font-size:0.8rem; color:var(--muted-2); padding:0 0.5rem; }
+
+/* ============================================================
+   SEÇÃO DE EXTRAS (novas contribuições)
+   ============================================================ */
+.extras-section {
+  margin-top:1.5rem;
+  background:var(--bg-card); border:1px solid var(--green-border);
+  border-radius:var(--radius-xl); padding:2rem;
+  animation:fadeUp 0.4s var(--ease-out) both;
+}
+.extras-header {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;
+}
+.extras-title { font-family:var(--font-display); font-size:1rem; font-weight:700; }
+.extras-desc { font-size:0.82rem; color:var(--muted-2); margin-top:0.2rem; font-weight:300; }
+
+.extra-row {
+  display:grid; grid-template-columns:140px 1fr 1fr auto;
+  gap:1rem; align-items:end; margin-bottom:1rem;
+  padding-bottom:1rem; border-bottom:1px solid var(--muted-3);
+}
+.extra-row:last-of-type { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+
+.extras-actions {
+  display:flex; gap:1rem; align-items:center; margin-top:1.5rem;
+  padding-top:1.5rem; border-top:1px solid var(--muted-3);
+  flex-wrap:wrap;
 }
 
 /* ============================================================
-   PANEL HEADER
+   RESULTADOS
    ============================================================ */
-.panel-header { margin-bottom:1.5rem; }
-.panel-header h2 {
-  font-family:var(--font-display); font-size:1.5rem;
-  font-weight:700; letter-spacing:-0.5px;
-}
-.panel-header p { color:var(--muted-1); font-size:0.875rem; margin-top:0.35rem; line-height:1.6; }
+.results-section { animation:fadeUp 0.5s var(--ease-out) both; }
 
-/* ============================================================
-   AVISO PRIVACIDADE
-   ============================================================ */
-.aviso-privacidade {
-  display:flex; align-items:flex-start; gap:0.6rem;
-  font-size:0.75rem; color:var(--muted-2); margin-top:1rem;
-  padding:0.75rem 1rem; background:var(--muted-4);
-  border-radius:var(--radius-md); border:1px solid var(--muted-3);
+.results-header {
+  display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap;
 }
-.aviso-privacidade span { line-height:1.5; }
-
-/* ============================================================
-   SEXO SELECTOR (visual)
-   ============================================================ */
-.sexo-selector { display:flex; gap:0.75rem; }
-.sexo-btn {
-  flex:1; padding:0.6rem; border:1px solid var(--muted-3);
-  border-radius:var(--radius-md); background:var(--bg-2);
-  color:var(--muted-1); font-family:var(--font-body); font-size:0.85rem;
-  font-weight:500; cursor:pointer; transition:all 0.2s; text-align:center;
-}
-.sexo-btn:hover { border-color:var(--muted-2); color:var(--white); }
-.sexo-btn.selected {
-  background:var(--green-glow); border-color:var(--green);
-  color:var(--green);
+.results-header h2 {
+  font-family:var(--font-display); font-size:1.5rem; font-weight:700; letter-spacing:-0.5px;
 }
 
+/* Cards de regras */
+.regras-grid {
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+  gap:1px; background:var(--muted-3); border:1px solid var(--muted-3);
+  border-radius:var(--radius-xl); overflow:hidden; margin-bottom:1.5rem;
+}
+.regra-card {
+  background:var(--bg-card); padding:2rem;
+  transition:background 0.2s; position:relative; overflow:hidden;
+}
+.regra-card.highlight { background:linear-gradient(135deg,#0E1F15,#0A1A11); }
+.regra-card::after {
+  content:''; position:absolute; bottom:0; left:0; right:0;
+  height:2px; background:var(--green);
+  transform:scaleX(0); transition:transform 0.3s var(--ease-out); transform-origin:left;
+}
+.regra-card:hover::after { transform:scaleX(1); }
+.regra-card:hover { background:var(--bg-hover); }
+.regra-card.highlight:hover { background:linear-gradient(135deg,#0E2318,#0C1E14); }
+
+.regra-nome {
+  font-size:0.7rem; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--muted-2); font-weight:500; margin-bottom:0.75rem;
+}
+.regra-badge { margin-bottom:1rem; }
+.regra-valor {
+  font-family:var(--font-display); font-size:1.8rem; font-weight:700;
+  line-height:1; margin-bottom:0.3rem;
+}
+.regra-card.highlight .regra-valor { color:var(--green); }
+.regra-sub { font-size:0.75rem; color:var(--muted-2); margin-bottom:1.25rem; }
+.regra-detalhe {
+  display:flex; flex-direction:column; gap:0.5rem;
+  padding-top:1.25rem; border-top:1px solid var(--muted-3);
+}
+.regra-detalhe-row {
+  display:flex; justify-content:space-between; align-items:center;
+}
+.regra-detalhe-key { font-size:0.78rem; color:var(--muted-2); }
+.regra-detalhe-val { font-size:0.82rem; color:var(--white); font-weight:500; }
+.regra-detalhe-val.green { color:var(--green); }
+.regra-detalhe-val.warning { color:var(--warning); }
+
+/* Comparativo antes/depois */
+.comparativo-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:1px; background:var(--muted-3); border:1px solid var(--muted-3);
+  border-radius:var(--radius-xl); overflow:hidden; margin-bottom:1.5rem;
+}
+.comparativo-card { background:var(--bg-card); padding:2rem; }
+.comparativo-card.depois { background:linear-gradient(135deg,#0A1F10,#081A0E); }
+.comparativo-label {
+  font-size:0.7rem; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--muted-2); font-weight:500; margin-bottom:1.25rem;
+  display:flex; align-items:center; gap:0.5rem;
+}
+.comparativo-label .dot { width:6px; height:6px; border-radius:50%; background:var(--muted-2); }
+.comparativo-card.depois .comparativo-label { color:var(--green); }
+.comparativo-card.depois .comparativo-label .dot { background:var(--green); }
+
+/* Info box */
+.info-box {
+  display:flex; gap:1rem; padding:1rem 1.25rem;
+  background:rgba(255,179,0,0.06); border:1px solid rgba(255,179,0,0.2);
+  border-radius:var(--radius-lg); margin-bottom:1.5rem;
+  font-size:0.85rem; color:var(--muted-1); line-height:1.6;
+}
+.info-box-icon { font-size:1rem; flex-shrink:0; margin-top:0.1rem; }
+.info-box strong { color:var(--warning); }
+
 /* ============================================================
-   RESPONSIVE
+   FOOTER
    ============================================================ */
-@media (max-width:640px) {
+footer {
+  border-top:1px solid var(--muted-3); padding:2rem 2.5rem;
+  display:flex; justify-content:space-between; align-items:center;
+  flex-wrap:wrap; gap:1rem; max-width:1200px; margin:0 auto;
+}
+.footer-links { display:flex; gap:1.5rem; }
+.footer-links a { color:var(--muted-2); text-decoration:none; font-size:0.8rem; transition:color 0.2s; }
+.footer-links a:hover { color:var(--green); }
+.footer-copy { color:var(--muted-2); font-size:0.75rem; }
+
+/* ============================================================
+   ANIMAÇÕES
+   ============================================================ */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(16px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.hidden { display:none !important; }
+
+/* ============================================================
+   RESPONSIVO
+   ============================================================ */
+@media(max-width:768px){
   nav { padding:1rem 1.25rem; }
   .nav-links { display:none; }
   .nav-hamburger { display:flex; }
   .page-header { padding:6rem 1.25rem 2rem; }
   .sim-wrapper { padding:0 1.25rem 4rem; }
-  .panel-card { padding:1.5rem 1.25rem; }
-  .modo-grid { grid-template-columns:1fr; }
-  .form-row.cols-2, .form-row.cols-3 { grid-template-columns:1fr; }
-  .stepper { padding:1.25rem; }
-  .step-label { font-size:0.62rem; }
-  .btn-row { flex-direction:column-reverse; }
-  .btn-primary, .btn-secondary { width:100%; justify-content:center; }
-  .extrato-stats { gap:1rem; }
-  .extrato-stat-val { font-size:1.1rem; }
-  .extrato-table thead th:nth-child(2),
-  .extrato-table thead th:nth-child(3),
-  .extrato-table thead th:nth-child(4),
-  .extrato-table tbody td:nth-child(2),
-  .extrato-table tbody td:nth-child(3),
-  .extrato-table tbody td:nth-child(4) { display:none; }
-  .ajuste-tempo-grid { grid-template-columns:1fr 1fr 1fr; gap:0.5rem; }
-  .sim-campos { grid-template-columns:1fr; }
+  .form-card { padding:1.5rem; }
+  .form-grid { grid-template-columns:1fr; }
+  .form-grid-3 { grid-template-columns:1fr 1fr; }
+  .stepper { padding:1rem; gap:0.5rem; overflow-x:auto; }
+  .step-info { display:none; }
+  .step:not(:last-child)::after { display:none; }
+  .regras-grid { grid-template-columns:1fr; }
+  .comparativo-grid { grid-template-columns:1fr; }
+  .extra-row { grid-template-columns:1fr 1fr; }
+  .extra-row > *:last-child { grid-column:1/-1; }
   footer { flex-direction:column; align-items:flex-start; padding:2rem 1.25rem; }
   .footer-links { flex-wrap:wrap; gap:1rem; }
 }
+@media(max-width:480px){
+  .form-grid-3 { grid-template-columns:1fr; }
+  .extrato-stats { gap:1rem; }
+}
+
+.regra-card-back {
+  background:var(--bg-card); border:1px solid var(--muted-3);
+  border-radius:var(--radius-lg); overflow:hidden; cursor:pointer;
+  transition:background 0.2s;
+}
+.regra-card-back:hover { background:var(--bg-hover); }
+.regra-card-back.melhor { border-color:var(--green-border); }
+.regra-back-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:1rem 1.25rem; gap:1rem; flex-wrap:wrap;
+}
+.regra-back-nome {
+  font-size:0.9rem; font-weight:600;
+  color:var(--white); flex-shrink:0;
+  display:block !important; visibility:visible !important;
+}
+.regra-back-rmi { font-family:var(--font-display); font-size:1rem; font-weight:700; color:var(--white); }
+.regra-back-detalhe { padding:0 1.25rem 1rem; border-top:1px solid var(--muted-3); margin-top:0.5rem; }
+
+
+.regra-back-status { font-size:0.8rem; font-weight:600; white-space:nowrap; }
+.regra-back-status.elegivel { color:var(--green); }
+.regra-back-status.nao-elegivel { color:var(--danger); }
 </style>
 </head>
 <body>
 
+
+<!-- MODAL LOTE -->
+<div id="modalLote" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(8,11,10,0.88);backdrop-filter:blur(8px);align-items:center;justify-content:center;">
+  <div style="background:var(--bg-card);border:1px solid var(--muted-3);border-radius:var(--radius-xl);padding:2.5rem;max-width:480px;width:90%;animation:fadeUp 0.3s var(--ease-out) both;">
+    <div style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;margin-bottom:0.4rem;">Adicionar em lote</div>
+    <div style="font-size:0.82rem;color:var(--muted-2);margin-bottom:1.5rem;">Gera automaticamente N competências com o mesmo valor.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+      <div class="form-group">
+        <label class="input-label">Competência inicial</label>
+        <input type="text" class="input" id="loteCompIni" placeholder="Ex: 04/2026" maxlength="7">
+      </div>
+      <div class="form-group">
+        <label class="input-label">Competência final</label>
+        <input type="text" class="input" id="loteCompFim" placeholder="Ex: 03/2031" maxlength="7">
+      </div>
+      <div class="form-group">
+        <label class="input-label">Remuneração (R$)</label>
+        <input type="number" class="input" id="loteRem" placeholder="Ex: 27273.71" min="0" step="0.01">
+      </div>
+      <div class="form-group">
+        <label class="input-label">Empregador (opcional)</label>
+        <input type="text" class="input" id="loteEmp" placeholder="Nome do empregador">
+      </div>
+    </div>
+    <div id="loteInfo" style="font-size:0.82rem;color:var(--green);margin-bottom:1rem;min-height:1.2rem;"></div>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+      <button class="btn-primary" onclick="confirmarLote()">Gerar competências</button>
+      <button class="btn-ghost" onclick="fecharModalLote()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- SPINNER -->
+<div class="spinner-overlay" id="spinnerOverlay">
+  <div class="spinner"></div>
+  <div class="spinner-text" id="spinnerText">Processando seu CNIS...</div>
+</div>
+
+<!-- NAV -->
 <div id="site-header"></div>
 
 <!-- PAGE HEADER -->
 <div class="page-header">
-  <div class="page-eyebrow"><span class="eyebrow-line"></span>Previdência Social</div>
-  <h1>Simulador de <em>Aposentadoria</em> INSS</h1>
-  <p>Carregue seu CNIS ou informe manualmente suas contribuições. Descubra quando você pode se aposentar e quanto vai receber — por todas as regras vigentes.</p>
+  <div class="page-eyebrow"><div class="eyebrow-line"></div>Previdência Social</div>
+  <h1>Simulador de<br><em>Aposentadoria</em> INSS</h1>
+  <p>Carregue seu CNIS, informe seus dados e descubra quando você pode se aposentar e quanto vai receber — com possibilidade de simular contribuições futuras.</p>
 </div>
 
-<!-- SIMULADOR -->
 <div class="sim-wrapper">
 
   <!-- STEPPER -->
   <div class="stepper" id="stepper">
     <div class="step active" id="step-1">
-      <div class="step-dot">1</div>
-      <div class="step-label">Entrada</div>
-      <div class="step-sublabel">Como prefere?</div>
-    </div>
-    <div class="step-connector" id="conn-1"></div>
-    <div class="step pending" id="step-2">
-      <div class="step-dot">2</div>
-      <div class="step-label">Seus dados</div>
-      <div class="step-sublabel">CNIS ou manual</div>
-    </div>
-    <div class="step-connector" id="conn-2"></div>
-    <div class="step pending" id="step-3">
-      <div class="step-dot">3</div>
-      <div class="step-label">Resultado</div>
-      <div class="step-sublabel">Regras e benefício</div>
-    </div>
-  </div>
-
-  <!-- ═══════════════════════════════════════════
-       PASSO 1 — Escolha do modo
-  ═══════════════════════════════════════════ -->
-  <div class="step-panel active" id="panel-1">
-    <div class="panel-card">
-      <div class="panel-header">
-        <h2>Como deseja simular?</h2>
-        <p>Você pode carregar seu extrato CNIS em PDF — os dados são preenchidos automaticamente — ou informar tudo manualmente.</p>
+      <div class="step-number">1</div>
+      <div class="step-info">
+        <div class="step-label">Passo 1</div>
+        <div class="step-title">Seus dados</div>
       </div>
-
-      <div class="modo-grid">
-        <div class="modo-card" id="modo-pdf" onclick="selecionarModo('pdf')">
-          <div class="modo-icon">📄</div>
-          <h3>Carregar CNIS</h3>
-          <p>Faça upload do seu extrato em PDF. Nome, data de nascimento e histórico de contribuições são extraídos automaticamente.</p>
-        </div>
-        <div class="modo-card" id="modo-manual" onclick="selecionarModo('manual')">
-          <div class="modo-icon">✏️</div>
-          <h3>Informar manualmente</h3>
-          <p>Informe seu sexo, data de nascimento e contribuições uma a uma ou em lote. Ideal para quem não tem o PDF em mãos.</p>
-        </div>
+    </div>
+    <div class="step" id="step-2">
+      <div class="step-number">2</div>
+      <div class="step-info">
+        <div class="step-label">Passo 2</div>
+        <div class="step-title">Carregar CNIS</div>
       </div>
-
-      <div class="btn-row">
-        <button class="btn-primary" id="btn-proximo-1" onclick="irPara(2)" disabled>
-          Continuar →
-        </button>
+    </div>
+    <div class="step" id="step-3">
+      <div class="step-number">3</div>
+      <div class="step-info">
+        <div class="step-label">Passo 3</div>
+        <div class="step-title">Extrato</div>
+      </div>
+    </div>
+    <div class="step" id="step-4">
+      <div class="step-number">4</div>
+      <div class="step-info">
+        <div class="step-label">Passo 4</div>
+        <div class="step-title">Resultado</div>
       </div>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════
-       PASSO 2A — Upload do CNIS
-  ═══════════════════════════════════════════ -->
-  <div class="step-panel" id="panel-2-pdf">
-    <div class="panel-card">
-      <div class="panel-header">
-        <h2>Carregar CNIS</h2>
-        <p>Selecione ou arraste o arquivo PDF do seu extrato do CNIS. Os dados serão extraídos automaticamente.</p>
+  <!-- ========================================================
+       PASSO 1 — DADOS DO SEGURADO
+       ======================================================== -->
+  <div id="bloco-dados" class="form-card">
+    <div class="form-card-header">
+      <div class="form-card-icon">👤</div>
+      <div>
+        <div class="form-card-title">Dados do Segurado</div>
+        <div class="form-card-desc">Nenhum dado é armazenado — tudo fica apenas no seu navegador.</div>
       </div>
+    </div>
 
-      <div class="upload-zone" id="uploadZone">
-        <input type="file" id="inputPdf" accept=".pdf" onchange="processarPdf(this)">
-        <div class="upload-icon">📁</div>
-        <h3>Clique ou arraste seu CNIS aqui</h3>
-        <p>Apenas arquivos PDF • O arquivo não é enviado a terceiros</p>
+    <div class="form-grid-3">
+      <div class="form-group">
+        <label class="input-label" for="nome">Nome (opcional)</label>
+        <input type="text" class="input" id="nome" placeholder="Ex: João Silva">
+        <span class="input-hint">Apenas para personalizar a tela</span>
       </div>
-
-      <div class="upload-status" id="uploadStatus">
-        <div class="spinner"></div>
-        <span id="uploadStatusMsg">Processando...</span>
+      <div class="form-group">
+        <label class="input-label" for="sexo">Sexo <span style="color:var(--danger)">*</span></label>
+        <select class="input" id="sexo">
+          <option value="">Selecione...</option>
+          <option value="M">Masculino</option>
+          <option value="F">Feminino</option>
+        </select>
+        <span class="input-hint">Necessário para calcular elegibilidade</span>
       </div>
-
-      <div class="dados-extraidos" id="dadosExtraidos">
-        <div class="dados-extraidos-title">
-          <span>✓</span> Dados extraídos do CNIS
-        </div>
-        <div class="dados-grid">
-          <div class="dado-item">
-            <label>Nome</label>
-            <span id="cnis-nome">—</span>
-          </div>
-          <div class="dado-item">
-            <label>Data de nascimento</label>
-            <span id="cnis-nasc">—</span>
-          </div>
-          <div class="dado-item">
-            <label>CPF</label>
-            <span id="cnis-cpf">—</span>
-          </div>
-          <div class="dado-item">
-            <label>Data do CNIS</label>
-            <span id="cnis-data">—</span>
-          </div>
-          <div class="dado-item">
-            <label>Competências</label>
-            <span id="cnis-comp">—</span>
-          </div>
-        </div>
-
-        <!-- Sexo não vem no CNIS, pedimos aqui -->
-        <div class="sexo-aviso visible" id="sexoAvisoPdf">
-          <div style="margin-top:0.75rem;">
-            <div class="form-group">
-              <label>Sexo <span style="color:var(--danger)">*</span></label>
-              <div class="sexo-selector">
-                <button class="sexo-btn" id="sexo-pdf-m" onclick="selecionarSexoPdf('M')">Masculino</button>
-                <button class="sexo-btn" id="sexo-pdf-f" onclick="selecionarSexoPdf('F')">Feminino</button>
-              </div>
-              <span class="form-hint">Necessário para calcular os requisitos de cada regra</span>
-            </div>
-          </div>
-        </div>
+      <div class="form-group">
+        <label class="input-label" for="dataNascimento">Data de Nascimento <span style="color:var(--danger)">*</span></label>
+        <input type="date" class="input" id="dataNascimento">
+        <span class="input-hint">Necessário para calcular a idade</span>
       </div>
+    </div>
 
-      <div class="aviso-privacidade">
-        <span>🔒</span>
-        <span>Seu arquivo é processado localmente no servidor e descartado imediatamente após a extração. Nenhum dado é armazenado.</span>
-      </div>
-
-      <div class="btn-row">
-        <button class="btn-secondary" onclick="irPara(1)">← Voltar</button>
-        <button class="btn-primary" id="btn-proximo-2pdf" onclick="calcularPdf()" disabled>
-          Calcular aposentadoria →
-        </button>
-      </div>
+    <div style="margin-top:2rem; display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
+      <button class="btn-primary" onclick="avancarParaCnis()">
+        Continuar → Carregar CNIS
+      </button>
+      <span class="input-hint" style="margin-top:0;">* Campos obrigatórios</span>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════
-       PASSO 2B — Entrada manual
-  ═══════════════════════════════════════════ -->
-  <div class="step-panel" id="panel-2-manual">
-    <div class="panel-card">
-      <div class="panel-header">
-        <h2>Seus dados</h2>
-        <p>Informe seus dados pessoais e o histórico de contribuições. O nome é opcional.</p>
+  <!-- ========================================================
+       PASSO 2 — UPLOAD DO CNIS
+       ======================================================== -->
+  <div id="bloco-cnis" class="form-card hidden">
+    <div class="form-card-header">
+      <div class="form-card-icon">📄</div>
+      <div>
+        <div class="form-card-title">Extrato CNIS</div>
+        <div class="form-card-desc">Carregue o PDF do seu CNIS — obtido no Gov.br ou aplicativo Meu INSS.</div>
       </div>
+    </div>
 
-      <!-- Dados pessoais -->
-      <div class="form-section">
-        <div class="form-section-title">Dados do segurado</div>
+    <div class="upload-zone" id="uploadZone">
+      <input type="file" id="fileInput" accept="application/pdf">
+      <span class="upload-icon">📋</span>
+      <div class="upload-title">Arraste o PDF do CNIS aqui</div>
+      <div class="upload-desc">ou clique para selecionar o arquivo</div>
+      <div class="upload-badge">PDF — até 10MB</div>
+    </div>
+    <div class="file-name" id="fileName">
+      <span>✅</span> <span id="fileNameText"></span>
+    </div>
 
-        <div class="form-row cols-3">
-          <div class="form-group" style="grid-column:1/3">
-            <label>Nome (opcional)</label>
-            <input type="text" id="manual-nome" placeholder="Ex: João Silva">
-          </div>
+    <div style="margin-top:2rem; display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
+      <button class="btn-primary" id="btnEnviar" onclick="enviarCnis()" disabled>
+        Processar CNIS →
+      </button>
+      <button class="btn-ghost" onclick="voltarParaDados()">← Voltar</button>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       PASSO 3 — EXTRATO + EXTRAS
+       ======================================================== -->
+  <div id="bloco-extrato" class="hidden">
+
+    <!-- Cabeçalho do extrato -->
+    <div class="form-card" style="margin-bottom:1rem;">
+      <div class="extrato-header">
+        <div>
+          <div class="form-card-title" id="extratoNomeTitulo">Extrato CNIS</div>
+          <div class="form-card-desc" id="extratoSubtitulo">Competências extraídas e corrigidas pelo INPC</div>
         </div>
-
-        <div class="form-row cols-2">
-          <div class="form-group">
-            <label>Sexo <span style="color:var(--danger)">*</span></label>
-            <div class="sexo-selector">
-              <button class="sexo-btn" id="sexo-m" onclick="selecionarSexoManual('M')">Masculino</button>
-              <button class="sexo-btn" id="sexo-f" onclick="selecionarSexoManual('F')">Feminino</button>
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Data de nascimento <span style="color:var(--danger)">*</span></label>
-            <input type="date" id="manual-nasc" max="">
-          </div>
-        </div>
-      </div>
-
-      <!-- Contribuições -->
-      <div class="form-section">
-        <div class="form-section-title">Histórico de contribuições</div>
-
-        <div class="contrib-tabs">
-          <button class="contrib-tab active" id="tab-um-um" onclick="mudarTabContrib('um-a-um')">Uma a uma</button>
-          <button class="contrib-tab" id="tab-lote" onclick="mudarTabContrib('lote')">Em lote</button>
-        </div>
-
-        <!-- Um a um -->
-        <div id="contrib-um-a-um">
-          <div class="contrib-table-wrap">
-            <table class="contrib-table">
-              <thead>
-                <tr>
-                  <th>Competência (MM/AAAA)</th>
-                  <th>Salário bruto (R$)</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="contrib-tbody">
-                <tr>
-                  <td><input type="text" placeholder="01/2024" maxlength="7" oninput="formatarCompetencia(this)" onchange="recalcularMedia()"></td>
-                  <td><input type="text" placeholder="3.500,00" oninput="formatarValor(this)" onchange="recalcularMedia()"></td>
-                  <td><button class="btn-remove-row" onclick="removerLinha(this)" title="Remover">✕</button></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <button class="btn-add-row" onclick="adicionarLinha()">+ Adicionar competência</button>
-        </div>
-
-        <!-- Em lote -->
-        <div id="contrib-lote" style="display:none">
-          <textarea class="lote-textarea" id="lote-texto" placeholder="Cole ou digite as competências, uma por linha:&#10;01/2024  3500,00&#10;02/2024  3500,00&#10;03/2024  3800,00&#10;..." oninput="recalcularMediaLote()"></textarea>
-          <span class="form-hint" style="margin-top:0.4rem;display:block">Formato: MM/AAAA seguido do valor. Use vírgula ou ponto como separador decimal.</span>
-        </div>
-
-        <!-- Média em tempo real -->
-        <div class="media-realtime" id="mediaRealtime">
+        <div class="extrato-stats">
           <div>
-            <div class="media-realtime-label">Média salarial estimada (corrigida)</div>
-            <div style="font-size:0.72rem;color:var(--muted-2);margin-top:0.15rem">Calculada sobre os valores informados</div>
+            <div class="extrato-stat-n green" id="statMeses">—</div>
+            <div class="extrato-stat-l">Meses contrib.</div>
           </div>
-          <div class="media-realtime-value" id="mediaRealtimeVal">R$ 0,00</div>
+          <div>
+            <div class="extrato-stat-n" id="statAnos">—</div>
+            <div class="extrato-stat-l">Anos contrib.</div>
+          </div>
+          <div>
+            <div class="extrato-stat-n" id="statMedia">—</div>
+            <div class="extrato-stat-l">Média corrigida</div>
+          </div>
         </div>
       </div>
 
-      <div class="btn-row">
-        <button class="btn-secondary" onclick="irPara(1)">← Voltar</button>
-        <button class="btn-primary" id="btn-calcular-manual" onclick="calcularManual()">
-          Calcular →
-        </button>
+      <!-- INFO BOX -->
+      <div class="info-box">
+        <span class="info-box-icon">⚠️</span>
+        <span>Contribuições <strong>anteriores a julho/1994</strong> não entram na média salarial, mas contam no tempo de contribuição. Elas aparecem em cinza na tabela abaixo.</span>
       </div>
+
+      <!-- TABELA PAGINADA -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Competência</th>
+              <th>Soma Remunerações</th>
+              <th>Teto Vigente</th>
+              <th>Valor Utilizado</th>
+              <th>Valor Corrigido</th>
+              <th>Empregador</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tbodyExtrato"></tbody>
+        </table>
+        <div class="pagination" id="paginacaoExtrato">
+          <div class="pagination-info" id="paginacaoInfo"></div>
+          <div class="pagination-controls" id="paginacaoControls"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO DE EXTRAS -->
+    <div class="extras-section" id="extrasSection">
+      <div class="extras-header">
+        <div>
+          <div class="extras-title">Simular Contribuições Futuras</div>
+          <div class="extras-desc">Adicione competências para ver o impacto na sua aposentadoria.</div>
+        </div>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+          <button class="btn-secondary btn-sm" onclick="adicionarExtra()">＋ Competência</button>
+          <button class="btn-secondary btn-sm" onclick="abrirModalLote()">＋ Adicionar em lote</button>
+        </div>
+      </div>
+
+      <!-- Botão calcular ACIMA da lista — sempre visível -->
+      <div class="extras-actions" style="margin-bottom:1rem;">
+        <button class="btn-primary" onclick="calcularResultados()">
+          📊 Calcular Aposentadoria
+        </button>
+        <button class="btn-ghost" onclick="voltarParaCnis()">← Carregar outro CNIS</button>
+      </div>
+
+      <div id="extrasLista" style="max-height:420px;overflow-y:auto;padding-right:4px;"></div>
+
+
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════
-       PASSO 3 — Resultado
-  ═══════════════════════════════════════════ -->
-  <div class="step-panel" id="panel-3">
-    <div class="panel-card">
+  <!-- ========================================================
+       PASSO 4 — RESULTADOS
+       ======================================================== -->
+  <div id="bloco-resultados" class="results-section hidden">
 
-      <!-- Loading -->
-      <div id="resultado-loading" style="text-align:center;padding:3rem 1rem">
-        <div class="spinner" style="margin:0 auto 1rem"></div>
-        <p style="color:var(--muted-1)">Calculando sua aposentadoria...</p>
+    <div class="results-header">
+      <h2>Simulação de <em style="font-style:italic; color:var(--green)">Aposentadoria</em></h2>
+      <span class="badge badge-green"><span class="badge-dot"></span>Resultado</span>
+    </div>
+
+    <!-- Comparativo Antes x Depois (só aparece se tiver extras) -->
+    <div id="blocoComparativo" class="hidden">
+      <div class="comparativo-grid" id="comparativoGrid"></div>
+    </div>
+
+    <!-- Melhor Opção -->
+    <div id="blocoMelhorOpcao" class="hidden" style="margin-bottom:1.5rem;">
+      <div style="background:linear-gradient(135deg,#0E1F15,#0A1A11);border:1px solid var(--green-border);border-radius:var(--radius-xl);padding:2rem;">
+        <div style="font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:0.5rem;">📅 Aposentadoria mais próxima identificada</div>
+        <div id="melhorOpcaoNome" style="font-family:var(--font-display);font-size:1.4rem;font-weight:700;margin-bottom:0.25rem;"></div>
+        <div id="melhorOpcaoFalta" style="font-size:0.9rem;color:var(--muted-1);margin-bottom:1rem;"></div>
+        <div style="display:flex;align-items:baseline;gap:0.5rem;">
+          <div id="melhorOpcaoRMI" style="font-family:var(--font-display);font-size:2rem;font-weight:700;color:var(--green);"></div>
+          <div id="melhorOpcaoRMISub" style="font-size:0.8rem;color:var(--muted-2);"></div>
+        </div>
+        <div style="margin-top:1rem;padding:0.75rem;background:rgba(255,179,0,0.08);border:1px solid rgba(255,179,0,0.2);border-radius:var(--radius-md);font-size:0.78rem;color:var(--warning);">
+          ⚠ Esta é uma simulação baseada nos dados do seu CNIS. Os valores são estimativas e não garantem direito ao benefício. Consulte sempre o <strong>Meu INSS</strong> ou um especialista previdenciário. A regra destacada acima é a que permite aposentadoria em <strong>menor tempo</strong> — não necessariamente a de maior benefício. A regra destacada acima é a que permite aposentadoria em <strong>menor tempo</strong> — não necessariamente a de maior benefício.
+        </div>
       </div>
+    </div>
 
-      <!-- Conteúdo do resultado (oculto até carregar) -->
-      <div id="resultado-conteudo" style="display:none">
+    <!-- Regras do back (expansíveis) -->
+    <div id="regrasGridBack" style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1.5rem;"></div>
 
-        <!-- Métricas do segurado -->
-        <div class="resultado-header">
-          <div class="resultado-nome" id="res-nome">—</div>
-          <div class="resultado-metrics" id="res-metrics"></div>
-        </div>
+    <!-- Cards por regra -->
+    <div class="regras-grid" id="regrasGrid"></div>
 
-        <!-- Seção: Regras Antigas (pré-2019) -->
-        <div class="regras-secao" id="secao-pre2019" style="display:none">
-          <div class="regras-secao-label">Regras antigas (pré-2019)</div>
-          <div id="acordeons-pre2019"></div>
-        </div>
-
-        <!-- Seção: Regras de Transição (pós-2019) -->
-        <div class="regras-secao" id="secao-pos2019" style="display:none">
-          <div class="regras-secao-label">Regras de transição (pós-2019)</div>
-          <div id="acordeons-pos2019"></div>
-        </div>
-
-        <!-- CTA Simulação -->
-        <div class="sim-cta" id="simCta" style="display:none">
-          <div class="sim-cta-text">
-            <strong>Quer ver como ficaria se continuasse contribuindo?</strong>
-            Simule contribuições futuras e veja quando cada regra seria atingida.
-          </div>
-          <button class="btn-primary" onclick="abrirSimulacao()" style="white-space:nowrap;font-size:0.85rem;padding:0.6rem 1.25rem">
-            Simular →
-          </button>
-        </div>
-
-        <!-- Aviso -->
-        <div class="aviso-resultado" id="res-aviso"></div>
-
-      </div><!-- /resultado-conteudo -->
-
-      <div class="btn-row" style="margin-top:1.5rem">
-        <button class="btn-secondary" onclick="irPara(2)">← Voltar</button>
-      </div>
+    <div style="display:flex; gap:1rem; flex-wrap:wrap; margin-top:1.5rem;">
+      <button class="btn-secondary" onclick="voltarParaExtrato()">← Ajustar simulação</button>
+      <button class="btn-ghost" onclick="reiniciar()">Começar nova simulação</button>
     </div>
   </div>
 
 </div><!-- /sim-wrapper -->
 
+<!-- FOOTER -->
 <div id="site-footer"></div>
 
-<script src="/assets/js/components.js"></script>
-
+<!-- ============================================================
+     SCRIPTS
+     ============================================================ -->
 <script>
-// ─── CONFIGURAÇÃO ──────────────────────────────────────────
+// ─── CONFIG ───────────────────────────────────────────────────
 const BACKEND_URL = 'https://inss-api.gelocci.com.br';
+const LINHAS_POR_PAGINA = 10;
 
-// ─── ESTADO GLOBAL ─────────────────────────────────────────
-const state = {
-  modo: null,
-  stepAtual: 1,
-  segurado: {},
-  extrato: [],
-  extratoBase: [],
-  sexoPdf: null,
-  sexoManual: null,
-  modoContrib: 'um-a-um',
-  modoSim: 'CONST',
-  lancamentosSimulados: [],
-  ultimoSalario: 0,
-  mesesDesatualizado: 0,
-  teto2026: 8475.55,
-  resultadoAtual: null
+// ─── STATE ────────────────────────────────────────────────────
+let state = {
+  segurado: { nome: '', sexo: '', dataNascimento: '' },
+  registrosOriginais: [],   // vindo do back (já processados)
+  extras: [],               // contribuições simuladas pelo usuário
+  paginaAtual: 1,
+  idxExtraContador: 0,
 };
 
-// ─── STEPPER (3 steps) ─────────────────────────────────────
-function irPara(step) {
-  if (step === 3 && state.modo === 'manual') {
-    if (!validarManual()) return;
-    calcularManual();
-    return;
-  }
+// ─── NAV (gerenciado pelo components.js) ───────────────────
 
-  // Atualiza steps e conectores
-  for (let i = 1; i <= 3; i++) {
-    const el = document.getElementById('step-' + i);
-    el.className = 'step ' + (i < step ? 'done' : i === step ? 'active' : 'pending');
-    el.querySelector('.step-dot').textContent = i < step ? '✓' : i;
-  }
-  for (let i = 1; i <= 2; i++) {
-    const c = document.getElementById('conn-' + i);
-    c.className = 'step-connector' + (i < step ? ' done' : '');
-  }
-
-  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
-  state.stepAtual = step;
-
-  if (step === 1) {
-    document.getElementById('panel-1').classList.add('active');
-  } else if (step === 2) {
-    const painel = state.modo === 'pdf' ? 'panel-2-pdf' : 'panel-2-manual';
-    document.getElementById(painel).classList.add('active');
-  } else if (step === 3) {
-    document.getElementById('panel-3').classList.add('active');
-  }
-
-  document.querySelector('.stepper').scrollIntoView({ behavior:'smooth', block:'start' });
-}
-
-// ─── PASSO 1: MODO ─────────────────────────────────────────
-function selecionarModo(modo) {
-  state.modo = modo;
-  document.getElementById('modo-pdf').classList.toggle('selected', modo === 'pdf');
-  document.getElementById('modo-manual').classList.toggle('selected', modo === 'manual');
-  document.getElementById('btn-proximo-1').disabled = false;
-}
-
-// ─── PASSO 2A: PDF → CALCULAR DIRETO ──────────────────────
-async function calcularPdf() {
-  const file = document.getElementById('inputPdf').files[0];
-  if (!file || !state.sexoPdf) return;
-
-  irPara(3);
-  document.getElementById('resultado-loading').style.display = 'block';
-  document.getElementById('resultado-conteudo').style.display = 'none';
-
-  try {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('sexo', state.sexoPdf);
-
-    const res = await fetch(`${BACKEND_URL}/api/cnis/extrair-e-calcular`, {
-      method: 'POST', body: formData
-    });
-    if (!res.ok) throw new Error('Erro no cálculo: ' + res.status);
-    const data = await res.json();
-    state.resultadoAtual = data;
-    renderizarResultado(data);
-  } catch(e) {
-    console.error('Erro calcularPdf:', e);
-    document.getElementById('resultado-loading').innerHTML = `
-      <p style="color:#FF4D4D">Erro: ${e.message}</p>
-    `;
+// ─── STEPPER ──────────────────────────────────────────────────
+function setStep(n) {
+  for (let i = 1; i <= 4; i++) {
+    const el = document.getElementById(`step-${i}`);
+    el.classList.remove('active','done');
+    if (i < n) el.classList.add('done');
+    if (i === n) el.classList.add('active');
   }
 }
 
-// ─── PASSO 2B: MANUAL → CALCULAR ──────────────────────────
-async function calcularManual() {
-  if (!validarManual()) return;
-
-  irPara(3);
-  document.getElementById('resultado-loading').style.display = 'block';
-  document.getElementById('resultado-conteudo').style.display = 'none';
-
-  const nasc = document.getElementById('manual-nasc').value;
-  const nome = document.getElementById('manual-nome').value.trim();
-
-  const seguradoPayload = {
-    nome: nome || 'Não identificado',
-    sexo: state.sexoManual,
-    dataNascimento: nasc.split('-').reverse().join('/')
-  };
-
-  const lancamentos = [];
-  if (state.modoContrib === 'um-a-um') {
-    document.querySelectorAll('#contrib-tbody tr').forEach(tr => {
-      const comp = tr.querySelectorAll('input')[0].value.trim();
-      const val  = strToFloat(tr.querySelectorAll('input')[1].value);
-      if (comp && val > 0) lancamentos.push({ competencia:comp, remuneracao:val, nomeEmpregador:'', simulado:false });
-    });
-  } else {
-    document.getElementById('lote-texto').value.trim().split('\n').forEach(l => {
-      const parts = l.trim().split(/\s+/);
-      if (parts.length >= 2) {
-        const comp = parts[0];
-        const val  = strToFloat(parts.slice(1).join(''));
-        if (comp && val > 0) lancamentos.push({ competencia:comp, remuneracao:val, nomeEmpregador:'', simulado:false });
-      }
-    });
-  }
-
-  try {
-    const res = await fetch(`${BACKEND_URL}/api/cnis/calcular`, {
-      method: 'POST',
-      headers: { 'Content-Type':'application/json' },
-      body: JSON.stringify({
-        segurado: seguradoPayload,
-        lancamentos,
-        dataCnis: new Date().toLocaleDateString('pt-BR')
-      })
-    });
-    if (!res.ok) throw new Error('Erro');
-    const data = await res.json();
-    state.resultadoAtual = data;
-    renderizarResultado(data);
-  } catch(e) {
-    document.getElementById('resultado-loading').innerHTML = `
-      <p style="color:#FF4D4D">Erro ao calcular. Verifique se o servidor está disponível.</p>
-    `;
-  }
+// ─── SPINNER ──────────────────────────────────────────────────
+function showSpinner(txt) {
+  document.getElementById('spinnerText').textContent = txt || 'Processando...';
+  document.getElementById('spinnerOverlay').classList.add('visible');
+}
+function hideSpinner() {
+  document.getElementById('spinnerOverlay').classList.remove('visible');
 }
 
-// ─── RENDERIZAR RESULTADO ──────────────────────────────────
-function renderizarResultado(data) {
-  document.getElementById('resultado-loading').style.display = 'none';
-  document.getElementById('resultado-conteudo').style.display = 'block';
-
-  const seg = data.segurado;
-  const con = data.contribuicao;
-  const med = data.mediaSalarial;
-
-  // Nome
-  const elNome = document.getElementById('res-nome');
-  if (!elNome) { console.error('res-nome nao encontrado'); return; }
-  elNome.textContent = seg.nome || 'Segurado';
-
-  // Métricas
-  document.getElementById('res-metrics').innerHTML = `
-    <div class="res-metric">
-      <div class="res-metric-label">Idade (CNIS)</div>
-      <div class="res-metric-val green">${seg.idadeTexto}</div>
-    </div>
-    <div class="res-metric">
-      <div class="res-metric-label">Tempo total</div>
-      <div class="res-metric-val">${con.textoFormatado}</div>
-    </div>
-    <div class="res-metric">
-      <div class="res-metric-label">Data do CNIS</div>
-      <div class="res-metric-val">${seg.dataCnis}</div>
-    </div>
-  `;
-
-  // Regras
-  const pre  = data.regras.filter(r => r.grupo === 'PRE_2019');
-  const pos  = data.regras.filter(r => r.grupo === 'POS_2019');
-
-  if (pre.length > 0) {
-    document.getElementById('secao-pre2019').style.display = 'block';
-    document.getElementById('acordeons-pre2019').innerHTML = pre.map(r => montarAcordeon(r)).join('');
-  }
-  if (pos.length > 0) {
-    document.getElementById('secao-pos2019').style.display = 'block';
-    document.getElementById('acordeons-pos2019').innerHTML = pos.map(r => montarAcordeon(r)).join('');
-  }
-
-  // CTA simulação
-  document.getElementById('simCta').style.display = 'flex';
-
-  // Aviso
-  document.getElementById('res-aviso').textContent =
-    `Simulação com base no extrato de ${seg.dataCnis}. Este resultado não garante direito ao benefício.`;
-}
-
-function montarAcordeon(regra) {
-  const statusClass = regra.elegivel ? 'status-ok' : 'status-no';
-  const statusIcon  = regra.elegivel ? '✓' : '✕';
-
-  const requisitosHtml = regra.requisitos.map(req => `
-    <tr>
-      <td class="req-nome">
-        <span style="color:${req.ok ? 'var(--green)' : '#FF4D4D'};margin-right:6px;font-size:13px">${req.ok ? '✓' : '✕'}</span>${req.nome}
-      </td>
-      <td class="req-exigido">${req.exigidoTexto}</td>
-      <td class="req-atual ${req.ok ? 'ok' : 'no'}">${req.atualTexto}</td>
-    </tr>
-  `).join('');
-
-  const obsHtml = regra.observacaoDataReferencia
-    ? `<div class="req-obs">* ${regra.observacaoDataReferencia}</div>` : '';
-
-  const veredicto = regra.elegivel
-    ? `Você <span class="sim">possui direito</span> a esta modalidade.`
-    : `De acordo com as regras da <strong>${regra.nome}</strong>, você <span class="nao">não possui</span> direito.`;
-
-  const rmiHtml = regra.elegivel && regra.rmi
-    ? `<div style="padding:10px 16px;border-top:0.5px solid var(--muted-3);font-size:12px;color:var(--muted-1)">
-        Benefício estimado: <strong style="color:var(--green);font-size:1rem">${fmtBRL(regra.rmi)}</strong>
-       </div>` : '';
-
-  return `
-    <div class="acord" onclick="toggleAcord(this)">
-      <div class="acord-header">
-        <div class="acord-status ${statusClass}">${statusIcon}</div>
-        <div class="acord-title">${regra.nome}</div>
-        <div class="acord-chevron">▼</div>
-      </div>
-      <div class="acord-body">
-        <div class="acord-veredicto">${veredicto}</div>
-        <table class="req-table"><tbody>${requisitosHtml}</tbody></table>
-        ${obsHtml}
-        ${rmiHtml}
-      </div>
-    </div>
-  `;
-}
-
-function toggleAcord(el) {
-  el.classList.toggle('open');
-}
-
-function abrirSimulacao() {
-  // TODO: implementar simulação futura
-  alert('Em breve: simulação de contribuições futuras!');
-}
-
-// ─── PASSO 2A: EXTRAÇÃO DO CNIS (exibe dados no passo 2) ───
-async function processarPdf(input) {
-  if (!input.files || !input.files[0]) return;
-  const file = input.files[0];
-
-  mostrarStatus('loading', 'Processando extrato...');
-  document.getElementById('dadosExtraidos').classList.remove('visible');
-  document.getElementById('btn-proximo-2pdf').disabled = true;
-
-  const formData = new FormData();
-  formData.append('file', file);
-
-  try {
-    const res = await fetch(`${BACKEND_URL}/api/cnis/extrair`, {
-      method: 'POST',
-      body: formData
-    });
-
-    if (!res.ok) throw new Error('Erro ao processar o PDF');
-    const data = await res.json();
-
-    state.segurado = data.segurado;
-    state.extrato  = data.extrato;
-
-    // Preenche os dados exibidos
-    document.getElementById('cnis-nome').textContent = data.segurado.nome  || '(não identificado)';
-    document.getElementById('cnis-nasc').textContent = data.segurado.dataNascimento || '—';
-    document.getElementById('cnis-cpf').textContent  = data.segurado.cpf   || '—';
-    document.getElementById('cnis-data').textContent = data.segurado.dataCnis || '—';
-    document.getElementById('cnis-comp').textContent = data.extrato.length + ' registros';
-
-    mostrarStatus('success', 'Extrato carregado com sucesso!');
-    document.getElementById('dadosExtraidos').classList.add('visible');
-
-    verificarBotaoPdf();
-  } catch (e) {
-    mostrarStatus('error', 'Não foi possível processar o arquivo. Verifique se é um CNIS válido.');
-  }
-}
-
-function mostrarStatus(tipo, msg) {
-  const el = document.getElementById('uploadStatus');
-  el.className = 'upload-status ' + tipo;
-  el.querySelector('span') || el.appendChild(document.createElement('span'));
-  el.querySelector('#uploadStatusMsg').textContent = msg;
-  if (tipo === 'loading') {
-    if (!el.querySelector('.spinner')) {
-      const s = document.createElement('div'); s.className = 'spinner';
-      el.insertBefore(s, el.firstChild);
-    }
-  } else {
-    const s = el.querySelector('.spinner');
-    if (s) s.remove();
-  }
-}
-
-function selecionarSexoPdf(sexo) {
-  state.sexoPdf = sexo;
-  state.segurado.sexo = sexo;
-  document.getElementById('sexo-pdf-m').classList.toggle('selected', sexo === 'M');
-  document.getElementById('sexo-pdf-f').classList.toggle('selected', sexo === 'F');
-  verificarBotaoPdf();
-}
-
-function verificarBotaoPdf() {
-  const ok = state.extrato.length > 0 && state.sexoPdf !== null;
-  document.getElementById('btn-proximo-2pdf').disabled = !ok;
-}
-
-// ─── PASSO 2B: MANUAL ──────────────────────────────────────
-function selecionarSexoManual(sexo) {
-  state.sexoManual = sexo;
-  document.getElementById('sexo-m').classList.toggle('selected', sexo === 'M');
-  document.getElementById('sexo-f').classList.toggle('selected', sexo === 'F');
-}
-
-function mudarTabContrib(modo) {
-  state.modoContrib = modo;
-  document.getElementById('tab-um-um').classList.toggle('active', modo === 'um-a-um');
-  document.getElementById('tab-lote').classList.toggle('active', modo === 'lote');
-  document.getElementById('contrib-um-a-um').style.display = modo === 'um-a-um' ? 'block' : 'none';
-  document.getElementById('contrib-lote').style.display    = modo === 'lote'    ? 'block' : 'none';
-}
-
-function adicionarLinha() {
-  const tbody = document.getElementById('contrib-tbody');
-  const tr = document.createElement('tr');
-  tr.innerHTML = `
-    <td><input type="text" placeholder="01/2024" maxlength="7" oninput="formatarCompetencia(this)" onchange="recalcularMedia()"></td>
-    <td><input type="text" placeholder="3.500,00" oninput="formatarValor(this)" onchange="recalcularMedia()"></td>
-    <td><button class="btn-remove-row" onclick="removerLinha(this)" title="Remover">✕</button></td>
-  `;
-  tbody.appendChild(tr);
-  tr.querySelector('input').focus();
-}
-
-function removerLinha(btn) {
-  const tbody = document.getElementById('contrib-tbody');
-  if (tbody.rows.length > 1) {
-    btn.closest('tr').remove();
-    recalcularMedia();
-  }
-}
-
-function formatarCompetencia(input) {
-  let v = input.value.replace(/\D/g, '');
-  if (v.length > 2) v = v.slice(0,2) + '/' + v.slice(2,6);
-  input.value = v;
-}
-
-function formatarValor(input) {
-  // Aceita vírgula ou ponto — não força máscara durante digitação
-}
-
-function strToFloat(s) {
-  if (!s) return 0;
-  s = String(s).replace(/[R$\s]/g, '').trim();
-  if (s.includes(',') && s.includes('.')) {
-    if (s.lastIndexOf(',') > s.lastIndexOf('.')) {
-      s = s.replace(/\./g, '').replace(',', '.');
-    } else {
-      s = s.replace(/,/g, '');
-    }
-  } else if (s.includes(',')) {
-    s = s.replace(',', '.');
-  }
-  return parseFloat(s) || 0;
-}
-
-function fmtBRL(v) {
-  return 'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 });
-}
-
-// Média salarial em tempo real (front-end only, estimativa simples)
-function recalcularMedia() {
-  const linhas = document.querySelectorAll('#contrib-tbody tr');
-  let soma = 0, count = 0;
-  linhas.forEach(tr => {
-    const val = strToFloat(tr.querySelectorAll('input')[1].value);
-    if (val > 0) { soma += Math.min(val, state.teto2026); count++; }
-  });
-  exibirMediaRealtime(soma, count);
-}
-
-function recalcularMediaLote() {
-  const linhas = document.getElementById('lote-texto').value.trim().split('\n');
-  let soma = 0, count = 0;
-  linhas.forEach(l => {
-    const parts = l.trim().split(/\s+/);
-    if (parts.length >= 2) {
-      const val = strToFloat(parts.slice(1).join(''));
-      if (val > 0) { soma += Math.min(val, state.teto2026); count++; }
-    }
-  });
-  exibirMediaRealtime(soma, count);
-}
-
-function exibirMediaRealtime(soma, count) {
-  const div = document.getElementById('mediaRealtime');
-  if (count === 0) { div.classList.remove('visible'); return; }
-  const media = soma / count;
-  document.getElementById('mediaRealtimeVal').textContent = fmtBRL(media);
-  div.classList.add('visible');
-}
-
-function validarManual() {
-  if (!state.sexoManual) {
-    alert('Por favor, selecione o sexo antes de continuar.'); return false;
-  }
-  const nasc = document.getElementById('manual-nasc').value;
-  if (!nasc) {
-    alert('Por favor, informe a data de nascimento.'); return false;
-  }
-  return true;
-}
-
-function montarExtratoManual() {
-  const nasc  = document.getElementById('manual-nasc').value;
-  const nome  = document.getElementById('manual-nome').value.trim();
-
-  state.segurado = {
-    nome: nome || 'Não identificado',
-    sexo: state.sexoManual,
-    dataNascimento: nasc.split('-').reverse().join('/'), // yyyy-MM-dd → dd/MM/yyyy
-    dataCnis: new Date().toLocaleDateString('pt-BR')
-  };
-
-  const lancamentos = [];
-
-  if (state.modoContrib === 'um-a-um') {
-    const linhas = document.querySelectorAll('#contrib-tbody tr');
-    linhas.forEach(tr => {
-      const comp = tr.querySelectorAll('input')[0].value.trim();
-      const val  = strToFloat(tr.querySelectorAll('input')[1].value);
-      if (comp && val > 0) {
-        lancamentos.push({ competencia: comp, remuneracao: val, nomeEmpregador: '', simulado: false });
-      }
-    });
-  } else {
-    const linhas = document.getElementById('lote-texto').value.trim().split('\n');
-    linhas.forEach(l => {
-      const parts = l.trim().split(/\s+/);
-      if (parts.length >= 2) {
-        const comp = parts[0];
-        const val  = strToFloat(parts.slice(1).join(''));
-        if (comp && val > 0) {
-          lancamentos.push({ competencia: comp, remuneracao: val, nomeEmpregador: '', simulado: false });
-        }
-      }
-    });
-  }
-
-  // Para entrada manual vamos chamar o back /calcular diretamente no passo 3
-  state.extratoManualLancamentos = lancamentos;
-  // Monta extrato local simplificado para exibição no passo 3
-  state.extrato = lancamentos.map(l => ({
-    competencia: l.competencia,
-    somaRemuneracoes: l.remuneracao,
-    teto: state.teto2026,
-    valorAntesCorrecao: Math.min(l.remuneracao, state.teto2026),
-    valorCorrigido: Math.min(l.remuneracao, state.teto2026), // será recalculado no back
-    nomeEmpregador: '',
-    simulado: false
-  }));
-}
-
-async function calcularManual() {
-  if (!validarManual()) return;
-  montarExtratoManual();
-  irPara(3);
-}
-
-// ─── PASSO 3: EXTRATO ──────────────────────────────────────
-function fmtEmpregador(nome) {
-  if (!nome || nome === '—' || nome.trim() === '') return '—';
-  return nome.length > 10 ? nome.substring(0, 10) + '...' : nome;
-}
-
-function renderizarExtrato() {
-  const tbody = document.getElementById('extrato-tbody');
-  tbody.innerHTML = '';
-
-  let somaCorrigida = 0;
-  state.extrato.forEach(r => {
-    somaCorrigida += r.valorCorrigido || 0;
-    const tr = document.createElement('tr');
-    if (r.simulado) tr.classList.add('simulado');
-    tr.innerHTML = `
-      <td><strong>${r.competencia}</strong>${r.simulado ? ' <span class="badge-sim">SIM</span>' : ''}</td>
-      <td>${fmtBRL(r.somaRemuneracoes)}</td>
-      <td>${fmtBRL(r.teto)}</td>
-      <td>${fmtBRL(r.valorAntesCorrecao)}</td>
-      <td class="val-corrigido">${fmtBRL(r.valorCorrigido)}</td>
-      <td class="empregador" title="${r.nomeEmpregador || ''}">${fmtEmpregador(r.nomeEmpregador)}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-
-  const media = state.extrato.length > 0 ? somaCorrigida / state.extrato.length : 0;
-  document.getElementById('stat-comp').textContent  = state.extrato.length;
-  document.getElementById('stat-media').textContent = fmtBRL(media);
-  document.getElementById('stat-data-cnis').textContent = state.segurado.dataCnis || '—';
-
-  // Verifica se CNIS está desatualizado
-  verificarDesatualizacao();
-}
-
-function verificarDesatualizacao() {
-  const dataCnis = state.segurado.dataCnis;
-  if (!dataCnis) return;
-
-  try {
-    const partes = dataCnis.split('/');
-    const dtCnis = new Date(parseInt(partes[2]), parseInt(partes[1]) - 1, parseInt(partes[0]));
-    const hoje   = new Date();
-    const diffMs = hoje - dtCnis;
-    const diffDias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    const diffMeses = Math.floor(diffDias / 30);
-
-    state.mesesDesatualizado = diffMeses;
-    state.ultimoSalario = state.extrato.length > 0 ? state.extrato[0].somaRemuneracoes : 0;
-
-    const el = document.getElementById('ajusteTempo');
-    if (diffMeses > 0) {
-      el.classList.add('visible');
-      const anos  = Math.floor(diffMeses / 12);
-      const meses = diffMeses % 12;
-      document.getElementById('ajusteTempoMsg').textContent =
-        `Seu CNIS é de ${dataCnis}. Já se passaram aprox. ${anos > 0 ? anos + 'a ' : ''}${meses}m desde então. Informe o tempo adicional para ajustar o cálculo.`;
-      document.getElementById('ajuste-anos').value  = anos;
-      document.getElementById('ajuste-meses').value = meses;
-      document.getElementById('ajuste-dias').value  = 0;
-    } else {
-      el.classList.remove('visible');
-    }
-  } catch(e) {}
-}
-
-// ─── SIMULAÇÕES ────────────────────────────────────────────
-const modoDescs = {
-  CONST:     'Simula contribuições mensais com valor fixo a partir da data do CNIS.',
-  QUALIDADE: 'Contribui o mínimo a cada 6 meses para manter a qualidade de segurado (reduz custo, mantém tempo).',
-  PARAR:     'Calcula elegibilidade e RMI apenas com as contribuições já realizadas — sem novas contribuições.'
-};
-
-function selecionarModoSim(modo) {
-  state.modoSim = modo;
-  ['CONST','QUALIDADE','PARAR'].forEach(m => {
-    document.getElementById('modo-' + m.toLowerCase()).classList.toggle('active', m === modo);
-    const campos = document.getElementById('sim-campos-' + m.toLowerCase());
-    if (campos) campos.style.display = m === modo ? (m === 'PARAR' ? 'grid' : 'grid') : 'none';
-  });
-  document.getElementById('simModoDesc').textContent = modoDescs[modo];
-  atualizarSimulacao();
-}
-
-function atualizarSimulacao() {
-  // Gera lançamentos simulados conforme modo e adiciona ao extrato base
-  const modo   = state.modoSim || 'CONST';
-  const extrato = state.extratoBase || state.extrato;
-
-  // Calcula data de início da simulação (última competência + 1 mês)
-  let ultimaComp = extrato.length > 0 ? extrato[0].competencia : null;
-  if (!ultimaComp) { esconderResumoSim(); return; }
-
-  const ajusteAnos  = parseInt(document.getElementById('ajuste-anos')?.value  || 0);
-  const ajusteMeses = parseInt(document.getElementById('ajuste-meses')?.value || 0);
-  const ajusteDias  = parseInt(document.getElementById('ajuste-dias')?.value  || 0);
-
-  // Lançamentos de ajuste (meses entre CNIS e hoje com último salário)
-  const lancAjuste = [];
-  const totalAjusteMeses = ajusteAnos * 12 + ajusteMeses;
-  if (totalAjusteMeses > 0) {
-    let [mm, aaaa] = ultimaComp.split('/').map(Number);
-    for (let i = 0; i < totalAjusteMeses; i++) {
-      mm++; if (mm > 12) { mm = 1; aaaa++; }
-      const comp = String(mm).padStart(2,'0') + '/' + aaaa;
-      lancAjuste.push({
-        competencia: comp,
-        remuneracao: state.ultimoSalario || state.teto2026,
-        nomeEmpregador: '', simulado: true,
-        somaRemuneracoes: state.ultimoSalario || state.teto2026,
-        teto: state.teto2026,
-        valorAntesCorrecao: Math.min(state.ultimoSalario || state.teto2026, state.teto2026),
-        valorCorrigido: Math.min(state.ultimoSalario || state.teto2026, state.teto2026)
-      });
-    }
-    ultimaComp = lancAjuste[lancAjuste.length - 1].competencia;
-  }
-
-  // Lançamentos de simulação futura
-  const lancSim = [];
-  if (modo !== 'PARAR') {
-    const campoValor = modo === 'CONST' ? 'sim-valor-const' : 'sim-valor-qualidade';
-    const campoMeses = modo === 'CONST' ? 'sim-meses-const' : 'sim-meses-qualidade';
-    const valorInput = strToFloat(document.getElementById(campoValor)?.value);
-    const mesesSim   = parseInt(document.getElementById(campoMeses)?.value || 0);
-    const valor = valorInput > 0 ? valorInput : (state.ultimoSalario || state.teto2026);
-
-    if (mesesSim > 0) {
-      let [mm, aaaa] = ultimaComp.split('/').map(Number);
-      for (let i = 0; i < mesesSim; i++) {
-        mm++; if (mm > 12) { mm = 1; aaaa++; }
-        if (modo === 'QUALIDADE' && i % 6 !== 0) continue;
-        const comp = String(mm).padStart(2,'0') + '/' + aaaa;
-        lancSim.push({
-          competencia: comp,
-          remuneracao: valor,
-          nomeEmpregador: '', simulado: true,
-          somaRemuneracoes: valor,
-          teto: state.teto2026,
-          valorAntesCorrecao: Math.min(valor, state.teto2026),
-          valorCorrigido: Math.min(valor, state.teto2026)
-        });
-      }
-    }
-  }
-
-  // Monta extrato com base + ajuste + simulados
-  state.lancamentosSimulados = [...lancAjuste, ...lancSim];
-  const totalSimulados = state.lancamentosSimulados.length;
-
-  if (totalSimulados > 0) {
-    const el = document.getElementById('simResumo');
-    el.classList.add('visible');
-    document.getElementById('simResumoVal').textContent = totalSimulados + ' meses';
-    document.getElementById('simResumoDetalhe').textContent =
-      lancAjuste.length > 0
-        ? `${lancAjuste.length} de ajuste + ${lancSim.length} simulados`
-        : `${lancSim.length} contribuições futuras simuladas`;
-  } else {
-    esconderResumoSim();
-  }
-}
-
-function esconderResumoSim() {
-  document.getElementById('simResumo').classList.remove('visible');
-}
-
-function voltarStep3() {
-  irPara(state.modo === 'pdf' ? 2 : 2);
-}
-
-// ─── PASSO 4: CALCULAR ─────────────────────────────────────
-async function calcularBeneficio() {
-  irPara(4);
-  document.getElementById('resultado-content').innerHTML = `
-    <div style="font-size:2rem;margin-bottom:1rem">⏳</div>
-    <p>Calculando... aguarde.</p>
-  `;
-
-  // Lançamentos base (do CNIS ou manual)
-  const lancamentosBase = state.modo === 'pdf'
-    ? state.extrato.map(r => ({
-        competencia: r.competencia,
-        remuneracao: r.somaRemuneracoes,
-        nomeEmpregador: r.nomeEmpregador || '',
-        simulado: false
-      }))
-    : state.extratoManualLancamentos || [];
-
-  // Adiciona simulados (ajuste + futuros)
-  const lancamentosSimulados = (state.lancamentosSimulados || []).map(r => ({
-    competencia: r.competencia,
-    remuneracao: r.remuneracao,
-    nomeEmpregador: '',
-    simulado: true
-  }));
-
-  const lancamentos = [...lancamentosBase, ...lancamentosSimulados];
-
-  const seguradoPayload = {
-    nome: state.segurado.nome || '',
-    sexo: state.segurado.sexo || state.sexoPdf || state.sexoManual,
-    dataNascimento: state.segurado.dataNascimento || ''
-  };
-
-  try {
-    const res = await fetch(`${BACKEND_URL}/api/cnis/calcular`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ segurado: seguradoPayload, lancamentos })
-    });
-
-    if (!res.ok) throw new Error('Erro no cálculo');
-    const data = await res.json();
-    renderizarResultado(data);
-  } catch (e) {
-    document.getElementById('resultado-content').innerHTML = `
-      <div style="font-size:2rem;margin-bottom:1rem">❌</div>
-      <p style="color:var(--danger)">Erro ao calcular. Verifique se o servidor está disponível.</p>
-    `;
-  }
-}
-
-// ─── DRAG & DROP na upload zone ────────────────────────────
+// ─── UPLOAD DRAG & DROP ───────────────────────────────────────
 const uploadZone = document.getElementById('uploadZone');
-uploadZone.addEventListener('dragover',  e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+const fileInput  = document.getElementById('fileInput');
+
+uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
 uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
 uploadZone.addEventListener('drop', e => {
   e.preventDefault();
   uploadZone.classList.remove('drag-over');
   const file = e.dataTransfer.files[0];
-  if (file && file.type === 'application/pdf') {
-    const input = document.getElementById('inputPdf');
-    const dt = new DataTransfer(); dt.items.add(file);
-    input.files = dt.files;
-    processarPdf(input);
-  }
+  if (file && file.type === 'application/pdf') setFile(file);
 });
 
-// Data máxima = hoje
-document.getElementById('manual-nasc').max = new Date().toISOString().split('T')[0];
+fileInput.addEventListener('change', () => {
+  if (fileInput.files[0]) setFile(fileInput.files[0]);
+});
+
+let _selectedFile = null;
+function setFile(file) {
+  _selectedFile = file;
+  uploadZone.classList.add('has-file');
+  document.getElementById('fileNameText').textContent = file.name;
+  document.getElementById('fileName').classList.add('visible');
+  document.getElementById('btnEnviar').removeAttribute('disabled');
+}
+
+
+// ─── HELPERS: teto atual ──────────────────────────────────────
+function getTetoAtual() {
+  // Pega o maior teto dos registros originais
+  return state.registrosOriginais.reduce(
+    (t, r) => r.teto && isFinite(r.teto) ? Math.max(t, r.teto) : t, 0
+  ) || 8475.55;
+}
+
+// ─── MODAL LOTE ──────────────────────────────────────────────
+
+// ─── HELPER: última competência global (originais + extras) ──
+function ultimaCompetenciaGlobal() {
+  const todos = [
+    ...state.registrosOriginais,
+    ...state.extras.filter(e => e.confirmado).map(e => ({ competencia: e.competencia, somaRemuneracoes: parseFloat(e.remuneracao) }))
+  ].filter(r => r.competencia && /^\d{2}\/\d{4}$/.test(r.competencia));
+  if (!todos.length) return null;
+  return todos.sort((a, b) => {
+    const [ma, aa] = a.competencia.split('/').map(Number);
+    const [mb, ab] = b.competencia.split('/').map(Number);
+    return (ab - aa) || (mb - ma);
+  })[0];
+}
+
+// ─── HELPER: máscara de competência mm/aaaa ───────────────────
+function aplicarMascaraCompetencia(input) {
+  input.addEventListener('input', function() {
+    let v = this.value.replace(/\D/g, '');
+    if (v.length > 6) v = v.slice(0, 6);
+    if (v.length > 2) v = v.slice(0, 2) + '/' + v.slice(2);
+    this.value = v;
+    if (typeof atualizarInfoLote === 'function') atualizarInfoLote();
+  });
+}
+
+function abrirModalLote() {
+  const ultimo = ultimaCompetenciaGlobal();
+  document.getElementById('loteCompIni').value = ultimo ? proximaCompetencia(ultimo.competencia) : '';
+  document.getElementById('loteCompFim').value = '';
+  document.getElementById('loteRem').value = ultimo ? (ultimo.somaRemuneracoes || '') : '';
+  document.getElementById('loteInfo').textContent = '';
+  document.getElementById('modalLote').style.display = 'flex';
+
+  // Aplica máscara nos campos de competência
+  aplicarMascaraCompetencia(document.getElementById('loteCompIni'));
+  aplicarMascaraCompetencia(document.getElementById('loteCompFim'));
+
+  atualizarInfoLote();
+}
+
+function fecharModalLote() {
+  document.getElementById('modalLote').style.display = 'none';
+}
+
+function atualizarInfoLote() {
+  const ini = document.getElementById('loteCompIni').value;
+  const fim = document.getElementById('loteCompFim').value;
+  const info = document.getElementById('loteInfo');
+  if (!ini || !fim) { info.textContent = ''; return; }
+  const comps = gerarCompetencias(ini, fim);
+  if (comps.length === 0) {
+    info.textContent = '⚠ Competência final deve ser maior que a inicial.';
+    info.style.color = 'var(--warning)'; return;
+  }
+  info.style.color = 'var(--green)';
+  info.textContent = `✓ ${comps.length} competência${comps.length>1?'s':''} serão geradas (${ini} a ${fim})`;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('loteCompIni').addEventListener('input', atualizarInfoLote);
+  document.getElementById('loteCompFim').addEventListener('input', atualizarInfoLote);
+});
+
+function gerarCompetencias(ini, fim) {
+  const comps = [];
+  if (!/^\d{2}\/\d{4}$/.test(ini) || !/^\d{2}\/\d{4}$/.test(fim)) return comps;
+  let [m, a] = ini.split('/').map(Number);
+  const [mf, af] = fim.split('/').map(Number);
+  while (a < af || (a === af && m <= mf)) {
+    comps.push((m<10?'0':'')+m+'/'+a);
+    m++; if (m > 12) { m = 1; a++; }
+    if (comps.length > 600) break;
+  }
+  return comps;
+}
+
+
+// ─── VALIDAÇÃO DE COMPETÊNCIAS DUPLICADAS ────────────────────
+function competenciaExisteNoCnis(comp) {
+  return state.registrosOriginais.some(r => r.competencia === comp);
+}
+
+function competenciaExisteNosExtras(comp) {
+  return state.extras.filter(e => e.confirmado && e.competencia === comp);
+}
+
+function adicionarOuSomarExtra(comp, rem, emp, teto, valorUtilizado, valorCorrigido) {
+  // Bloqueia se existe no CNIS
+  if (competenciaExisteNoCnis(comp)) return 'cnis';
+
+  // Soma se já existe nos extras
+  const existentes = competenciaExisteNosExtras(comp);
+  if (existentes.length > 0) {
+    const idx = state.extras.findIndex(e => e.confirmado && e.competencia === comp);
+    const novaRem = parseFloat(state.extras[idx].remuneracao) + rem;
+    const novoValorUtilizado = Math.min(novaRem, teto);
+    state.extras[idx].remuneracao = novaRem;
+    state.extras[idx].valorAntesCorrecao = novoValorUtilizado;
+    state.extras[idx].valorCorrigido = novoValorUtilizado;
+    state.extras[idx].multiplas = true;
+    return 'somado';
+  }
+
+  // Adiciona novo
+  state.extras.push({
+    id: ++state.idxExtraContador,
+    competencia: comp,
+    remuneracao: rem,
+    empregador: emp,
+    confirmado: true,
+    teto: teto,
+    valorAntesCorrecao: valorUtilizado,
+    valorCorrigido: valorCorrigido,
+    multiplas: false,
+  });
+  return 'novo';
+}
+
+function confirmarLote() {
+  const ini = document.getElementById('loteCompIni').value;
+  const fim = document.getElementById('loteCompFim').value;
+  const rem = parseFloat(document.getElementById('loteRem').value);
+  const emp = document.getElementById('loteEmp').value;
+
+  if (!ini || !/^\d{2}\/\d{4}$/.test(ini)) { alert('Informe a competência inicial no formato mm/aaaa.'); return; }
+  if (!fim || !/^\d{2}\/\d{4}$/.test(fim)) { alert('Informe a competência final no formato mm/aaaa.'); return; }
+  if (!rem || isNaN(rem) || rem <= 0) { alert('Informe uma remuneração válida.'); return; }
+
+  const comps = gerarCompetencias(ini, fim);
+  if (comps.length === 0) { alert('A competência final deve ser maior que a inicial.'); return; }
+
+  // Usa o último teto conhecido como proxy para contribuições futuras
+  const teto = getTetoAtual();
+  const valorUtilizado = Math.min(rem, teto);
+  // Fator = 1 para contribuições futuras (ainda não há correção)
+  const valorCorrigido = valorUtilizado;
+
+  let adicionadas = 0, somadas = 0, bloqueadas = 0;
+  comps.forEach(comp => {
+    const resultado = adicionarOuSomarExtra(comp, rem, emp, teto, valorUtilizado, valorCorrigido);
+    if (resultado === 'novo') adicionadas++;
+    else if (resultado === 'somado') somadas++;
+    else if (resultado === 'cnis') bloqueadas++;
+  });
+
+  fecharModalLote();
+  mostrarExtrato();
+
+  let msg = [];
+  if (adicionadas > 0) msg.push(`✓ ${adicionadas} competência${adicionadas>1?'s':''} adicionada${adicionadas>1?'s':''}`);
+  if (somadas > 0) msg.push(`⊕ ${somadas} competência${somadas>1?'s':''} somada${somadas>1?'s':''} a existentes`);
+  if (bloqueadas > 0) msg.push(`⚠ ${bloqueadas} competência${bloqueadas>1?'s':''} ignorada${bloqueadas>1?'s':''} (já existe no CNIS)`);
+  alert(msg.join('\n'));
+}
+
+
+// ─── HELPERS REGRAS BACK ─────────────────────────────────
+function formatarNomeRegra(nome) {
+  const nomes = {
+    'Regra Geral Pos-2019': 'Regra Geral Pós-2019',
+    'Aposentadoria por Idade': 'Aposentadoria por Idade',
+    'Transicao - Pontos (Art. 15)': 'Transição — Pontos',
+    'Transicao - Idade Progressiva (Art. 16)': 'Transição — Idade Progressiva',
+    'Transicao - Aposentadoria por Idade (Art. 18)': 'Transição — Por Idade',
+    'Transicao - Pedagio 100% (Art. 20)': 'Transição — Pedágio 100%',
+    'Transicao - Pedagio 50% (Art. 17)': 'Transição — Pedágio 50%',
+  };
+  // Tenta match parcial
+  for (const [key, val] of Object.entries(nomes)) {
+    if (nome && nome.includes(key.split(' ')[0]) && nome.includes(key.split(' ')[2] || '')) return val;
+    if (nome === key) return val;
+  }
+  // Fallback: limpa encoding
+  return nome ? nome.replace('PÃ³s', 'Pós').replace('Ã§Ã£o', 'ção') : nome;
+}
+
+function mesesParaTextoSimples(m) {
+  if (m <= 0) return 'Elegível agora!';
+  m = Math.round(m);
+  const a = Math.floor(m/12), ms = m%12;
+  let s = '';
+  if (a > 0) s += a + ' ano' + (a>1?'s':'');
+  if (a > 0 && ms > 0) s += ' e ';
+  if (ms > 0) s += ms + (ms > 1 ? ' meses' : ' mês');
+  return s;
+}
+
+function renderDetalheRegra(r) {
+  const e = r.elegibilidade || {};
+  const rmi = r.rmi || {};
+  const linhas = [];
+
+  if (e.contribMinimaMeses) linhas.push(['Contribuição mínima', Math.round(e.contribMinimaMeses/12) + ' anos', e.faltaContribMeses === 0]);
+  if (e.idadeMinima) linhas.push(['Idade mínima', e.idadeMinima + ' anos', e.faltaIdadeMeses === 0]);
+  if (e.pontuacaoNecessaria) linhas.push(['Pontuação necessária', e.pontuacaoNecessaria + ' pts', false]);
+  if (e.pontuacaoAtual) linhas.push(['Sua pontuação atual', e.pontuacaoAtual.toFixed(1) + ' pts', false]);
+  if (e.pedagogioMeses) linhas.push(['Pedágio', mesesParaTextoSimples(e.pedagogioMeses), false]);
+  if (rmi.percentual) linhas.push(['Alíquota', rmi.percentual + '% da média', true]);
+  if (rmi.rmi) linhas.push(['RMI estimado', fmtBRL(rmi.rmi), true]);
+  if (rmi.obs) linhas.push(['Obs', rmi.obs, true]);
+
+  return linhas.map(([k, v, ok]) => `
+    <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid var(--muted-4);font-size:0.82rem;">
+      <span style="color:var(--muted-2);">${k}</span>
+      <span style="color:${ok ? 'var(--green)' : 'var(--white)'};">${v}</span>
+    </div>`).join('');
+}
+
+function toggleRegraDetalhe(el) {
+  const detalhe = el.querySelector('.regra-back-detalhe');
+  const arrow = el.querySelector('.regra-back-arrow');
+  if (detalhe) {
+    detalhe.classList.toggle('hidden');
+    if (arrow) arrow.textContent = detalhe.classList.contains('hidden') ? '▼' : '▲';
+  }
+}
+
+// ─── HELPERS ──────────────────────────────────────────────────
+function fmt(val) {
+  if (!isFinite(val)) return '—';
+  return val.toLocaleString('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 });
+}
+function fmtBRL(val) {
+  if (!isFinite(val)) return '—';
+  return 'R$ ' + fmt(val);
+}
+function isPosJul94(comp) {
+  if (!comp) return false;
+  const [m, a] = comp.split('/').map(Number);
+  return a > 1994 || (a === 1994 && m >= 7);
+}
+function proximaCompetencia(comp) {
+  if (!comp || !/^\d{2}\/\d{4}$/.test(comp)) return '';
+  let [m, a] = comp.split('/').map(Number);
+  m++; if (m > 12) { m = 1; a++; }
+  return (m < 10 ? '0' : '') + m + '/' + a;
+}
+function ultimaCompetencia(lista) {
+  const validos = lista.filter(r => r.competencia && /^\d{2}\/\d{4}$/.test(r.competencia));
+  if (!validos.length) return null;
+  return validos.sort((a, b) => {
+    const [ma, aa] = a.competencia.split('/').map(Number);
+    const [mb, ab] = b.competencia.split('/').map(Number);
+    return (ab - aa) || (mb - ma);
+  })[0];
+}
+
+// ─── NAVEGAÇÃO ENTRE PASSOS ───────────────────────────────────
+function avancarParaCnis() {
+  const sexo = document.getElementById('sexo').value;
+  const dataNasc = document.getElementById('dataNascimento').value;
+
+  if (!sexo) { alert('Por favor, selecione o sexo.'); return; }
+  if (!dataNasc) { alert('Por favor, informe a data de nascimento.'); return; }
+
+  state.segurado = {
+    nome: document.getElementById('nome').value.trim(),
+    sexo,
+    dataNascimento: dataNasc,
+  };
+
+  document.getElementById('bloco-dados').classList.add('hidden');
+  document.getElementById('bloco-cnis').classList.remove('hidden');
+  setStep(2);
+  scrollToTop();
+}
+
+function voltarParaDados() {
+  document.getElementById('bloco-cnis').classList.add('hidden');
+  document.getElementById('bloco-dados').classList.remove('hidden');
+  setStep(1);
+  scrollToTop();
+}
+
+function voltarParaCnis() {
+  document.getElementById('bloco-extrato').classList.add('hidden');
+  document.getElementById('bloco-resultados').classList.add('hidden');
+  document.getElementById('bloco-cnis').classList.remove('hidden');
+  setStep(2);
+  scrollToTop();
+}
+
+function voltarParaExtrato() {
+  document.getElementById('bloco-resultados').classList.add('hidden');
+  document.getElementById('bloco-extrato').classList.remove('hidden');
+  setStep(3);
+  scrollToTop();
+}
+
+function reiniciar() {
+  state = { segurado:{}, registrosOriginais:[], extras:[], paginaAtual:1, idxExtraContador:0 };
+  document.getElementById('bloco-resultados').classList.add('hidden');
+  document.getElementById('bloco-extrato').classList.add('hidden');
+  document.getElementById('bloco-cnis').classList.add('hidden');
+  document.getElementById('bloco-dados').classList.remove('hidden');
+  document.getElementById('fileName').classList.remove('visible');
+  document.getElementById('uploadZone').classList.remove('has-file');
+  document.getElementById('btnEnviar').setAttribute('disabled','');
+  fileInput.value = '';
+  setStep(1);
+  scrollToTop();
+}
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ─── ENVIAR CNIS AO BACK ─────────────────────────────────────
+async function enviarCnis() {
+  const file = _selectedFile || fileInput.files[0];
+  if (!file) { alert('Selecione um arquivo PDF!'); return; }
+
+  showSpinner('Extraindo dados do seu CNIS...');
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await fetch(BACKEND_URL + '/api/cnis/extrair', { method:'POST', body:formData });
+    if (!response.ok) throw new Error('Erro ao processar o arquivo. Verifique se é um CNIS válido.');
+
+    const data = await response.json();
+    state.registrosOriginais = data;
+    state.extras = [];
+
+    mostrarExtrato();
+    document.getElementById('bloco-cnis').classList.add('hidden');
+    document.getElementById('bloco-extrato').classList.remove('hidden');
+    setStep(3);
+    scrollToTop();
+  } catch(e) {
+    alert(e.message);
+  } finally {
+    hideSpinner();
+  }
+}
+
+// ─── MONTAR E EXIBIR EXTRATO ─────────────────────────────────
+function todosRegistros() {
+  // Junta originais + extras confirmados
+  return [
+    ...state.registrosOriginais,
+    ...state.extras.filter(e => e.confirmado).map(e => ({
+      competencia: e.competencia,
+      somaRemuneracoes: parseFloat(e.remuneracao),
+      teto: e.teto || getTetoAtual(),
+      valorAntesCorrecao: e.valorAntesCorrecao || Math.min(parseFloat(e.remuneracao), getTetoAtual()),
+      valorCorrigido: e.valorCorrigido || Math.min(parseFloat(e.remuneracao), getTetoAtual()),
+      nomeEmpregador: e.empregador || '',
+      _extra: true,
+      _multiplas: e.multiplas || false,
+    }))
+  ].sort((a,b) => {
+    const [ma,aa] = a.competencia.split('/').map(Number);
+    const [mb,ab] = b.competencia.split('/').map(Number);
+    return (ab - aa) || (mb - ma);
+  });
+}
+
+function mostrarExtrato() {
+  const todos = todosRegistros();
+
+  // Stats
+  const posJul94 = todos.filter(r => isPosJul94(r.competencia));
+  const meses = new Set(todos.map(r => r.competencia)).size;
+  const anos = (meses / 12).toFixed(1);
+  const soma = posJul94.reduce((s,r) => s + (r.valorCorrigido||0), 0);
+  const media = posJul94.length ? soma / posJul94.length : 0;
+
+  document.getElementById('statMeses').textContent = meses;
+  document.getElementById('statAnos').textContent = anos + ' anos';
+  document.getElementById('statMedia').textContent = fmtBRL(media);
+
+  const nome = state.segurado.nome;
+  if (nome) {
+    document.getElementById('extratoNomeTitulo').textContent = 'CNIS — ' + nome;
+  }
+
+  // Paginação
+  state.paginaAtual = 1;
+  renderTabela(todos);
+  renderExtras();
+}
+
+function renderTabela(todos) {
+  const total = todos.length;
+  const totalPag = Math.max(1, Math.ceil(total / LINHAS_POR_PAGINA));
+  if (state.paginaAtual > totalPag) state.paginaAtual = totalPag;
+  if (state.paginaAtual < 1) state.paginaAtual = 1;
+
+  const ini = (state.paginaAtual - 1) * LINHAS_POR_PAGINA;
+  const fim = ini + LINHAS_POR_PAGINA;
+  const pagina = todos.slice(ini, fim);
+
+  const tbody = document.getElementById('tbodyExtrato');
+  tbody.innerHTML = '';
+
+  pagina.forEach(r => {
+    const foraMedia = !isPosJul94(r.competencia);
+    const isExtra = r._extra;
+    const tr = document.createElement('tr');
+    if (foraMedia) tr.classList.add('fora-media');
+    if (isExtra) tr.classList.add('extra');
+
+    tr.innerHTML = `
+      <td class="competencia">${r.competencia}${foraMedia ? '<span class="out-of-range-badge">pré-94</span>' : ''}${isExtra ? '<span class="out-of-range-badge" style="background:var(--green-glow);border-color:var(--green-border);color:var(--green)">simulado</span>' : ''}</td>
+      <td>${fmtBRL(r.somaRemuneracoes)}</td>
+      <td>${r.teto && isFinite(r.teto) ? fmtBRL(r.teto) : '—'}</td>
+      <td>${r.valorAntesCorrecao && isFinite(r.valorAntesCorrecao) ? fmtBRL(r.valorAntesCorrecao) : '—'}</td>
+      <td class="valor-corrigido">${r.valorCorrigido && isFinite(r.valorCorrigido) ? fmtBRL(r.valorCorrigido) : isExtra ? '<span style="color:var(--muted-2);font-weight:400;font-size:0.75rem;">calculado no resultado</span>' : '—'}</td>
+      <td style="font-size:0.8rem; color:var(--muted-2);">${r.nomeEmpregador || '—'}</td>
+      <td></td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  // Paginação controls
+  document.getElementById('paginacaoInfo').textContent =
+    `Exibindo ${ini+1}–${Math.min(fim,total)} de ${total} competências`;
+
+  const ctrl = document.getElementById('paginacaoControls');
+  ctrl.innerHTML = '';
+
+  const addBtn = (label, page, disabled, active) => {
+    const btn = document.createElement('button');
+    btn.className = 'page-btn' + (active ? ' active' : '');
+    btn.disabled = disabled;
+    btn.textContent = label;
+    btn.onclick = () => { state.paginaAtual = page; renderTabela(todosRegistros()); };
+    ctrl.appendChild(btn);
+  };
+
+  addBtn('«', 1, state.paginaAtual === 1);
+  addBtn('‹', state.paginaAtual - 1, state.paginaAtual === 1);
+  // Páginas próximas
+  const delta = 2;
+  for (let p = Math.max(1, state.paginaAtual-delta); p <= Math.min(totalPag, state.paginaAtual+delta); p++) {
+    addBtn(p, p, false, p === state.paginaAtual);
+  }
+  addBtn('›', state.paginaAtual + 1, state.paginaAtual === totalPag);
+  addBtn('»', totalPag, state.paginaAtual === totalPag);
+}
+
+// ─── EXTRAS ──────────────────────────────────────────────────
+function adicionarExtra() {
+  const ultimo = ultimaCompetenciaGlobal();
+  const proxComp = ultimo ? proximaCompetencia(ultimo.competencia) : '';
+  const proxRem  = ultimo ? (ultimo.somaRemuneracoes || '') : '';
+
+  state.extras.push({
+    id: ++state.idxExtraContador,
+    competencia: proxComp,
+    remuneracao: proxRem,
+    empregador: '',
+    confirmado: false,
+  });
+  renderExtras();
+}
+
+function confirmarExtra(id) {
+  const idx = state.extras.findIndex(e => e.id === id);
+  if (idx < 0) return;
+  // Lê os valores dos inputs
+  const comp = document.getElementById(`extra-comp-${id}`)?.value || '';
+  const rem  = document.getElementById(`extra-rem-${id}`)?.value || '';
+  const emp  = document.getElementById(`extra-emp-${id}`)?.value || '';
+
+  if (!comp || !/^\d{2}\/\d{4}$/.test(comp)) {
+    alert('Informe uma competência válida no formato mm/aaaa.'); return;
+  }
+  if (!rem || isNaN(parseFloat(rem)) || parseFloat(rem) <= 0) {
+    alert('Informe uma remuneração válida.'); return;
+  }
+
+  // Verifica se a competência já existe no CNIS
+  if (competenciaExisteNoCnis(comp)) {
+    alert('Esta competência já existe no seu CNIS e não pode ser alterada.');
+    return;
+  }
+  // Verifica se já existe em outro extra (diferente do atual)
+  const duplicado = state.extras.find(e => e.id !== id && e.confirmado && e.competencia === comp);
+  if (duplicado) {
+    // Soma ao existente e remove o atual
+    const novaRem = parseFloat(duplicado.remuneracao) + parseFloat(rem);
+    const teto = getTetoAtual();
+    duplicado.remuneracao = novaRem;
+    duplicado.valorAntesCorrecao = Math.min(novaRem, teto);
+    duplicado.valorCorrigido = Math.min(novaRem, teto);
+    duplicado.multiplas = true;
+    state.extras = state.extras.filter(e => e.id !== id);
+  } else {
+    state.extras[idx] = { ...state.extras[idx], competencia:comp, remuneracao:rem, empregador:emp, confirmado:true };
+  }
+  renderExtras();
+  renderTabela(todosRegistros());
+}
+
+function editarExtra(id) {
+  const idx = state.extras.findIndex(e => e.id === id);
+  if (idx < 0) return;
+  state.extras[idx].confirmado = false;
+  renderExtras();
+}
+
+function removerExtra(id) {
+  state.extras = state.extras.filter(e => e.id !== id);
+  renderExtras();
+  renderTabela(todosRegistros());
+}
+
+function renderExtras() {
+  const lista = document.getElementById('extrasLista');
+  if (!state.extras.length) {
+    lista.innerHTML = `<p style="font-size:0.85rem; color:var(--muted-2); padding:0.5rem 0;">Nenhuma contribuição simulada ainda. Clique em "Adicionar competência" para começar.</p>`;
+    return;
+  }
+
+  lista.innerHTML = '';
+  state.extras.forEach(ex => {
+    const div = document.createElement('div');
+    div.className = 'extra-row';
+
+    if (!ex.confirmado) {
+      div.innerHTML = `
+        <div class="form-group">
+          <label class="input-label">Competência</label>
+          <input type="text" class="input" id="extra-comp-${ex.id}" placeholder="mm/aaaa" maxlength="7" value="${ex.competencia}">
+        </div>
+        <div class="form-group">
+          <label class="input-label">Remuneração (R$)</label>
+          <input type="number" class="input" id="extra-rem-${ex.id}" step="0.01" min="0" placeholder="0,00" value="${ex.remuneracao}">
+        </div>
+        <div class="form-group">
+          <label class="input-label">Empregador (opcional)</label>
+          <input type="text" class="input" id="extra-emp-${ex.id}" placeholder="Nome do empregador" value="${ex.empregador}">
+        </div>
+        <div style="display:flex; gap:0.5rem; align-items:flex-end; padding-bottom:0.1rem;">
+          <button class="btn-primary btn-sm" onclick="confirmarExtra(${ex.id})">✓</button>
+          <button class="btn-danger btn-sm" onclick="removerExtra(${ex.id})">✕</button>
+        </div>
+      `;
+    } else {
+      div.innerHTML = `
+        <div class="form-group">
+          <label class="input-label">Competência</label>
+          <input type="text" class="input" value="${ex.competencia}" readonly style="opacity:0.7;">
+        </div>
+        <div class="form-group">
+          <label class="input-label">Remuneração</label>
+          <input type="text" class="input" value="R$ ${fmt(parseFloat(ex.remuneracao))}" readonly style="opacity:0.7;">
+        </div>
+        <div class="form-group">
+          <label class="input-label">Empregador</label>
+          <input type="text" class="input" value="${ex.empregador || '—'}" readonly style="opacity:0.7;">
+        </div>
+        <div style="display:flex; gap:0.5rem; align-items:flex-end; padding-bottom:0.1rem;">
+          <button class="btn-secondary btn-sm" onclick="editarExtra(${ex.id})" title="Editar">✎</button>
+          <button class="btn-danger btn-sm" onclick="removerExtra(${ex.id})" title="Remover">✕</button>
+        </div>
+      `;
+    }
+    lista.appendChild(div);
+  });
+}
+
+// ─── CALCULAR RESULTADOS ─────────────────────────────────────
+async function calcularResultados() {
+  const temExtras = state.extras.filter(e => e.confirmado).length > 0;
+
+  showSpinner('Calculando sua aposentadoria...');
+  try {
+    // Monta payload: originais + extras confirmados
+    const payload = [
+      ...state.registrosOriginais.map(r => ({
+        competencia: r.competencia,
+        remuneracao: r.somaRemuneracoes,
+        nomeEmpregador: r.nomeEmpregador || '',
+      })),
+      ...state.extras.filter(e => e.confirmado).map(e => ({
+        competencia: e.competencia,
+        remuneracao: parseFloat(e.remuneracao),
+        nomeEmpregador: e.empregador || '',
+      }))
+    ];
+
+    const resp = await fetch(BACKEND_URL + '/api/cnis/simular-mix', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!resp.ok) throw new Error('Erro ao calcular resultados.');
+    const dadosComExtras = await resp.json();
+
+    // Se tem extras, calcula também sem eles para comparar
+    let dadosSemExtras = null;
+    if (temExtras) {
+      const payloadSem = state.registrosOriginais.map(r => ({
+        competencia: r.competencia,
+        remuneracao: r.somaRemuneracoes,
+        nomeEmpregador: r.nomeEmpregador || '',
+      }));
+      const respSem = await fetch(BACKEND_URL + '/api/cnis/simular-mix', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payloadSem),
+      });
+      dadosSemExtras = await respSem.json();
+    }
+
+    // Chama calcular-beneficio com todos os lançamentos
+    const respBeneficio = await fetch(
+      BACKEND_URL + '/api/cnis/calcular-beneficio?sexo=' + state.segurado.sexo +
+      '&dataNascimento=' + state.segurado.dataNascimento,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      }
+    );
+    const dadosBeneficio = respBeneficio.ok ? await respBeneficio.json() : null;
+
+    exibirResultados(dadosComExtras, dadosSemExtras, dadosBeneficio);
+
+    document.getElementById('bloco-extrato').classList.add('hidden');
+    document.getElementById('bloco-resultados').classList.remove('hidden');
+    setStep(4);
+    scrollToTop();
+  } catch(e) {
+    alert(e.message);
+  } finally {
+    hideSpinner();
+  }
+}
+
+// ─── CÁLCULO LOCAL (RMI + ELEGIBILIDADE) ─────────────────────
+function calcularMetricas(registros, segurado) {
+  const posJul94 = registros.filter(r => isPosJul94(r.competencia) && r.valorCorrigido > 0 && isFinite(r.valorCorrigido));
+  const competenciasUnicas = new Set(registros.map(r => r.competencia));
+  const meses = competenciasUnicas.size;
+  const anos = meses / 12;
+
+  const soma = posJul94.reduce((s,r) => s + r.valorCorrigido, 0);
+  const media = posJul94.length ? soma / posJul94.length : 0;
+
+  const tetoAtual = registros.reduce((t,r) => r.teto && isFinite(r.teto) ? Math.max(t, r.teto) : t, 0) || 8475.55;
+
+  const dataNasc = new Date(segurado.dataNascimento + 'T00:00:00');
+  const hoje = new Date();
+  const idadeAnos = (hoje - dataNasc) / (1000*60*60*24*365.25);
+
+  // ── Regra Geral Pós-2019 ──────────────────────────────────
+  const minContribH = 20, minContribM = 15;
+  const minIdadeH = 65, minIdadeM = 62;
+  const minContrib = segurado.sexo === 'M' ? minContribH : minContribM;
+  const minIdade   = segurado.sexo === 'M' ? minIdadeH : minIdadeM;
+
+  const faltaMesesContrib = Math.max(0, minContrib*12 - meses);
+  const faltaMesesIdade   = Math.max(0, (minIdade - idadeAnos)*12);
+  const faltaGeralMeses   = Math.max(faltaMesesContrib, faltaMesesIdade);
+
+  const percBaseGeral = 60;
+  const anosAcima = Math.max(0, Math.floor(anos - minContrib));
+  const percGeral = Math.min(100, percBaseGeral + anosAcima*2);
+  const rmiGeral  = Math.min((percGeral/100)*media, tetoAtual);
+
+  // ── Regra por Idade (aposentadoria por idade) ─────────────
+  // Homem: 65 anos + 15 anos contrib / Mulher: 62 anos + 15 anos contrib
+  const minContribIdadeH = 15, minContribIdadeM = 15;
+  const minContribIdade = segurado.sexo === 'M' ? minContribIdadeH : minContribIdadeM;
+  const faltaMesesContribIdade = Math.max(0, minContribIdade*12 - meses);
+  const faltaMesesIdadeRegra   = Math.max(0, (minIdade - idadeAnos)*12);
+  const faltaIdadeMeses = Math.max(faltaMesesContribIdade, faltaMesesIdadeRegra);
+
+  // RMI por idade = 70% + 1% por ano de contrib acima do mínimo — limitado ao teto
+  const percIdade = Math.min(100, 70 + Math.max(0, Math.floor(anos - minContribIdade)));
+  const rmiIdade  = Math.min((percIdade/100)*media, tetoAtual);
+
+  function mesesParaTexto(m) {
+    if (m <= 0) return 'Elegível agora!';
+    m = Math.round(m);
+    const a = Math.floor(m/12), ms = m%12;
+    let s = '';
+    if (a > 0) s += a + ' ano' + (a>1?'s':'');
+    if (a > 0 && ms > 0) s += ' e ';
+    if (ms > 0) s += ms + (ms > 1 ? ' meses' : ' mês');
+    return s;
+  }
+
+  return {
+    meses, anos, media, tetoAtual, idadeAnos,
+    regras: [
+      {
+        id: 'geral',
+        nome: 'Regra Geral Pós-2019',
+        destaque: true,
+        faltaMeses: faltaGeralMeses,
+        faltaTexto: mesesParaTexto(faltaGeralMeses),
+        elegivel: faltaGeralMeses <= 0,
+        rmi: rmiGeral,
+        perc: percGeral,
+        detalhes: [
+          { key: 'Idade mínima', val: minIdade + ' anos', ok: idadeAnos >= minIdade },
+          { key: 'Tempo mínimo', val: minContrib + ' anos', ok: anos >= minContrib },
+          { key: 'Alíquota aplicada', val: percGeral + '%', ok: true },
+          { key: 'Média salarial corrigida', val: fmtBRL(media), ok: true },
+          { key: 'Teto previdenciário', val: fmtBRL(tetoAtual), ok: true },
+        ]
+      },
+      {
+        id: 'idade',
+        nome: 'Aposentadoria por Idade',
+        destaque: false,
+        faltaMeses: faltaIdadeMeses,
+        faltaTexto: mesesParaTexto(faltaIdadeMeses),
+        elegivel: faltaIdadeMeses <= 0,
+        rmi: rmiIdade,
+        perc: percIdade,
+        detalhes: [
+          { key: 'Idade mínima', val: minIdade + ' anos', ok: idadeAnos >= minIdade },
+          { key: 'Tempo mínimo', val: minContribIdade + ' anos', ok: anos >= minContribIdade },
+          { key: 'Alíquota aplicada', val: percIdade + '%', ok: true },
+          { key: 'Média salarial corrigida', val: fmtBRL(media), ok: true },
+          { key: 'Teto previdenciário', val: fmtBRL(tetoAtual), ok: true },
+        ]
+      }
+    ]
+  };
+}
+
+// ─── EXIBIR RESULTADOS ────────────────────────────────────────
+function exibirResultados(dadosComExtras, dadosSemExtras, dadosBeneficio) {
+  const metricas = calcularMetricas(dadosComExtras, state.segurado);
+  const temExtras = dadosSemExtras !== null;
+
+  // ── Comparativo Antes x Depois ────────────────────────────
+  const blocoComp = document.getElementById('blocoComparativo');
+  if (temExtras) {
+    const metricasSem = calcularMetricas(dadosSemExtras, state.segurado);
+    blocoComp.classList.remove('hidden');
+
+    const melhorAgora  = metricasSem.regras.reduce((r, c) => c.rmi > r.rmi ? c : r);
+    const melhorDepois = metricas.regras.reduce((r, c) => c.rmi > r.rmi ? c : r);
+    const diffRMI = melhorDepois.rmi - melhorAgora.rmi;
+    const diffMeses = melhorAgora.faltaMeses - melhorDepois.faltaMeses;
+
+    document.getElementById('comparativoGrid').innerHTML = `
+      <div class="comparativo-card">
+        <div class="comparativo-label"><span class="dot"></span>Sem simulação</div>
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+          <div>
+            <div style="font-size:0.75rem;color:var(--muted-2);margin-bottom:0.3rem;">Melhor RMI estimado</div>
+            <div style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;">${fmtBRL(melhorAgora.rmi)}</div>
+          </div>
+          <div>
+            <div style="font-size:0.75rem;color:var(--muted-2);margin-bottom:0.3rem;">Tempo restante (melhor regra)</div>
+            <div style="font-size:1rem;font-weight:600;">${melhorAgora.faltaTexto}</div>
+          </div>
+          <div>
+            <div style="font-size:0.75rem;color:var(--muted-2);margin-bottom:0.3rem;">Contribuições</div>
+            <div style="font-size:0.9rem;color:var(--muted-1);">${metricasSem.meses} meses (${metricasSem.anos.toFixed(1)} anos)</div>
+          </div>
+        </div>
+      </div>
+      <div class="comparativo-card depois">
+        <div class="comparativo-label"><span class="dot"></span>Com simulação</div>
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+          <div>
+            <div style="font-size:0.75rem;color:var(--green);margin-bottom:0.3rem;">Melhor RMI estimado</div>
+            <div style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;color:var(--green);">${fmtBRL(melhorDepois.rmi)}</div>
+            ${diffRMI > 0 ? `<div style="font-size:0.75rem;color:var(--green);margin-top:0.3rem;">↑ +${fmtBRL(diffRMI)} a mais</div>` : ''}
+          </div>
+          <div>
+            <div style="font-size:0.75rem;color:var(--green);margin-bottom:0.3rem;">Tempo restante (melhor regra)</div>
+            <div style="font-size:1rem;font-weight:600;">${melhorDepois.faltaTexto}</div>
+            ${diffMeses > 0 ? `<div style="font-size:0.75rem;color:var(--green);margin-top:0.3rem;">↑ ${diffMeses} meses a menos de espera</div>` : ''}
+          </div>
+          <div>
+            <div style="font-size:0.75rem;color:var(--green);margin-bottom:0.3rem;">Contribuições</div>
+            <div style="font-size:0.9rem;color:var(--muted-1);">${metricas.meses} meses (${metricas.anos.toFixed(1)} anos)</div>
+          </div>
+        </div>
+      </div>
+    `;
+  } else {
+    blocoComp.classList.add('hidden');
+  }
+
+  // ── Melhor Opção (do back) ────────────────────────────────
+  const blocoMelhor = document.getElementById('blocoMelhorOpcao');
+  if (dadosBeneficio && dadosBeneficio.regras) {
+    blocoMelhor.classList.remove('hidden');
+    const regrasElegiveis = dadosBeneficio.regras.filter(r =>
+      r.elegibilidade && r.elegibilidade.elegivel === true
+    );
+    const todasRegras = dadosBeneficio.regras.filter(r =>
+      r.rmi && r.rmi.rmi > 0 && r.elegibilidade && r.elegibilidade.faltaTotalMeses !== undefined
+    );
+    // Ordena por menor tempo de espera
+    todasRegras.sort((a, b) =>
+      (a.elegibilidade.faltaTotalMeses || 0) - (b.elegibilidade.faltaTotalMeses || 0)
+    );
+    const melhor = todasRegras[0];
+
+    if (melhor) {
+      const faltaMeses = melhor.elegibilidade.faltaTotalMeses || 0;
+      const faltaTexto = faltaMeses > 0 ? mesesParaTextoSimples(faltaMeses) : 'Elegível agora!';
+      const rmi = melhor.rmi.rmi || 0;
+      const elegivel = faltaMeses === 0;
+
+      document.getElementById('melhorOpcaoNome').textContent = formatarNomeRegra(melhor.regra);
+      document.getElementById('melhorOpcaoFalta').textContent = elegivel ? '✓ Elegível agora!' : 'Falta ' + faltaTexto + ' (com contribuição contínua)';
+      document.getElementById('melhorOpcaoRMI').textContent = fmtBRL(rmi);
+      document.getElementById('melhorOpcaoRMISub').textContent = `${melhor.rmi.percentual || 0}% da média salarial corrigida`;
+    }
+
+    // Renderiza cards de todas as regras do back
+    const gridBack = document.getElementById('regrasGridBack');
+    gridBack.innerHTML = todasRegras.map(r => {
+      const falta = r.elegibilidade.faltaTotalMeses || 0;
+      const elegivel = falta === 0;
+      const rmiVal = r.rmi.rmi || 0;
+      const faltaTexto = falta > 0 ? mesesParaTextoSimples(falta) : 'Elegível agora!';
+      const isMelhor = r === melhor;
+
+      return `
+        <div class="regra-card-back ${isMelhor ? 'melhor' : ''}" onclick="toggleRegraDetalhe(this)">
+          <div class="regra-back-header">
+            <div class="regra-back-esquerda">
+              ${isMelhor ? '<span class="badge-melhor">MELHOR</span>' : ''}
+              <span class="regra-back-nome">${formatarNomeRegra(r.regra)}</span>
+            </div>
+            <div class="regra-back-direita">
+              <span class="regra-back-status ${elegivel ? 'elegivel' : 'nao-elegivel'}">
+                ${elegivel ? '✓ Elegível' : '✗ Não elegível'}
+              </span>
+              ${!elegivel ? `<span class="regra-back-tempo">${faltaTexto}</span>` : ''}
+              <span class="regra-back-rmi">${fmtBRL(rmiVal)}</span>
+              <span class="regra-back-arrow">▼</span>
+            </div>
+          </div>
+          <div class="regra-back-detalhe hidden">
+            <div style="font-size:0.8rem;color:var(--muted-2);margin-bottom:0.75rem;">${r.descricao}</div>
+            ${renderDetalheRegra(r)}
+          </div>
+        </div>`;
+    }).join('');
+  } else {
+    blocoMelhor.classList.add('hidden');
+  }
+
+  // ── Cards por Regra ───────────────────────────────────────
+  const grid = document.getElementById('regrasGrid');
+  grid.innerHTML = '';
+
+  metricas.regras.forEach(regra => {
+    const card = document.createElement('div');
+    card.className = 'regra-card' + (regra.destaque ? ' highlight' : '');
+
+    const badgeHtml = regra.elegivel
+      ? `<span class="badge badge-green"><span class="badge-dot"></span>Elegível</span>`
+      : `<span class="badge badge-neutral">Falta ${regra.faltaTexto}</span>`;
+
+    const detalhesHtml = regra.detalhes.map(d => `
+      <div class="regra-detalhe-row">
+        <span class="regra-detalhe-key">${d.key}</span>
+        <span class="regra-detalhe-val ${d.ok ? 'green' : 'warning'}">${d.val}</span>
+      </div>
+    `).join('');
+
+    card.innerHTML = `
+      <div class="regra-nome">${regra.nome}</div>
+      <div class="regra-badge">${badgeHtml}</div>
+      <div class="regra-valor">${fmtBRL(regra.rmi)}</div>
+      <div class="regra-sub">Estimativa de benefício mensal (${regra.perc}% da média)</div>
+      <div class="regra-detalhe">${detalhesHtml}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
 </script>
 
+<script src="/assets/js/components.js"></script>
 </body>
 </html>
