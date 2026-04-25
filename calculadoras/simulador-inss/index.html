@@ -739,8 +739,18 @@ footer {
 @media (max-width:640px) {
   .sim4-modos { grid-template-columns:1fr 1fr; }
   .sim4-form { grid-template-columns:1fr; }
-  .sim4-table thead th:nth-child(3), .sim4-table thead th:nth-child(4),
-  .sim4-table tbody td:nth-child(3), .sim4-table tbody td:nth-child(4) { display:none; }
+  .sim4-table { table-layout:fixed; width:100%; }
+  .sim4-table thead th:nth-child(1) { width:45%; }
+  .sim4-table thead th:nth-child(2) { width:30%; }
+  .sim4-table thead th:nth-child(5) { width:25%; }
+  .sim4-table thead th:nth-child(3),
+  .sim4-table thead th:nth-child(4),
+  .sim4-table tbody td:nth-child(3),
+  .sim4-table tbody td:nth-child(4) { display:none; }
+  .sim4-regra-nome { white-space:normal; font-size:11px; }
+  .sim4-regra-grupo { font-size:9px; }
+  .sim4-badge-green { font-size:11px; padding:2px 7px; }
+  .sim4-val, .sim4-muted, .sim4-na { font-size:11px; }
 }
 
 /* ============================================================
@@ -1182,7 +1192,7 @@ footer {
       </div>
 
       <div id="sim4-campos-auto">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:1rem;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:1rem;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
           <div class="form-group">
             <label>Renda bruta mensal</label>
             <input type="text" id="sim4-renda" placeholder="Ex: 8.000,00" oninput="formatarMoeda(this)" style="background:var(--bg-2);border:1px solid var(--muted-3);border-radius:var(--radius-md);padding:0.65rem 0.85rem;color:var(--white);font-family:var(--font-body);font-size:0.9rem;width:100%;outline:none;">
