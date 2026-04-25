@@ -539,8 +539,62 @@ footer {
 .extrato-table tr.simulado td { color:rgba(201,168,76,0.85); }
 
 /* ============================================================
-   PASSO 3 — RESULTADO
+   PASSO 2 — UPLOAD COLAPSADO + EXTRAÇÃO
    ============================================================ */
+.upload-colapsado-bar {
+  display:flex; align-items:center; gap:10px;
+  background:var(--bg-2); border:0.5px solid var(--muted-3);
+  border-radius:var(--radius-md); padding:10px 14px;
+  margin-bottom:1.25rem;
+}
+.upload-colapsado-icon { font-size:1.1rem; }
+.upload-colapsado-bar span:nth-child(2) {
+  flex:1; font-size:13px; color:var(--white); font-weight:500;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.upload-trocar-btn {
+  background:none; border:0.5px solid var(--muted-3);
+  color:var(--muted-2); font-size:11px; padding:4px 10px;
+  border-radius:var(--radius-sm); cursor:pointer;
+  transition:all 0.2s;
+}
+.upload-trocar-btn:hover { border-color:var(--green); color:var(--green); }
+
+/* Nome em evidência */
+.extracao-nome {
+  font-family:var(--font-display); font-size:1.5rem;
+  font-weight:700; color:var(--white); margin-bottom:6px;
+}
+.extracao-sub {
+  font-size:12px; color:var(--muted-2); margin-bottom:1.25rem;
+  display:flex; flex-wrap:wrap; gap:6px; align-items:center;
+}
+.extracao-sub strong { color:var(--muted-1); }
+.extracao-sep { color:var(--muted-3); }
+
+/* Cards de métricas */
+.extracao-cards {
+  display:grid; grid-template-columns:repeat(4,1fr);
+  gap:8px; margin-bottom:1.25rem;
+}
+.extracao-card {
+  background:var(--bg-2); border:0.5px solid var(--muted-3);
+  border-radius:var(--radius-md); padding:10px 12px;
+}
+.extracao-card-label {
+  font-size:10px; text-transform:uppercase; letter-spacing:0.8px;
+  color:var(--muted-2); margin-bottom:4px;
+}
+.extracao-card-val {
+  font-size:1rem; font-weight:500; color:var(--white);
+}
+.extracao-card-val.green { color:var(--green); }
+
+@media (max-width:640px) {
+  .extracao-cards { grid-template-columns:repeat(2,1fr); }
+  .extracao-sub { flex-direction:column; gap:2px; }
+  .extracao-sep { display:none; }
+}
 .resultado-header { margin-bottom:1.5rem; }
 .resultado-nome {
   font-family:var(--font-display); font-size:1.3rem;
@@ -809,61 +863,76 @@ footer {
   ═══════════════════════════════════════════ -->
   <div class="step-panel" id="panel-2-pdf">
     <div class="panel-card">
-      <div class="panel-header">
-        <h2>Carregar CNIS</h2>
-        <p>Selecione ou arraste o arquivo PDF do seu extrato do CNIS. Os dados serão extraídos automaticamente.</p>
+
+      <!-- Upload zone — colapsa após carregar -->
+      <div id="upload-area">
+        <div class="panel-header">
+          <h2>Carregar CNIS</h2>
+          <p>Selecione ou arraste o arquivo PDF do seu extrato do CNIS.</p>
+        </div>
+        <div class="upload-zone" id="uploadZone">
+          <input type="file" id="inputPdf" accept=".pdf" onchange="processarPdf(this)">
+          <div class="upload-icon">📁</div>
+          <h3>Clique ou arraste seu CNIS aqui</h3>
+          <p>Apenas arquivos PDF • O arquivo não é enviado a terceiros</p>
+        </div>
+        <div class="upload-status" id="uploadStatus">
+          <div class="spinner"></div>
+          <span id="uploadStatusMsg">Processando...</span>
+        </div>
       </div>
 
-      <div class="upload-zone" id="uploadZone">
-        <input type="file" id="inputPdf" accept=".pdf" onchange="processarPdf(this)">
-        <div class="upload-icon">📁</div>
-        <h3>Clique ou arraste seu CNIS aqui</h3>
-        <p>Apenas arquivos PDF • O arquivo não é enviado a terceiros</p>
+      <!-- Arquivo carregado — versão colapsada do upload -->
+      <div id="upload-colapsado" style="display:none">
+        <div class="upload-colapsado-bar">
+          <span class="upload-colapsado-icon">📄</span>
+          <span id="upload-colapsado-nome">extrato.pdf</span>
+          <button class="upload-trocar-btn" onclick="trocarArquivo()">Trocar arquivo</button>
+        </div>
       </div>
 
-      <div class="upload-status" id="uploadStatus">
-        <div class="spinner"></div>
-        <span id="uploadStatusMsg">Processando...</span>
-      </div>
-
+      <!-- Resultado da extração -->
       <div class="dados-extraidos" id="dadosExtraidos">
-        <div class="dados-extraidos-title">
-          <span>✓</span> Dados extraídos do CNIS
+
+        <!-- Nome em evidência -->
+        <div class="extracao-nome" id="cnis-nome">—</div>
+        <div class="extracao-sub">
+          <span id="cnis-cpf">—</span>
+          <span class="extracao-sep">·</span>
+          <span>Nascimento: <strong id="cnis-nasc">—</strong></span>
+          <span class="extracao-sep">·</span>
+          <span>CNIS de <strong id="cnis-data">—</strong></span>
         </div>
-        <div class="dados-grid">
-          <div class="dado-item">
-            <label>Nome</label>
-            <span id="cnis-nome">—</span>
+
+        <!-- Cards de métricas -->
+        <div class="extracao-cards" id="extracao-cards">
+          <div class="extracao-card">
+            <div class="extracao-card-label">Idade <span style="font-size:9px;display:block;margin-top:1px;opacity:0.7">(na data do CNIS)</span></div>
+            <div class="extracao-card-val green" id="cnis-idade">—</div>
           </div>
-          <div class="dado-item">
-            <label>Data de nascimento</label>
-            <span id="cnis-nasc">—</span>
+          <div class="extracao-card">
+            <div class="extracao-card-label">Tempo total</div>
+            <div class="extracao-card-val" id="cnis-tempo-total">—</div>
           </div>
-          <div class="dado-item">
-            <label>CPF</label>
-            <span id="cnis-cpf">—</span>
+          <div class="extracao-card">
+            <div class="extracao-card-label">Tempo até 2019</div>
+            <div class="extracao-card-val" id="cnis-tempo-2019">—</div>
           </div>
-          <div class="dado-item">
-            <label>Data do CNIS</label>
-            <span id="cnis-data">—</span>
-          </div>
-          <div class="dado-item">
-            <label>Competências</label>
-            <span id="cnis-comp">—</span>
+          <div class="extracao-card">
+            <div class="extracao-card-label">Competências</div>
+            <div class="extracao-card-val" id="cnis-comp">—</div>
           </div>
         </div>
 
-        <!-- Sexo não vem no CNIS, pedimos aqui -->
+        <!-- Sexo -->
         <div class="sexo-aviso visible" id="sexoAvisoPdf">
-          <div style="margin-top:0.75rem;">
-            <div class="form-group">
-              <label>Sexo <span style="color:var(--danger)">*</span></label>
-              <div class="sexo-selector">
-                <button class="sexo-btn" id="sexo-pdf-m" onclick="selecionarSexoPdf('M')">Masculino</button>
-                <button class="sexo-btn" id="sexo-pdf-f" onclick="selecionarSexoPdf('F')">Feminino</button>
-              </div>
-              <span class="form-hint">Necessário para calcular os requisitos de cada regra</span>
+          <div class="form-group" style="margin-top:0.75rem">
+            <label>Sexo <span style="color:var(--danger)">*</span></label>
+            <div class="sexo-selector">
+              <button class="sexo-btn" id="sexo-pdf-m" onclick="selecionarSexoPdf('M')">Masculino</button>
+              <button class="sexo-btn" id="sexo-pdf-f" onclick="selecionarSexoPdf('F')">Feminino</button>
             </div>
+            <span class="form-hint">Necessário para calcular os requisitos de cada regra</span>
           </div>
         </div>
       </div>
@@ -1045,8 +1114,8 @@ const state = {
   modo: null,
   stepAtual: 1,
   segurado: {},
-  extrato: [],
-  extratoBase: [],
+  contribuicao: null,
+  mediaSalarial: null,
   sexoPdf: null,
   sexoManual: null,
   modoContrib: 'um-a-um',
@@ -1309,15 +1378,30 @@ async function processarPdf(input) {
     if (!res.ok) throw new Error('Erro ao processar o PDF');
     const data = await res.json();
 
-    state.segurado = data.segurado;
-    state.extrato  = data.extrato;
+    state.segurado     = data.segurado;
+    state.contribuicao  = data.contribuicao;
+    state.mediaSalarial = data.mediaSalarial;
 
-    // Preenche os dados exibidos
-    document.getElementById('cnis-nome').textContent = data.segurado.nome  || '(não identificado)';
+    // Colapsa o upload e mostra o nome do arquivo
+    document.getElementById('upload-area').style.display = 'none';
+    document.getElementById('upload-colapsado').style.display = 'block';
+    document.getElementById('upload-colapsado-nome').textContent = input.files[0].name;
+
+    // Nome em evidência
+    document.getElementById('cnis-nome').textContent = data.segurado.nome || '(não identificado)';
+
+    // Subtítulo
+    document.getElementById('cnis-cpf').textContent  = data.segurado.cpf || '—';
     document.getElementById('cnis-nasc').textContent = data.segurado.dataNascimento || '—';
-    document.getElementById('cnis-cpf').textContent  = data.segurado.cpf   || '—';
     document.getElementById('cnis-data').textContent = data.segurado.dataCnis || '—';
-    document.getElementById('cnis-comp').textContent = data.extrato.length + ' registros';
+
+    // Cards de métricas
+    document.getElementById('cnis-idade').textContent       = data.segurado.idadeTexto || '—';
+    document.getElementById('cnis-tempo-total').textContent = data.contribuicao.textoFormatado || '—';
+    const preAnos = Math.floor(data.contribuicao.mesesPreReforma / 12);
+    const preMeses = data.contribuicao.mesesPreReforma % 12;
+    document.getElementById('cnis-tempo-2019').textContent  = `${preAnos}a e ${preMeses}m`;
+    document.getElementById('cnis-comp').textContent        = data.contribuicao.totalMeses + ' meses';
 
     mostrarStatus('success', 'Extrato carregado com sucesso!');
     document.getElementById('dadosExtraidos').classList.add('visible');
@@ -1344,6 +1428,20 @@ function mostrarStatus(tipo, msg) {
   }
 }
 
+function trocarArquivo() {
+  // Restaura o upload
+  document.getElementById('upload-area').style.display = 'block';
+  document.getElementById('upload-colapsado').style.display = 'none';
+  document.getElementById('dadosExtraidos').classList.remove('visible');
+  document.getElementById('inputPdf').value = '';
+  state.contribuicao = null;
+  state.sexoPdf = null;
+  document.getElementById('sexo-pdf-m').classList.remove('selected');
+  document.getElementById('sexo-pdf-f').classList.remove('selected');
+  verificarBotaoPdf();
+  mostrarStatus('idle', '');
+}
+
 function selecionarSexoPdf(sexo) {
   state.sexoPdf = sexo;
   state.segurado.sexo = sexo;
@@ -1353,7 +1451,7 @@ function selecionarSexoPdf(sexo) {
 }
 
 function verificarBotaoPdf() {
-  const ok = state.extrato.length > 0 && state.sexoPdf !== null;
+  const ok = state.contribuicao !== null && state.sexoPdf !== null;
   document.getElementById('btn-proximo-2pdf').disabled = !ok;
 }
 
