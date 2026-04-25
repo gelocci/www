@@ -696,6 +696,54 @@ footer {
 }
 
 /* ============================================================
+   STEP 4 — SIMULAÇÃO
+   ============================================================ */
+.sim4-modos { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:1.5rem; }
+.sim4-modo { border:1px solid var(--muted-3); border-radius:var(--radius-lg); padding:14px 12px; cursor:pointer; transition:all 0.2s; background:var(--bg-card); }
+.sim4-modo:hover { border-color:var(--muted-2); background:var(--bg-hover); }
+.sim4-modo.active { border-color:var(--green); background:var(--green-glow); }
+.sim4-modo h4 { font-size:13px; font-weight:500; color:var(--muted-1); margin-bottom:4px; }
+.sim4-modo p  { font-size:11px; color:var(--muted-2); line-height:1.5; }
+.sim4-modo.active h4 { color:var(--green); }
+.sim4-form { display:flex; flex-wrap:wrap; gap:16px; align-items:flex-end; margin-bottom:1.5rem; }
+.sim4-form .form-group { flex:1; min-width:180px; }
+.sim4-manual-tabs { display:flex; gap:0; margin-bottom:1rem; border:0.5px solid var(--muted-3); border-radius:var(--radius-sm); overflow:hidden; width:fit-content; }
+.sim4-manual-tab { padding:7px 18px; font-size:12px; color:var(--muted-2); cursor:pointer; background:transparent; border:none; font-family:var(--font-body); }
+.sim4-manual-tab.active { background:var(--muted-4); color:var(--white); }
+.sim4-contrib-table { width:100%; border-collapse:collapse; margin-bottom:10px; }
+.sim4-contrib-table thead th { font-size:10px; letter-spacing:0.8px; text-transform:uppercase; color:var(--muted-2); padding:6px 10px; border-bottom:0.5px solid var(--muted-3); text-align:left; }
+.sim4-contrib-table tbody td { padding:6px 10px; border-bottom:0.5px solid var(--muted-4); }
+.sim4-contrib-table tbody tr:last-child td { border-bottom:none; }
+.sim4-contrib-table input { width:100%; background:var(--bg-2); border:0.5px solid var(--muted-3); border-radius:var(--radius-sm); padding:6px 8px; font-size:12px; color:var(--white); font-family:var(--font-body); }
+.sim4-lote-textarea { width:100%; background:var(--bg-2); border:0.5px solid var(--muted-3); border-radius:var(--radius-md); padding:10px 12px; font-size:12px; color:var(--white); font-family:monospace; resize:vertical; min-height:130px; line-height:1.8; }
+.sim4-lote-preview { font-size:11px; color:var(--muted-2); margin-top:6px; }
+.sim4-lote-preview span { color:var(--green); font-weight:500; }
+.sim4-resultado { margin-top:1.5rem; }
+.sim4-resultado-label { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted-2); margin-bottom:0.75rem; }
+.sim4-table-wrap { border:0.5px solid var(--muted-3); border-radius:var(--radius-lg); overflow:hidden; }
+.sim4-table { width:100%; border-collapse:collapse; }
+.sim4-table thead th { font-size:10px; letter-spacing:0.8px; text-transform:uppercase; color:var(--muted-2); padding:10px 16px; border-bottom:0.5px solid var(--muted-3); text-align:left; background:var(--muted-4); }
+.sim4-table thead th:not(:first-child) { text-align:center; }
+.sim4-table tbody td { padding:13px 16px; border-bottom:0.5px solid var(--muted-4); color:var(--white); vertical-align:middle; }
+.sim4-table tbody td:not(:first-child) { text-align:center; }
+.sim4-table tbody tr:last-child td { border-bottom:none; }
+.sim4-table tbody tr:hover td { background:var(--muted-4); }
+.sim4-regra-nome { font-size:12px; font-weight:500; color:var(--white); white-space:nowrap; }
+.sim4-regra-grupo { font-size:10px; color:var(--muted-2); margin-top:2px; }
+.sim4-badge-green { background:var(--green-glow); color:var(--green); border:1px solid var(--green-border); border-radius:var(--radius-sm); padding:3px 10px; font-size:12px; font-weight:500; display:inline-block; white-space:nowrap; }
+.sim4-val { font-size:12px; color:var(--white); }
+.sim4-muted { font-size:12px; color:var(--muted-2); }
+.sim4-na { font-size:12px; color:rgba(240,244,242,0.2); font-style:italic; }
+.sim4-legend { font-size:10px; color:var(--muted-2); margin-top:8px; }
+.sim4-aviso { font-size:11px; color:var(--muted-2); text-align:center; margin-top:1.25rem; line-height:1.6; }
+@media (max-width:640px) {
+  .sim4-modos { grid-template-columns:1fr 1fr; }
+  .sim4-form { grid-template-columns:1fr; }
+  .sim4-table thead th:nth-child(3), .sim4-table thead th:nth-child(4),
+  .sim4-table tbody td:nth-child(3), .sim4-table tbody td:nth-child(4) { display:none; }
+}
+
+/* ============================================================
    BOTÕES
    ============================================================ */
 .btn-primary {
@@ -824,6 +872,12 @@ footer {
       <div class="step-dot">3</div>
       <div class="step-label">Resultado</div>
       <div class="step-sublabel">Regras e benefício</div>
+    </div>
+    <div class="step-connector" id="conn-3"></div>
+    <div class="step pending" id="step-4">
+      <div class="step-dot">4</div>
+      <div class="step-label">Simulação</div>
+      <div class="step-sublabel">Projeção futura</div>
     </div>
   </div>
 
@@ -1099,6 +1153,117 @@ footer {
     </div>
   </div>
 
+
+  <!-- ══════════════════════════════════════════════════════
+       PASSO 4 — SIMULAÇÃO DE PROJEÇÃO FUTURA
+  ══════════════════════════════════════════════════════ -->
+  <div class="step-panel" id="panel-4">
+    <div class="panel-card">
+      <div class="panel-header" style="margin-bottom:1rem">
+        <h2>Como deseja simular?</h2>
+      </div>
+      <div class="sim4-modos">
+        <div class="sim4-modo active" id="sim4-modo-CONST" onclick="sim4SelecionarModo('CONST')">
+          <h4>Projeção automática</h4>
+          <p>Simula contribuições mensais com valor fixo até atingir cada regra.</p>
+        </div>
+        <div class="sim4-modo" id="sim4-modo-QUALIDADE" onclick="sim4SelecionarModo('QUALIDADE')">
+          <h4>Manter vínculo</h4>
+          <p>Contribui a cada 6 meses para manter a qualidade de segurado.</p>
+        </div>
+        <div class="sim4-modo" id="sim4-modo-PARAR" onclick="sim4SelecionarModo('PARAR')">
+          <h4>Parar de contribuir</h4>
+          <p>Calcula o que você já tem direito sem novas contribuições.</p>
+        </div>
+        <div class="sim4-modo" id="sim4-modo-MANUAL" onclick="sim4SelecionarModo('MANUAL')">
+          <h4>Lançamento manual</h4>
+          <p>Informe contribuições futuras individualmente ou em lote.</p>
+        </div>
+      </div>
+
+      <div id="sim4-campos-auto">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:1rem;">
+          <div class="form-group">
+            <label>Renda bruta mensal</label>
+            <input type="text" id="sim4-renda" placeholder="Ex: 8.000,00" oninput="formatarMoeda(this)" style="background:var(--bg-2);border:1px solid var(--muted-3);border-radius:var(--radius-md);padding:0.65rem 0.85rem;color:var(--white);font-family:var(--font-body);font-size:0.9rem;width:100%;outline:none;">
+            <span class="form-hint">O sistema aplica o teto do INSS automaticamente.</span>
+          </div>
+          <div class="form-group">
+            <label>Reajuste anual estimado (%)</label>
+            <input type="number" id="sim4-reajuste" value="0" min="0" max="30" step="0.5" style="background:var(--bg-2);border:1px solid var(--muted-3);border-radius:var(--radius-md);padding:0.65rem 0.85rem;color:var(--white);font-family:var(--font-body);font-size:0.9rem;width:100%;outline:none;">
+            <span class="form-hint">Use 0% para manter o valor fixo.</span>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="calcularSimulacao()">Calcular projeção →</button>
+      </div>
+
+      <div id="sim4-campos-parar" style="display:none">
+        <div class="btn-row" style="justify-content:flex-start;margin-top:0;margin-bottom:1.5rem">
+          <button class="btn-primary" onclick="calcularSimulacao()">Calcular projeção →</button>
+        </div>
+      </div>
+
+      <div id="sim4-campos-manual" style="display:none">
+        <div class="sim4-manual-tabs">
+          <button class="sim4-manual-tab active" id="sim4-tab-individual" onclick="sim4SelecionarTabManual('individual')">Individual</button>
+          <button class="sim4-manual-tab" id="sim4-tab-lote" onclick="sim4SelecionarTabManual('lote')">Em lote</button>
+        </div>
+        <div id="sim4-manual-individual">
+          <div style="border:0.5px solid var(--muted-3);border-radius:var(--radius-md);overflow:hidden;margin-bottom:10px;">
+            <table class="sim4-contrib-table">
+              <thead><tr><th>Competência (MM/AAAA)</th><th>Renda bruta (R$)</th><th></th></tr></thead>
+              <tbody id="sim4-contrib-tbody">
+                <tr>
+                  <td><input type="text" placeholder="05/2026" maxlength="7" oninput="formatarCompetencia(this)"></td>
+                  <td><input type="text" placeholder="8.000,00" oninput="formatarValor(this)"></td>
+                  <td><button class="btn-remove-row" onclick="sim4RemoverLinha(this)">✕</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <button class="btn-add-row" onclick="sim4AdicionarLinha()">+ Adicionar competência</button>
+        </div>
+        <div id="sim4-manual-lote" style="display:none">
+          <label style="font-size:12px;color:var(--muted-1);display:block;margin-bottom:6px;">Cole ou digite as competências — uma por linha</label>
+          <textarea class="sim4-lote-textarea" id="sim4-lote-texto" placeholder="05/2026  8000,00&#10;06/2026  8000,00" oninput="sim4AtualizarPreviewLote()"></textarea>
+          <p class="form-hint">Formato: MM/AAAA seguido do valor. Use vírgula ou ponto como decimal.</p>
+          <div class="sim4-lote-preview" id="sim4-lote-preview"></div>
+        </div>
+        <div class="btn-row" style="justify-content:flex-start;margin-top:1rem;margin-bottom:0.5rem">
+          <button class="btn-primary" onclick="calcularSimulacao()">Calcular projeção →</button>
+        </div>
+      </div>
+
+      <div id="sim4-loading" style="display:none;text-align:center;padding:2rem 1rem">
+        <div class="spinner" style="margin:0 auto 1rem"></div>
+        <p style="color:var(--muted-1)">Calculando projeção...</p>
+      </div>
+
+      <div id="sim4-resultado" style="display:none;margin-top:1.5rem">
+        <div class="sim4-table-wrap">
+          <table class="sim4-table">
+            <thead>
+              <tr>
+                <th>Regra</th>
+                <th>Data elegível</th>
+                <th>Idade</th>
+                <th>Contribuição</th>
+                <th>RMI estimado</th>
+              </tr>
+            </thead>
+            <tbody id="sim4-tbody"></tbody>
+          </table>
+        </div>
+        <p class="sim4-legend">* TC = Tempo de Contribuição</p>
+        <p class="sim4-aviso">Simulação estimada. Valores sujeitos a alterações legais.<br>Este resultado não garante direito ao benefício. Consulte um especialista previdenciário.</p>
+      </div>
+
+      <div class="btn-row" style="margin-top:1.5rem">
+        <button class="btn-secondary" onclick="irPara(3)">← Voltar ao resultado</button>
+      </div>
+    </div>
+  </div>
+
 </div><!-- /sim-wrapper -->
 
 <div id="site-footer"></div>
@@ -1124,10 +1289,38 @@ const state = {
   ultimoSalario: 0,
   mesesDesatualizado: 0,
   teto2026: 8475.55,
-  resultadoAtual: null
+  resultadoAtual: null,
+  lancamentosOriginais: [],
+  sim4Modo: 'CONST',
+  sim4TabManual: 'individual'
 };
 
 // ─── STEPPER (3 steps) ─────────────────────────────────────
+
+function montarLancamentosBase() {
+  if (state.modo === 'pdf' && state.lancamentosOriginais && state.lancamentosOriginais.length > 0) {
+    return state.lancamentosOriginais.map(l => ({
+      competencia: l.competencia,
+      remuneracao: l.remuneracao,
+      nomeEmpregador: l.nomeEmpregador || '',
+      simulado: false
+    }));
+  }
+  if (state.modo === 'manual' && state.extratoManualLancamentos) {
+    return state.extratoManualLancamentos.map(l => ({
+      competencia: l.competencia,
+      remuneracao: l.remuneracao,
+      nomeEmpregador: '',
+      simulado: false
+    }));
+  }
+  return [];
+}
+
+function sim4FormatarRenda(input) {
+  formatarValor(input);
+}
+
 function irPara(step) {
   if (step === 3 && state.modo === 'manual') {
     if (!validarManual()) return;
@@ -1136,12 +1329,12 @@ function irPara(step) {
   }
 
   // Atualiza steps e conectores
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 1; i <= 4; i++) {
     const el = document.getElementById('step-' + i);
     el.className = 'step ' + (i < step ? 'done' : i === step ? 'active' : 'pending');
     el.querySelector('.step-dot').textContent = i < step ? '✓' : i;
   }
-  for (let i = 1; i <= 2; i++) {
+  for (let i = 1; i <= 3; i++) {
     const c = document.getElementById('conn-' + i);
     c.className = 'step-connector' + (i < step ? ' done' : '');
   }
@@ -1156,6 +1349,8 @@ function irPara(step) {
     document.getElementById(painel).classList.add('active');
   } else if (step === 3) {
     document.getElementById('panel-3').classList.add('active');
+  } else if (step === 4) {
+    document.getElementById('panel-4').classList.add('active');
   }
 
   document.querySelector('.stepper').scrollIntoView({ behavior:'smooth', block:'start' });
@@ -1353,8 +1548,7 @@ function toggleAcord(el) {
 }
 
 function abrirSimulacao() {
-  // TODO: implementar simulação futura
-  alert('Em breve: simulação de contribuições futuras!');
+  irPara(4);
 }
 
 // ─── PASSO 2A: EXTRAÇÃO DO CNIS (exibe dados no passo 2) ───
@@ -1381,6 +1575,17 @@ async function processarPdf(input) {
     state.segurado     = data.segurado;
     state.contribuicao  = data.contribuicao;
     state.mediaSalarial = data.mediaSalarial;
+
+    // Guarda lançamentos para uso na simulação
+    try {
+      const resLanc = await fetch(`${BACKEND_URL}/api/cnis/extrair-lancamentos`, {
+        method: 'POST', body: formData
+      });
+      if (resLanc.ok) {
+        const dataLanc = await resLanc.json();
+        state.lancamentosOriginais = dataLanc.lancamentos || [];
+      }
+    } catch(e) { state.lancamentosOriginais = []; }
 
     // Colapsa o upload e mostra o nome do arquivo
     document.getElementById('upload-area').style.display = 'none';
@@ -1498,6 +1703,13 @@ function formatarCompetencia(input) {
 
 function formatarValor(input) {
   // Aceita vírgula ou ponto — não força máscara durante digitação
+}
+
+function formatarMoeda(input) {
+  let v = input.value.replace(/\D/g, '');
+  if (!v) { input.value = ''; return; }
+  let num = parseInt(v) / 100;
+  input.value = num.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 function strToFloat(s) {
@@ -1856,6 +2068,175 @@ uploadZone.addEventListener('drop', e => {
     processarPdf(input);
   }
 });
+
+
+// ─── STEP 4: SIMULAÇÃO ──────────────────────────────────────────────────
+
+function sim4SelecionarModo(modo) {
+  state.sim4Modo = modo;
+  ['CONST','QUALIDADE','PARAR','MANUAL'].forEach(m => {
+    document.getElementById('sim4-modo-' + m).classList.toggle('active', m === modo);
+  });
+  document.getElementById('sim4-campos-auto').style.display   = ['CONST','QUALIDADE'].includes(modo) ? 'block' : 'none';
+  document.getElementById('sim4-campos-parar').style.display  = modo === 'PARAR'  ? 'block' : 'none';
+  document.getElementById('sim4-campos-manual').style.display = modo === 'MANUAL' ? 'block' : 'none';
+  document.getElementById('sim4-resultado').style.display = 'none';
+}
+
+function sim4SelecionarTabManual(tab) {
+  state.sim4TabManual = tab;
+  document.getElementById('sim4-tab-individual').classList.toggle('active', tab === 'individual');
+  document.getElementById('sim4-tab-lote').classList.toggle('active', tab === 'lote');
+  document.getElementById('sim4-manual-individual').style.display = tab === 'individual' ? 'block' : 'none';
+  document.getElementById('sim4-manual-lote').style.display = tab === 'lote' ? 'block' : 'none';
+}
+
+function sim4AdicionarLinha() {
+  const tbody = document.getElementById('sim4-contrib-tbody');
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td><input type="text" placeholder="MM/AAAA" maxlength="7" oninput="formatarCompetencia(this)"></td><td><input type="text" placeholder="8.000,00" oninput="sim4FormatarRenda(this)"></td><td><button class="btn-remove-row" onclick="sim4RemoverLinha(this)">✕</button></td>';
+  tbody.appendChild(tr);
+}
+
+function sim4RemoverLinha(btn) {
+  const tbody = document.getElementById('sim4-contrib-tbody');
+  if (tbody.rows.length > 1) btn.closest('tr').remove();
+}
+
+function sim4AtualizarPreviewLote() {
+  const texto = document.getElementById('sim4-lote-texto').value.trim();
+  const linhas = texto.split('\n').filter(l => l.trim());
+  let validas = 0;
+  linhas.forEach(l => {
+    const parts = l.trim().split(/\s+/);
+    if (parts.length >= 2 && /^\d{2}\/\d{4}$/.test(parts[0])) validas++;
+  });
+  const preview = document.getElementById('sim4-lote-preview');
+  preview.innerHTML = validas > 0 ? '<span>' + validas + '</span> competência' + (validas > 1 ? 's' : '') + ' reconhecida' + (validas > 1 ? 's' : '') : '';
+}
+
+function sim4MontarLancamentosManuais() {
+  if (state.sim4TabManual === 'individual') {
+    const lancamentos = [];
+    document.querySelectorAll('#sim4-contrib-tbody tr').forEach(tr => {
+      const comp = tr.querySelectorAll('input')[0].value.trim();
+      const val  = strToFloat(tr.querySelectorAll('input')[1].value);
+      if (comp && val > 0) lancamentos.push({ competencia: comp, remuneracao: val, nomeEmpregador: '', simulado: true });
+    });
+    return lancamentos;
+  } else {
+    const lancamentos = [];
+    document.getElementById('sim4-lote-texto').value.trim().split('\n').forEach(l => {
+      const parts = l.trim().split(/\s+/);
+      if (parts.length >= 2) {
+        const comp = parts[0];
+        const val  = strToFloat(parts.slice(1).join(''));
+        if (comp && val > 0) lancamentos.push({ competencia: comp, remuneracao: val, nomeEmpregador: '', simulado: true });
+      }
+    });
+    return lancamentos;
+  }
+}
+
+async function calcularSimulacao() {
+  document.getElementById('sim4-resultado').style.display = 'none';
+  document.getElementById('sim4-loading').style.display = 'block';
+
+  const segurado = {
+    nome: state.segurado.nome || '',
+    sexo: state.segurado.sexo || state.sexoPdf || state.sexoManual || 'M',
+    dataNascimento: state.segurado.dataNascimento || ''
+  };
+
+  const payload = {
+    segurado,
+    lancamentosBase: montarLancamentosBase(),
+    modo: state.sim4Modo,
+    rendaBruta: state.sim4Modo === 'PARAR' ? 0 : strToFloat(document.getElementById('sim4-renda').value || '0'),
+    reajusteAnual: state.sim4Modo === 'PARAR' ? 0 : parseFloat(document.getElementById('sim4-reajuste').value || '0'),
+    lancamentosManuais: state.sim4Modo === 'MANUAL' ? sim4MontarLancamentosManuais() : []
+  };
+
+  try {
+    const res = await fetch(BACKEND_URL + '/api/cnis/simular', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error('Erro no servidor');
+    const data = await res.json();
+    renderizarSimulacao(data);
+  } catch(e) {
+    document.getElementById('sim4-loading').style.display = 'none';
+    document.getElementById('sim4-resultado').style.display = 'block';
+    document.getElementById('sim4-tbody').innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--danger);padding:2rem">Erro ao calcular. Verifique se o servidor está disponível.</td></tr>';
+  }
+}
+
+function renderizarSimulacao(data) {
+  document.getElementById('sim4-loading').style.display = 'none';
+  document.getElementById('sim4-resultado').style.display = 'block';
+
+  const tbody = document.getElementById('sim4-tbody');
+  tbody.innerHTML = '';
+
+  const nomeMap = {
+    'IDADE_PRE2019':       'Aposentadoria por Idade',
+    'TEMPO_PRE2019':       'Apos. por TC',
+    'REGRA_GERAL_POS2019': 'Aposentadoria por Idade',
+    'PONTOS':              'Apos. por TC — Pontos',
+    'IDADE_PROGRESSIVA':   'Apos. por TC — Idade',
+    'PEDAGIO_50':          'Apos. por TC — Pedágio 50%',
+    'PEDAGIO_100':         'Apos. por TC — Pedágio 100%'
+  };
+
+  // Separa pós-2019 e pré-2019
+  const pos = data.regras.filter(r => r.grupo === 'POS_2019');
+  const pre = data.regras.filter(r => r.grupo === 'PRE_2019');
+
+  // Dentro de cada grupo: atingíveis primeiro (por data), depois não atingíveis
+  const ordenar = (lista) => {
+    const ating = lista.filter(r => r.atingivel).sort((a, b) => {
+      const [ma, aa] = a.dataElegivel.split('/').map(Number);
+      const [mb, ab] = b.dataElegivel.split('/').map(Number);
+      return (aa * 12 + ma) - (ab * 12 + mb);
+    });
+    const nao = lista.filter(r => !r.atingivel);
+    return [...ating, ...nao];
+  };
+
+  const montarLinha = (r) => {
+    const nome = nomeMap[r.id] || r.nome;
+    const dataCell  = !r.atingivel ? '<span class="sim4-na">—</span>'
+                    : r.melhorData ? '<span class="sim4-badge-green">' + r.dataElegivel + '</span>'
+                    : '<span class="sim4-muted">' + r.dataElegivel + '</span>';
+    const idadeCell = r.atingivel ? '<span class="sim4-muted">' + r.idadeNaData + '</span>' : '<span class="sim4-na">—</span>';
+    const tempoCell = r.atingivel ? '<span class="sim4-muted">' + r.tempoContribuicao + '</span>' : '<span class="sim4-na">—</span>';
+    const rmiCell   = !r.atingivel ? '<span class="sim4-na">Não atingível</span>'
+                    : r.rmiEstimado == null ? '<span class="sim4-muted">—</span>'
+                    : r.melhorRmi ? '<span class="sim4-badge-green">' + fmtBRL(r.rmiEstimado) + '</span>'
+                    : '<span class="sim4-val">' + fmtBRL(r.rmiEstimado) + '</span>';
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td><div class="sim4-regra-nome">' + nome + '</div><div class="sim4-regra-grupo">' + (r.grupo === 'PRE_2019' ? 'Pré-2019' : 'Transição (pós-2019)') + '</div></td><td>' + dataCell + '</td><td>' + idadeCell + '</td><td>' + tempoCell + '</td><td>' + rmiCell + '</td>';
+    return tr;
+  };
+
+  const montarSeparador = (label) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td colspan="5" style="padding:8px 16px 4px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-2);font-weight:500;background:var(--muted-4);border-bottom:0.5px solid var(--muted-3)">' + label + '</td>';
+    return tr;
+  };
+
+  // Renderiza pós-2019 primeiro, depois pré-2019
+  if (pos.length > 0) {
+    tbody.appendChild(montarSeparador('Regras de transição (pós-2019)'));
+    ordenar(pos).forEach(r => tbody.appendChild(montarLinha(r)));
+  }
+  if (pre.length > 0) {
+    tbody.appendChild(montarSeparador('Regras antigas (pré-2019)'));
+    ordenar(pre).forEach(r => tbody.appendChild(montarLinha(r)));
+  }
+}
 
 // Data máxima = hoje
 document.getElementById('manual-nasc').max = new Date().toISOString().split('T')[0];
