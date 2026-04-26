@@ -85,6 +85,9 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:1.4rem
 .error-banner{display:none;background:rgba(220,50,50,0.12);border:1px solid rgba(220,50,50,0.3);border-radius:8px;padding:0.9rem 1.2rem;margin-top:1rem;color:#FF6B6B;font-size:0.85rem;font-weight:500;}
 .error-banner.show{display:block;}
 .results-section{display:none;animation:fadeUp 0.5s ease both;}
+.btn-share{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;border:1px solid var(--muted-3);background:transparent;color:var(--muted-1);font-size:12px;font-family:'Outfit',sans-serif;cursor:pointer;transition:border-color 0.2s,color 0.2s;}
+.btn-share:hover{border-color:var(--green);color:var(--green);}
+.btn-share svg{width:13px;height:13px;flex-shrink:0;}
 .results-hero{background:linear-gradient(135deg,#0E1F15,#0A1A11);border:1px solid var(--green-border);border-radius:16px;padding:2.5rem;margin-bottom:1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;}
 .results-hero-left{}
 .results-hero-label{font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--green);font-weight:500;margin-bottom:0.75rem;}
@@ -217,7 +220,13 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
   <div class="results-section" id="resultsSection">
     <div class="results-hero">
       <div class="results-hero-left">
-        <div class="results-hero-label">Aporte mensal necessário (hoje)</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+          <div class="results-hero-label" style="margin-bottom:0;">Aporte mensal necessário (hoje)</div>
+          <button class="btn-share" id="btnShare" onclick="compartilharURL()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Compartilhar
+          </button>
+        </div>
         <div class="results-hero-value" id="resAporte">—</div>
         <div class="results-hero-sub" id="resAporteSub">—</div>
       </div>
@@ -289,6 +298,10 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
     $('#currentPatrimony').mask('000.000.000,00',{reverse:true});
     $('#annualReturn').mask('##0,00',{reverse:true});
     $('#annualInflation').mask('##0,00',{reverse:true});
+
+    if (loadFromURL()) {
+      simular();
+    }
   });
 
   function showError(msg){var b=document.getElementById('errorBanner');b.textContent=msg;b.classList.add('show');}
@@ -356,8 +369,79 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
     };
   }
 
+
+  // ── URL como estado ────────────────────────────────────────────────────────
+
+  function numToBr(val, decimals) {
+    return parseFloat(val).toLocaleString('pt-BR', {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals
+    });
+  }
+
+  function pushStateFromForm() {
+    var params = new URLSearchParams({
+      idadeAtual:    document.getElementById('currentAge').value || '',
+      idadeApo:      document.getElementById('retirementAge').value || '',
+      expectativa:   document.getElementById('lifeExpectancy').value || '',
+      renda:         document.getElementById('desiredIncome').value.replace(/\./g,'').replace(',','.') || '0',
+      patrimonio:    document.getElementById('currentPatrimony').value.replace(/\./g,'').replace(',','.') || '0',
+      retorno:       document.getElementById('annualReturn').value.replace(',','.') || '0',
+      inflacao:      document.getElementById('annualInflation').value.replace(',','.') || '0',
+      modelo:        document.getElementById('withdrawalModel').value,
+      decimo:        document.getElementById('include13th').value
+    });
+    history.replaceState(null, '', '?' + params.toString());
+  }
+
+  function loadFromURL() {
+    var params = new URLSearchParams(window.location.search);
+    if (!params.has('renda')) return false;
+
+    var set = function(id, val) {
+      var el = document.getElementById(id);
+      if (el && val) el.value = val;
+    };
+
+    set('currentAge',      params.get('idadeAtual'));
+    set('retirementAge',   params.get('idadeApo'));
+    set('lifeExpectancy',  params.get('expectativa'));
+    set('withdrawalModel', params.get('modelo'));
+    set('include13th',     params.get('decimo'));
+
+    var renda = parseFloat(params.get('renda') || 0);
+    var patrim = parseFloat(params.get('patrimonio') || 0);
+    var retorno = parseFloat(params.get('retorno') || 0);
+    var inflacao = parseFloat(params.get('inflacao') || 0);
+
+    if (renda)   $('#desiredIncome').val(numToBr(renda, 2)).trigger('input');
+    if (patrim)  $('#currentPatrimony').val(numToBr(patrim, 2)).trigger('input');
+    if (retorno) $('#annualReturn').val(numToBr(retorno, 2)).trigger('input');
+    if (inflacao) $('#annualInflation').val(numToBr(inflacao, 2)).trigger('input');
+
+    return true;
+  }
+
+  function compartilharURL() {
+    var url = window.location.href;
+    var btn = document.getElementById('btnShare');
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url).then(function() {
+        var original = btn.innerHTML;
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><polyline points="20 6 9 17 4 12"/></svg> Copiado!';
+        btn.style.color = 'var(--green)';
+        btn.style.borderColor = 'var(--green)';
+        setTimeout(function() { btn.innerHTML = original; btn.style.color = ''; btn.style.borderColor = ''; }, 2000);
+      });
+    } else {
+      prompt('Copie a URL abaixo:', url);
+    }
+  }
+
+  // ── Inicialização ───────────────────────────────────────────────────────────
   function simular(){
     clearError();
+    pushStateFromForm();
     var currentAge     = parseInt(document.getElementById('currentAge').value);
     var retirementAge  = parseInt(document.getElementById('retirementAge').value);
     var lifeExpectancy = parseInt(document.getElementById('lifeExpectancy').value);

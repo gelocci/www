@@ -111,6 +111,10 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
   .form-card{padding:1.5rem;}.form-grid{grid-template-columns:1fr;}
   footer{flex-direction:column;align-items:flex-start;padding:2rem 1.25rem;}.footer-links{flex-wrap:wrap;gap:1rem;}
 }
+
+.btn-share{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;border:1px solid var(--muted-3);background:transparent;color:var(--muted-1);font-size:12px;font-family:'Outfit',sans-serif;cursor:pointer;transition:border-color 0.2s,color 0.2s;}
+.btn-share:hover{border-color:var(--green);color:var(--green);}
+.btn-share svg{width:13px;height:13px;flex-shrink:0;}
 </style>
   <link rel="stylesheet" href="../../assets/css/theme.css">
   <script src="../../assets/js/theme.js"></script>
@@ -146,6 +150,10 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
       </div>
     </div>
     <button type="button" class="btn-calc" onclick="converterTaxa()">Converter →</button>
+    <button class="btn-share" id="btnShare" onclick="compartilharURL()" style="display:none;margin-top:1rem;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      Compartilhar
+    </button>
   </div>
 
   <div class="results-card" id="resultsCard">
@@ -163,6 +171,47 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
 </script>
 
 <script>
+function pushStateFromForm() {
+  var params = new URLSearchParams({
+    taxa:    document.getElementById('rateInput').value || '',
+    periodo: document.getElementById('periodSelect').value
+  });
+  history.replaceState(null, '', '?' + params.toString());
+}
+
+function loadFromURL() {
+  var params = new URLSearchParams(window.location.search);
+  if (!params.has('taxa')) return false;
+  var taxa = params.get('taxa');
+  var periodo = params.get('periodo');
+  if (taxa)    document.getElementById('rateInput').value = taxa;
+  if (periodo) document.getElementById('periodSelect').value = periodo;
+  return true;
+}
+
+function compartilharURL() {
+  var url = window.location.href;
+  var btn = document.getElementById('btnShare');
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(function() {
+      var original = btn.innerHTML;
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><polyline points="20 6 9 17 4 12"/></svg> Copiado!';
+      btn.style.color = 'var(--green)';
+      btn.style.borderColor = 'var(--green)';
+      setTimeout(function() { btn.innerHTML = original; btn.style.color = ''; btn.style.borderColor = ''; }, 2000);
+    });
+  } else {
+    prompt('Copie a URL abaixo:', url);
+  }
+}
+
+// Inicialização
+document.addEventListener('DOMContentLoaded', function() {
+  if (loadFromURL()) {
+    converterTaxa();
+  }
+});
+
 function converterTaxa(){
   var taxa=parseFloat(document.getElementById('rateInput').value.replace(',','.'));
   var periodo=document.getElementById('periodSelect').value;
@@ -198,6 +247,8 @@ function converterTaxa(){
 
     document.getElementById('resultsCardSub').textContent=`Taxa de entrada: ${taxa.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}% ao ${periodoNome[periodo].toLowerCase()}`;
     resultsCard.style.display='block';
+    pushStateFromForm();
+    document.getElementById('btnShare').style.display='inline-flex';
 
     const offset=resultsCard.getBoundingClientRect().top+window.scrollY-80;
     window.scrollTo({top:offset,behavior:'smooth'});

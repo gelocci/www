@@ -121,6 +121,10 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
   .summary-row{grid-template-columns:1fr 1fr;}
   footer{flex-direction:column;align-items:flex-start;padding:2rem 1.25rem;}.footer-links{flex-wrap:wrap;gap:1rem;}
 }
+
+.btn-share{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;border:1px solid var(--muted-3);background:transparent;color:var(--muted-1);font-size:12px;font-family:'Outfit',sans-serif;cursor:pointer;transition:border-color 0.2s,color 0.2s;}
+.btn-share:hover{border-color:var(--green);color:var(--green);}
+.btn-share svg{width:13px;height:13px;flex-shrink:0;}
 </style>
   <link rel="stylesheet" href="../../assets/css/theme.css">
   <script src="../../assets/js/theme.js"></script>
@@ -177,6 +181,12 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
   </div>
 
   <div class="results-section" id="resultsSection">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:1rem;">
+      <button class="btn-share" id="btnShare" onclick="compartilharURL()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Compartilhar
+      </button>
+    </div>
     <div class="summary-row">
       <div class="summary-card">
         <div class="summary-label">Preço da Ação</div>
@@ -278,6 +288,63 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
     } else {
       var alpha=Math.min(0.55,Math.abs(ratio)*0.55);
       return 'rgba(220,60,40,'+alpha.toFixed(3)+')';
+    }
+  }
+
+
+  // ── URL como estado ────────────────────────────────────────────────────────
+
+  function pushStateFromForm() {
+    var params = new URLSearchParams({
+      preco:     document.getElementById('currentPrice').value.replace(/\./g,'').replace(',','.') || '',
+      vol:       document.getElementById('volatility').value.replace(',','.') || '',
+      taxa:      document.getElementById('interestRate').value.replace(',','.') || '',
+      venc:      document.getElementById('timeToMaturity').value || '',
+      intervalo: document.getElementById('strikeInterval').value.replace(',','.') || '',
+      qtd:       document.getElementById('strikeCount').value || ''
+    });
+    history.replaceState(null, '', '?' + params.toString());
+  }
+
+  function loadFromURL() {
+    var params = new URLSearchParams(window.location.search);
+    if (!params.has('preco')) return false;
+
+    var numToBr = function(val, dec) {
+      return parseFloat(val).toLocaleString('pt-BR', {minimumFractionDigits:dec, maximumFractionDigits:dec});
+    };
+
+    var preco = parseFloat(params.get('preco') || 0);
+    var vol   = parseFloat(params.get('vol') || 0);
+    var taxa  = parseFloat(params.get('taxa') || 0);
+    var interv = parseFloat(params.get('intervalo') || 0);
+
+    if (preco)  document.getElementById('currentPrice').value   = numToBr(preco, 2);
+    if (vol)    document.getElementById('volatility').value     = numToBr(vol, 2);
+    if (taxa)   document.getElementById('interestRate').value   = numToBr(taxa, 2);
+    if (interv) document.getElementById('strikeInterval').value = numToBr(interv, 2);
+
+    var venc = params.get('venc');
+    var qtd  = params.get('qtd');
+    if (venc) document.getElementById('timeToMaturity').value = venc;
+    if (qtd)  document.getElementById('strikeCount').value    = qtd;
+
+    return true;
+  }
+
+  function compartilharURL() {
+    var url = window.location.href;
+    var btn = document.getElementById('btnShare');
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url).then(function() {
+        var original = btn.innerHTML;
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><polyline points="20 6 9 17 4 12"/></svg> Copiado!';
+        btn.style.color = 'var(--green)';
+        btn.style.borderColor = 'var(--green)';
+        setTimeout(function() { btn.innerHTML = original; btn.style.color = ''; btn.style.borderColor = ''; }, 2000);
+      });
+    } else {
+      prompt('Copie a URL abaixo:', url);
     }
   }
 
@@ -385,9 +452,16 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
 
     var resultsSection=document.getElementById('resultsSection');
     resultsSection.style.display='block';
+    pushStateFromForm();
     var offset=resultsSection.getBoundingClientRect().top+window.scrollY-80;
     window.scrollTo({top:offset,behavior:'smooth'});
   }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    if (loadFromURL()) {
+      calcularCadeia();
+    }
+  });
 </script>
 
 <script src="/assets/js/components.js"></script>

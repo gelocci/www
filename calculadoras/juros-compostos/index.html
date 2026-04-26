@@ -134,6 +134,9 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:1.4rem
 .result-sub{font-size:0.75rem;color:var(--muted-2);margin-top:0.4rem;}
 
 /* ── Chart card ── */
+.btn-share{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;border:1px solid var(--muted-3);background:transparent;color:var(--muted-1);font-size:12px;font-family:'Outfit',sans-serif;cursor:pointer;transition:border-color 0.2s,color 0.2s;}
+.btn-share:hover{border-color:var(--green);color:var(--green);}
+.btn-share svg{width:13px;height:13px;flex-shrink:0;}
 .chart-card{background:var(--bg-card);border:1px solid var(--muted-3);border-radius:16px;padding:2rem;margin-bottom:1.5rem;}
 .chart-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;}
 .chart-card-title{font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted-2);font-weight:500;}
@@ -229,7 +232,13 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
   <div class="results-section" id="resultsSection">
     <div class="results-hero">
       <div class="results-hero-left">
-        <div class="results-hero-label">Reserva Acumulada</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+          <div class="results-hero-label" style="margin-bottom:0;">Reserva Acumulada</div>
+          <button class="btn-share" id="btnShare" onclick="compartilharURL()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Compartilhar
+          </button>
+        </div>
         <div class="results-hero-value" id="resAccumulado">—</div>
         <div class="results-hero-sub">Valor bruto ao final do período</div>
       </div>
@@ -270,6 +279,11 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
     $('#monthlyInterest').mask('##0,00', {reverse: true});
     $('#inflation').mask('##0,00', {reverse: true});
     $('#period').mask('000', {reverse: true});
+
+    // Se vier com parâmetros na URL, preenche e calcula automaticamente
+    if (loadFromURL()) {
+      document.getElementById('advancedCompoundInterestForm').dispatchEvent(new Event('submit'));
+    }
   });
 
   function isLightMode() {
@@ -339,8 +353,66 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
     };
   }
 
+
+  // ── URL como estado ────────────────────────────────────────────────────────
+
+  // Converte valor BR (1.000,00) para número
+  function brToNum(val) {
+    return parseFloat(val.replace(/\./g, '').replace(',', '.')) || 0;
+  }
+
+  // Formata número para exibição BR
+  function numToBr(val, decimals) {
+    return parseFloat(val).toLocaleString('pt-BR', {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals
+    });
+  }
+
+  // Atualiza a URL com os valores atuais dos campos (sem recarregar)
+  function pushStateFromForm() {
+    const params = new URLSearchParams({
+      aporte:       document.getElementById('initialDeposit').value.replace(/\./g,'').replace(',','.') || '0',
+      contribuicao: document.getElementById('monthlyContribution').value.replace(/\./g,'').replace(',','.') || '0',
+      taxa:         document.getElementById('monthlyInterest').value.replace(',','.') || '0',
+      inflacao:     document.getElementById('inflation').value.replace(',','.') || '0',
+      periodo:      document.getElementById('period').value || '0',
+      decimo:       document.getElementById('include13th').value
+    });
+    history.replaceState(null, '', '?' + params.toString());
+  }
+
+  // Lê a URL e preenche os campos
+  function loadFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has('taxa')) return false; // sem parâmetros, não faz nada
+
+    const set = (id, val) => {
+      const el = document.getElementById(id);
+      if (el && val !== undefined && val !== 'undefined') el.value = val;
+    };
+
+    // Campos monetários precisam do formato BR com máscara
+    const aporte = parseFloat(params.get('aporte') || 0);
+    const contrib = parseFloat(params.get('contribuicao') || 0);
+    const taxa = parseFloat(params.get('taxa') || 0);
+    const inflacao = parseFloat(params.get('inflacao') || 0);
+
+    if (aporte)   $('#initialDeposit').val(numToBr(aporte, 2)).trigger('input');
+    if (contrib)  $('#monthlyContribution').val(numToBr(contrib, 2)).trigger('input');
+    if (taxa)     $('#monthlyInterest').val(numToBr(taxa, 2)).trigger('input');
+    if (inflacao) $('#inflation').val(numToBr(inflacao, 2)).trigger('input');
+
+    set('period', params.get('periodo') || '');
+    set('include13th', params.get('decimo') || 'no');
+
+    return true; // tinha parâmetros
+  }
+
+  // ── Inicialização ───────────────────────────────────────────────────────────
   document.getElementById('advancedCompoundInterestForm').addEventListener('submit', function(event) {
     event.preventDefault();
+    pushStateFromForm();
 
     const initialDeposit      = parseFloat(document.getElementById('initialDeposit').value.replace(/\./g, '').replace(',', '.')) || 0;
     const monthlyContribution = parseFloat(document.getElementById('monthlyContribution').value.replace(/\./g, '').replace(',', '.')) || 0;
@@ -393,6 +465,23 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
       window.scrollTo({ top: offset, behavior: 'smooth' });
     });
   });
+
+  // ── Compartilhar ───────────────────────────────────────────────────────────
+  function compartilharURL() {
+    const url = window.location.href;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url).then(function() {
+        const btn = document.getElementById('btnShare');
+        const original = btn.innerHTML;
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copiado!';
+        btn.style.color = 'var(--green)';
+        btn.style.borderColor = 'var(--green)';
+        setTimeout(function() { btn.innerHTML = original; btn.style.color = ''; btn.style.borderColor = ''; }, 2000);
+      });
+    } else {
+      prompt('Copie a URL abaixo:', url);
+    }
+  }
 
   // Troca de tema: recriar o gráfico com o novo tema
   var _investmentThemeTimer = null;
