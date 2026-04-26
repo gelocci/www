@@ -665,7 +665,6 @@ html.light-mode .tool-card-disabled {
 }
 
 /* ── Nav: links centralizados ─────────────────────────────────────────────── */
-nav { position: relative; }
 nav .nav-links {
   position: absolute;
   left: 50%;
