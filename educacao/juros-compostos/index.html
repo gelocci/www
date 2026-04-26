@@ -50,12 +50,15 @@ html { scroll-behavior: smooth; }
 body { background: var(--bg); color: var(--muted-1); font-family: var(--font-body); font-size: 16px; line-height: 1.7; overflow-x: hidden; }
 
 /* PAGE */
-.page-wrap { max-width: 900px; margin: 0 auto; padding: 72px 32px 96px; }
+.page-wrap { max-width: 900px; margin: 0 auto; padding: 0 32px 96px; }
+.page-hero { padding: 8rem 0 3rem; }
 
 /* HERO */
 .eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
 .ey-line { width: 32px; height: 1px; background: var(--green); }
 .ey-txt { font-size: 11px; letter-spacing: 3px; color: var(--green); text-transform: uppercase; font-weight: 500; }
+.page-eyebrow { display: inline-flex !important; align-items: center; gap: 0.6rem; font-size: 0.75rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--green) !important; margin-bottom: 1.2rem; font-weight: 500; }
+.eyebrow-line { width: 28px; height: 1px; background: var(--green); }
 h1 { font-family: var(--font-serif); font-size: clamp(36px, 5vw, 54px); font-weight: 900; line-height: 1.05; letter-spacing: -1.5px; margin-bottom: 20px; }
 h1 em { color: var(--green); font-style: italic; }
 .lead { font-size: 17px; color: var(--muted-2); line-height: 1.8; max-width: 620px; margin-bottom: 64px; font-weight: 300; }
@@ -156,9 +159,11 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
 
 <div class="page-wrap">
 
-  <div class="eyebrow"><div class="ey-line"></div><div class="ey-txt">Educação financeira</div></div>
+  <div class="page-hero">
+  <div class="page-eyebrow"><span class="eyebrow-line"></span>Educação</div>
   <h1>Juros compostos:<br>seu dinheiro como <em>uma floresta</em></h1>
   <p class="lead">Junto do seu cachorro, os juros compostos podem ser considerados o seu <strong>melhor amigo</strong>. R$ 300 por mês viram R$ 1.048.489 em 30 anos — entenda por quê com uma analogia que você nunca vai esquecer.</p>
+  </div>
 
   <div class="steps">
 
