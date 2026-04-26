@@ -218,15 +218,15 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
   </div>
 
   <div class="results-section" id="resultsSection">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:0.75rem;">
+      <button class="btn-share" id="btnShare" onclick="compartilharURL()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Compartilhar simulação
+      </button>
+    </div>
     <div class="results-hero">
       <div class="results-hero-left">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
-          <div class="results-hero-label" style="margin-bottom:0;">Aporte mensal necessário (hoje)</div>
-          <button class="btn-share" id="btnShare" onclick="compartilharURL()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-            Compartilhar
-          </button>
-        </div>
+        <div class="results-hero-label">Aporte mensal necessário (hoje)</div>
         <div class="results-hero-value" id="resAporte">—</div>
         <div class="results-hero-sub" id="resAporteSub">—</div>
       </div>
@@ -555,6 +555,18 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
 
     var rs = document.getElementById('resultsSection');
     rs.style.display = 'block';
+
+    // Salvar no histórico
+    (function(entrada) {
+      if (window.gelocciSalvarSimulacao) { gelocciSalvarSimulacao(entrada); }
+      else { window._gelocciHistFila = window._gelocciHistFila || []; window._gelocciHistFila.push(entrada); }
+    })({
+        calculadora: 'Aposentadoria',
+        valor: fmt(monthlyAporte) + '/mês',
+        params: 'meta ' + fmt(desiredIncome) + ' · ' + yearsToRetirement + ' anos · ' + fmtN(annualReturn*100,2) + '% a.a.',
+        url: window.location.href
+      });
+
     requestAnimationFrame(function(){
       var offset = rs.getBoundingClientRect().top + window.scrollY - 80;
       window.scrollTo({top:offset, behavior:'smooth'});

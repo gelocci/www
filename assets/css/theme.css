@@ -447,7 +447,7 @@ html.light-mode .cta-final p {
   flex: 0 0 auto;
   background: var(--toggle-bg, var(--muted-4));
   border: 1px solid var(--muted-3);
-  border-radius: 50px;
+  border-radius: 8px;
   padding: 0.35rem 0.75rem 0.35rem 0.5rem;
   cursor: pointer;
   font-family: 'Outfit', sans-serif;
@@ -476,6 +476,15 @@ html.light-mode .cta-final p {
   font-size: 1rem;
   line-height: 1;
   transition: transform 0.4s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted-1);
+}
+.theme-toggle-icon svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
 }
 
 html.light-mode .theme-toggle-icon {
@@ -543,4 +552,133 @@ html.light-mode .modo-card.selected .modo-icon {
 html.light-mode .tool-card-disabled {
   background: var(--muted-4) !important;
   border-color: var(--muted-3) !important;
+}
+
+/* ── Histórico no nav ─────────────────────────────────────────────────────── */
+.nav-right {
+  display: flex; align-items: center; gap: 8px;
+  margin-left: auto;
+  padding-left: 16px;
+  border-left: 1px solid var(--muted-3);
+}
+
+.nav-hist-btn {
+  display: flex; align-items: center; gap: 7px;
+  padding: 5px 14px;
+  border: 0.5px solid var(--muted-3);
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  font-family: 'Outfit', sans-serif;
+}
+.nav-hist-btn:hover { border-color: var(--green); }
+
+.nav-hist-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+}
+
+.nav-hist-label {
+  font-size: 13px;
+  color: var(--muted-1);
+}
+
+.nav-hist-count {
+  font-size: 10px; font-weight: 600;
+  background: var(--green);
+  color: #0A0F0C;
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.nav-hist-dropdown {
+  display: none;
+  position: fixed;
+  top: 62px;
+  right: 20px;
+  width: 310px;
+  background: var(--bg-card);
+  border: 0.5px solid var(--muted-3);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  z-index: 200;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+}
+.nav-hist-dropdown.open { display: block; }
+
+.nav-hist-dropdown-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 14px;
+  border-bottom: 0.5px solid var(--muted-3);
+}
+.nav-hist-dropdown-header span {
+  font-size: 12px; font-weight: 500; color: var(--text);
+}
+.nav-hist-dropdown-header button {
+  font-size: 11px; color: var(--muted-2);
+  background: none; border: none; cursor: pointer; font-family: 'Outfit', sans-serif;
+}
+.nav-hist-dropdown-header button:hover { color: var(--green); }
+
+.nav-hist-item {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 10px 14px;
+  border-bottom: 0.5px solid var(--muted-4);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.nav-hist-item:last-child { border-bottom: none; }
+.nav-hist-item:hover { background: var(--muted-4); }
+
+.nav-hist-item-left { flex: 1; min-width: 0; }
+.nav-hist-item-tag {
+  font-size: 10px; font-weight: 500; color: var(--green);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px;
+}
+.nav-hist-item-value {
+  font-size: 13px; font-weight: 500; color: var(--text);
+  margin-bottom: 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.nav-hist-item-params {
+  font-size: 11px; color: var(--muted-2);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.nav-hist-item-time {
+  font-size: 10px; color: var(--muted-2);
+  white-space: nowrap; margin-left: 8px; padding-top: 2px; flex-shrink: 0;
+}
+
+.nav-hist-empty {
+  padding: 20px 14px;
+  font-size: 12px; color: var(--muted-2); text-align: center;
+}
+
+@media (max-width: 768px) {
+  .nav-right { display: none; }
+  .nav-hist-dropdown { right: 10px; width: calc(100vw - 20px); }
+  .nav-hamburger { margin-left: 12px; }
+}
+
+/* ── Nav: links centralizados ─────────────────────────────────────────────── */
+nav { position: relative; }
+nav .nav-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Toggle compacto no nav-right */
+.nav-right .theme-toggle {
+  width: 2.4rem !important;
+  min-width: 2.4rem !important;
+  max-width: 2.4rem !important;
+  padding: 0.35rem 0.5rem !important;
+}
+.nav-right .theme-toggle-label {
+  display: none !important;
 }

@@ -453,6 +453,18 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
     var resultsSection=document.getElementById('resultsSection');
     resultsSection.style.display='block';
     pushStateFromForm();
+
+    // Salvar no histórico
+    (function(entrada) {
+      if (window.gelocciSalvarSimulacao) { gelocciSalvarSimulacao(entrada); }
+      else { window._gelocciHistFila = window._gelocciHistFila || []; window._gelocciHistFila.push(entrada); }
+    })({
+        calculadora: 'Black-Scholes',
+        valor: 'S=R$ ' + document.getElementById('currentPrice').value,
+        params: 'vol ' + document.getElementById('volatility').value + '% · venc. ' + document.getElementById('timeToMaturity').value,
+        url: window.location.href
+      });
+
     var offset=resultsSection.getBoundingClientRect().top+window.scrollY-80;
     window.scrollTo({top:offset,behavior:'smooth'});
   }

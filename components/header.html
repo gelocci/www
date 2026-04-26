@@ -6,21 +6,38 @@
     <li><a href="/quem-somos/">Sobre</a></li>
     <li><a href="/contato/">Contato</a></li>
   </ul>
-  <button class="theme-toggle" aria-label="Ativar tema claro" title="Ativar tema claro">
-    <span class="theme-toggle-icon">☀️</span>
-    <span class="theme-toggle-label">Tema claro</span>
-  </button>
+  <div class="nav-right">
+    <button class="nav-hist-btn" id="navHistBtn" onclick="gelocciToggleHistorico(event)" aria-label="Histórico de simulações">
+      <span class="nav-hist-dot"></span>
+      <span class="nav-hist-label">Histórico</span>
+      <span class="nav-hist-count" id="navHistCount" style="display:none">0</span>
+    </button>
+    <button class="theme-toggle" aria-label="Ativar tema claro" title="Ativar tema claro">
+      <span class="theme-toggle-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></span>
+      <span class="theme-toggle-label">Tema claro</span>
+    </button>
+  </div>
   <button class="nav-hamburger" id="hamburger" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
 </nav>
+
+<div class="nav-hist-dropdown" id="navHistDropdown">
+  <div class="nav-hist-dropdown-header">
+    <span>Últimas simulações</span>
+    <button onclick="gelocciLimparHistorico()">Limpar tudo</button>
+  </div>
+  <div id="navHistList"></div>
+  <div class="nav-hist-empty" id="navHistEmpty">Nenhuma simulação ainda.</div>
+</div>
+
 <div class="nav-mobile-menu" id="mobileMenu">
   <a href="/#ferramentas" onclick="closeMobileMenu()">Ferramentas</a>
   <a href="/glossario/" onclick="closeMobileMenu()">Glossário</a>
   <a href="/quem-somos/" onclick="closeMobileMenu()">Sobre</a>
   <a href="/contato/" onclick="closeMobileMenu()">Contato</a>
   <button class="theme-toggle" style="margin-top:0.5rem;align-self:flex-start;" aria-label="Ativar tema claro">
-    <span class="theme-toggle-icon">☀️</span>
+    <span class="theme-toggle-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></span>
     <span class="theme-toggle-label">Tema claro</span>
   </button>
 </div>

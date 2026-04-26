@@ -250,6 +250,17 @@ function converterTaxa(){
     pushStateFromForm();
     document.getElementById('btnShare').style.display='inline-flex';
 
+    // Salvar no histórico
+    (function(entrada) {
+      if (window.gelocciSalvarSimulacao) { gelocciSalvarSimulacao(entrada); }
+      else { window._gelocciHistFila = window._gelocciHistFila || []; window._gelocciHistFila.push(entrada); }
+    })({
+      calculadora: 'Equivalência de Taxas',
+      valor: taxa.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) + '% ' + ({monthly:'mensal',quarterly:'trimestral',semiannual:'semestral',annual:'anual'})[periodo],
+      params: 'Conversão de taxa ' + ({monthly:'mensal',quarterly:'trimestral',semiannual:'semestral',annual:'anual'})[periodo],
+      url: window.location.href
+    });
+
     const offset=resultsCard.getBoundingClientRect().top+window.scrollY-80;
     window.scrollTo({top:offset,behavior:'smooth'});
   } else {
