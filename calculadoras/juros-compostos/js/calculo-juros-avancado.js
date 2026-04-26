@@ -52,6 +52,13 @@ document.getElementById('advancedCompoundInterestForm').addEventListener('submit
     if (window.investmentChart && typeof window.investmentChart.destroy === 'function') {
         window.investmentChart.destroy();
     }
+
+    // Detecta o tema ativo para colorir o gráfico corretamente
+    const isLight = document.documentElement.classList.contains('light-mode');
+    const chartTextColor   = isLight ? '#0B1411' : 'rgba(240,244,242,0.85)';
+    const chartGridColor   = isLight ? 'rgba(0,0,0,0.08)' : 'rgba(240,244,242,0.10)';
+    const chartBorderColor = isLight ? 'rgba(0,0,0,0.12)' : 'rgba(240,244,242,0.15)';
+
     window.investmentChart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -72,17 +79,44 @@ document.getElementById('advancedCompoundInterestForm').addEventListener('submit
         },
         options: {
             responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: chartTextColor
+                    }
+                }
+            },
             scales: {
                 x: {
                     title: {
                         display: true,
-                        text: 'Tempo (Anos)'
+                        text: 'Tempo (Anos)',
+                        color: chartTextColor
+                    },
+                    ticks: {
+                        color: chartTextColor
+                    },
+                    grid: {
+                        color: chartGridColor
+                    },
+                    border: {
+                        color: chartBorderColor
                     }
                 },
                 y: {
                     title: {
                         display: true,
-                        text: 'Valor (R$)'
+                        text: 'Valor (R$)',
+                        color: chartTextColor
+                    },
+                    ticks: {
+                        color: chartTextColor
+                    },
+                    grid: {
+                        color: chartGridColor
+                    },
+                    border: {
+                        color: chartBorderColor
                     },
                     beginAtZero: true
                 }

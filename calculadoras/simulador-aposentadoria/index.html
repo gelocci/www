@@ -11,7 +11,7 @@
   <meta name="author" content="Gerson Locci">
   <link rel="icon" href="../../assets/imagens/favicon.ico" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 <style>
@@ -66,20 +66,21 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:1.4rem
 .error-banner.show{display:block;}
 .results-section{display:none;animation:fadeUp 0.5s ease both;}
 .results-hero{background:linear-gradient(135deg,#0E1F15,#0A1A11);border:1px solid var(--green-border);border-radius:16px;padding:2.5rem;margin-bottom:1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;}
+.results-hero-left{}
 .results-hero-label{font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--green);font-weight:500;margin-bottom:0.75rem;}
 .results-hero-value{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:900;color:var(--green);line-height:1;letter-spacing:-1px;margin-bottom:0.5rem;}
-.results-hero-sub{font-size:0.82rem;color:var(--muted-1);font-weight:300;line-height:1.5;}
+.results-hero-sub{font-size:0.82rem;color:rgba(221,231,226,0.6);font-weight:300;line-height:1.5;}
 .results-hero-right{display:flex;flex-direction:column;gap:1.25rem;}
-.result-item{display:flex;flex-direction:column;gap:0.3rem;padding-bottom:1.25rem;border-bottom:1px solid var(--muted-3);}
+.result-item{display:flex;flex-direction:column;gap:0.3rem;padding-bottom:1.25rem;border-bottom:1px solid rgba(221,231,226,0.12);}
 .result-item:last-child{border-bottom:none;padding-bottom:0;}
-.result-item-label{font-size:0.68rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-2);font-weight:500;}
-.result-item-value{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--white);}
-.result-item-note{font-size:0.75rem;color:var(--muted-2);font-weight:300;margin-top:0.2rem;}
+.result-item-label{font-size:0.68rem;letter-spacing:1.5px;text-transform:uppercase;color:rgba(221,231,226,0.55);font-weight:500;}
+.result-item-value{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:#DDE7E2;}
+.result-item-note{font-size:0.75rem;color:rgba(221,231,226,0.45);font-weight:300;margin-top:0.2rem;}
 .results-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--muted-3);border:1px solid var(--muted-3);border-radius:12px;overflow:hidden;margin-bottom:1.5rem;}
 .result-card{background:var(--bg-card);padding:1.5rem;}
-.result-label{font-size:0.68rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-2);font-weight:500;margin-bottom:0.5rem;}
-.result-value{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--white);}
-.result-sub{font-size:0.72rem;color:var(--muted-2);margin-top:0.3rem;font-weight:300;}
+.result-label{font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted-2);font-weight:500;margin-bottom:0.75rem;}
+.result-value{font-family:'Playfair Display',serif;font-size:clamp(1.2rem,2vw,1.6rem);font-weight:700;color:var(--white);line-height:1.1;}
+.result-sub{font-size:0.75rem;color:var(--muted-2);margin-top:0.4rem;}
 .chart-card{background:var(--bg-card);border:1px solid var(--muted-3);border-radius:16px;padding:2rem;margin-bottom:1.5rem;}
 .chart-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;}
 .chart-card-title{font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted-2);font-weight:500;}
@@ -99,11 +100,19 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
   .page-header{padding:6rem 1.25rem 2rem;}.disclaimer{padding:0 1.25rem 1.25rem;}.calc-wrapper{padding:0 1.25rem 4rem;}
   .form-card{padding:1.5rem;}.form-grid{grid-template-columns:1fr;}
   .results-hero{grid-template-columns:1fr;gap:2rem;}.results-grid{grid-template-columns:1fr 1fr;}
-  .chart-card{padding:1.25rem;}
+  .chart-card{padding:1.25rem;}.chart-card-header{flex-direction:column;align-items:flex-start;gap:1rem;}
   footer{flex-direction:column;align-items:flex-start;padding:2rem 1.25rem;}.footer-links{flex-wrap:wrap;gap:1rem;}
 }
 @media(max-width:480px){.results-grid{grid-template-columns:1fr;}}
+
+/* Fix ApexCharts: tooltip e background transparente */
+.apexcharts-canvas { background: transparent !important; }
+.apexcharts-svg { background: transparent !important; }
+
+
 </style>
+  <link rel="stylesheet" href="../../assets/css/theme.css">
+  <script src="../../assets/js/theme.js"></script>
 </head>
 <body>
 
@@ -242,7 +251,7 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
           <div class="legend-item"><div class="legend-dot" style="background:#C9A84C;"></div>Total investido</div>
         </div>
       </div>
-      <canvas id="retirementChart"></canvas>
+      <div class="chart-canvas-wrap"><div id="retirementChart"></div></div>
     </div>
 
     <div class="disclaimer-bottom">
@@ -269,17 +278,75 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
   function parseField(id){return parseFloat(document.getElementById(id).value.replace(/\./g,'').replace(',','.'));}
   function anualizadaParaMensal(a){return Math.pow(1+a,1/12)-1;}
 
+  function isLightMode(){
+    return document.documentElement.classList.contains('light-mode')
+      || document.documentElement.getAttribute('data-theme') === 'light';
+  }
+
+  function buildChartOptions(labels, dataPatrimony, dataInvested){
+    var light = isLightMode();
+    return {
+      chart:{
+        type:'area', height:420, background:'transparent',
+        toolbar:{show:false}, zoom:{enabled:false},
+        animations:{enabled:false}, fontFamily:'Outfit, sans-serif'
+      },
+      theme:{ mode: light ? 'light' : 'dark' },
+      series:[
+        {name:'Patrimônio acumulado', data:dataPatrimony},
+        {name:'Total investido',      data:dataInvested}
+      ],
+      colors:['#00C853','#C9A84C'],
+      fill:{
+        type:'gradient',
+        gradient:{
+          shadeIntensity:1,
+          opacityFrom: light ? 0.22 : 0.18,
+          opacityTo:   light ? 0.04 : 0.02,
+          stops:[0,95]
+        }
+      },
+      stroke:{curve:'smooth', width:2},
+      markers:{size:2, hover:{size:5}},
+      xaxis:{
+        categories:labels,
+        title:{text:'Tempo (anos)', style:{fontFamily:'Outfit, sans-serif', fontSize:'11px'}},
+        labels:{style:{fontFamily:'Outfit, sans-serif', fontSize:'11px'}}
+      },
+      yaxis:{
+        title:{text:'Valor (R$)', style:{fontFamily:'Outfit, sans-serif', fontSize:'11px'}},
+        labels:{
+          style:{fontFamily:'Outfit, sans-serif', fontSize:'11px'},
+          formatter:function(v){
+            if(v>=1000000) return 'R$ '+(v/1000000).toFixed(1)+'M';
+            if(v>=1000)    return 'R$ '+(v/1000).toFixed(0)+'k';
+            return 'R$ '+v;
+          }
+        }
+      },
+      tooltip:{
+        shared:true, intersect:false,
+        theme: 'dark',
+        style:{fontFamily:'Outfit, sans-serif', fontSize:'13px'},
+        y:{formatter:function(v){return parseFloat(v).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});}}
+      },
+      legend:{show:false},
+      grid:{borderColor: light ? 'rgba(36,51,45,0.14)' : 'rgba(221,231,226,0.13)'},
+      dataLabels:{enabled:false}
+    };
+  }
+
   function simular(){
     clearError();
-    var currentAge    = parseInt(document.getElementById('currentAge').value);
-    var retirementAge = parseInt(document.getElementById('retirementAge').value);
-    var lifeExpectancy= parseInt(document.getElementById('lifeExpectancy').value);
-    var desiredIncome = parseField('desiredIncome');
-    var currentPatrimony = parseField('currentPatrimony')||0;
-    var annualReturn  = parseField('annualReturn')/100;
+    var currentAge     = parseInt(document.getElementById('currentAge').value);
+    var retirementAge  = parseInt(document.getElementById('retirementAge').value);
+    var lifeExpectancy = parseInt(document.getElementById('lifeExpectancy').value);
+    var desiredIncome  = parseField('desiredIncome');
+    var currentPatrimony  = parseField('currentPatrimony')||0;
+    var annualReturn   = parseField('annualReturn')/100;
     var annualInflation = parseField('annualInflation')/100;
     var withdrawalModel = document.getElementById('withdrawalModel').value;
-    var include13th   = document.getElementById('include13th').value==='yes';
+    var include13th    = document.getElementById('include13th').value==='yes';
 
     if(isNaN(currentAge)||currentAge<18){showError('⚠ Informe uma idade atual válida (mínimo 18 anos).');return;}
     if(isNaN(retirementAge)||retirementAge<=currentAge){showError('⚠ A idade de aposentadoria deve ser maior que a idade atual.');return;}
@@ -288,34 +355,29 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
     if(isNaN(annualReturn)||annualReturn<=0){showError('⚠ Informe a taxa de rendimento.');return;}
     if(isNaN(annualInflation)||annualInflation<0){showError('⚠ Informe a taxa de inflação.');return;}
 
-    var accMonths = (retirementAge - currentAge) * 12;
-    var usufMonths = withdrawalModel==='period' ? (lifeExpectancy - retirementAge)*12 : null;
+    var accMonths = (retirementAge-currentAge)*12;
+    var usufMonths = withdrawalModel==='period'?(lifeExpectancy-retirementAge)*12:null;
     var monthlyReturn = anualizadaParaMensal(annualReturn);
     var monthlyInflation = anualizadaParaMensal(annualInflation);
     var monthlyRealReturn = (1+monthlyReturn)/(1+monthlyInflation)-1;
-    var yearsToRetirement = retirementAge - currentAge;
+    var yearsToRetirement = retirementAge-currentAge;
 
-    // Renda futura corrigida pela inflação
-    var futureIncome = desiredIncome * Math.pow(1+annualInflation, yearsToRetirement);
-
-    // Patrimônio necessário
+    var futureIncome = desiredIncome*Math.pow(1+annualInflation,yearsToRetirement);
     var requiredPatrimony;
     if(withdrawalModel==='perpetual'){
-      var perpetualMonthlyRate = Math.pow(1.04,1/12)-1;
-      requiredPatrimony = futureIncome / perpetualMonthlyRate;
+      var perpetualMonthlyRate=Math.pow(1.04,1/12)-1;
+      requiredPatrimony=futureIncome/perpetualMonthlyRate;
     } else {
       if(Math.abs(monthlyRealReturn)<0.0000001){
-        requiredPatrimony = futureIncome * usufMonths;
+        requiredPatrimony=futureIncome*usufMonths;
       } else {
-        requiredPatrimony = futureIncome * (1-Math.pow(1+monthlyRealReturn,-usufMonths))/monthlyRealReturn;
+        requiredPatrimony=futureIncome*(1-Math.pow(1+monthlyRealReturn,-usufMonths))/monthlyRealReturn;
       }
     }
 
-    // Patrimônio atual projetado
-    var projectedCurrentPatrimony = currentPatrimony * Math.pow(1+monthlyReturn, accMonths);
-    var netTarget = Math.max(0, requiredPatrimony - projectedCurrentPatrimony);
+    var projectedCurrentPatrimony=currentPatrimony*Math.pow(1+monthlyReturn,accMonths);
+    var netTarget=Math.max(0,requiredPatrimony-projectedCurrentPatrimony);
 
-    // Aporte mensal (PMT reverso com aportes crescentes pela inflação)
     var monthlyAporte;
     if(netTarget<=0){
       monthlyAporte=0;
@@ -338,7 +400,6 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
       monthlyAporte=netTarget/sumFactor;
     }
 
-    // Simulação mês a mês para o gráfico
     var patrimony=currentPatrimony;
     var contrib=monthlyAporte;
     var totalInvested=currentPatrimony;
@@ -357,22 +418,18 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
       }
     }
 
-    var patrimonioPresente = requiredPatrimony/Math.pow(1+annualInflation,yearsToRetirement);
+    var patrimonioPresente=requiredPatrimony/Math.pow(1+annualInflation,yearsToRetirement);
 
-    // Atualiza UI
     document.getElementById('resAporte').textContent=fmt(monthlyAporte);
     document.getElementById('resAporteSub').textContent=
       'Valor do 1º aporte hoje. Será reajustado anualmente pela inflação ('+fmtN(annualInflation*100,2)+'% a.a.) para manter o poder de compra.';
-
     document.getElementById('resPatrimonio').textContent=fmt(requiredPatrimony);
     document.getElementById('resPatrimonioPresente').textContent=fmt(patrimonioPresente);
     document.getElementById('resRendaFutura').textContent=fmt(futureIncome)+'/mês';
     document.getElementById('resRendaNota').textContent=
       'Equivale a '+fmt(desiredIncome)+'/mês em valores de hoje — corrigido pela inflação de '+fmtN(annualInflation*100,2)+'% a.a. por '+yearsToRetirement+' anos.';
-
     document.getElementById('resPeriodoAcum').textContent=yearsToRetirement+' anos';
     document.getElementById('resPeriodoAcumSub').textContent=accMonths+' meses de contribuição';
-
     if(withdrawalModel==='perpetual'){
       document.getElementById('resPeriodoUsuf').textContent='Perpétua';
       document.getElementById('resPeriodoUsufSub').textContent='Patrimônio não se esgota';
@@ -380,45 +437,54 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
       document.getElementById('resPeriodoUsuf').textContent=(lifeExpectancy-retirementAge)+' anos';
       document.getElementById('resPeriodoUsufSub').textContent=usufMonths+' meses de renda';
     }
-
     document.getElementById('resTotalInvestido').textContent=fmt(totalInvested);
     document.getElementById('resRendimento').textContent=fmt(patrimony-totalInvested);
 
-    // Gráfico
-    var ctx=document.getElementById('retirementChart').getContext('2d');
-    if(window.retirementChart&&typeof window.retirementChart.destroy==='function'){window.retirementChart.destroy();}
-    window.retirementChart=new Chart(ctx,{
-      type:'line',
-      data:{
-        labels:labels,
-        datasets:[
-          {label:'Patrimônio acumulado',data:dataPatrimony,borderColor:'#00C853',backgroundColor:'rgba(0,200,83,0.08)',borderWidth:2,fill:true,tension:0.4,pointRadius:0,pointHoverRadius:4},
-          {label:'Total investido',data:dataInvested,borderColor:'#C9A84C',backgroundColor:'rgba(201,168,76,0.08)',borderWidth:2,fill:true,tension:0.4,pointRadius:0,pointHoverRadius:4}
-        ]
-      },
-      options:{
-        responsive:true,
-        interaction:{mode:'index',intersect:false},
-        plugins:{
-          legend:{display:false},
-          tooltip:{
-            backgroundColor:'#111815',borderColor:'rgba(240,244,242,0.12)',borderWidth:1,
-            titleColor:'rgba(240,244,242,0.65)',bodyColor:'#F0F4F2',padding:12,
-            callbacks:{label:function(c){return ' '+c.dataset.label+': '+parseFloat(c.raw).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});}}
+    if(window.retirementChart && typeof window.retirementChart.destroy === 'function'){
+      window.retirementChart.destroy();
+    }
+    window.retirementChart = new ApexCharts(
+      document.getElementById('retirementChart'),
+      buildChartOptions(labels, dataPatrimony, dataInvested)
+    );
+    window.retirementChart.render();
+
+    var rs = document.getElementById('resultsSection');
+    rs.style.display = 'block';
+    requestAnimationFrame(function(){
+      var offset = rs.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({top:offset, behavior:'smooth'});
+    });
+  }
+
+  var _retirementThemeTimer = null;
+  function refreshRetirementChartTheme(){
+    if(_retirementThemeTimer) clearTimeout(_retirementThemeTimer);
+    _retirementThemeTimer = setTimeout(function(){
+      _retirementThemeTimer = null;
+      if(!window.retirementChart) return;
+      var light = isLightMode();
+      window.retirementChart.updateOptions({
+        theme:{ mode: light ? 'light' : 'dark' },
+        tooltip:{ theme: 'dark' },
+        fill:{
+          type:'gradient',
+          gradient:{
+            shadeIntensity:1,
+            opacityFrom: light ? 0.22 : 0.18,
+            opacityTo:   light ? 0.04 : 0.02,
+            stops:[0,95]
           }
         },
-        scales:{
-          x:{grid:{color:'rgba(240,244,242,0.06)'},ticks:{color:'rgba(240,244,242,0.40)',font:{family:'Outfit',size:11}},border:{color:'rgba(240,244,242,0.12)'}},
-          y:{grid:{color:'rgba(240,244,242,0.06)'},ticks:{color:'rgba(240,244,242,0.40)',font:{family:'Outfit',size:11},callback:function(v){if(v>=1000000)return'R$ '+(v/1000000).toFixed(1)+'M';if(v>=1000)return'R$ '+(v/1000).toFixed(0)+'k';return'R$ '+v;}},border:{color:'rgba(240,244,242,0.12)'}}
-        }
-      }
-    });
-
-    var rs=document.getElementById('resultsSection');
-    rs.style.display='block';
-    var offset=rs.getBoundingClientRect().top+window.scrollY-80;
-    window.scrollTo({top:offset,behavior:'smooth'});
+        grid:{borderColor: light ? 'rgba(36,51,45,0.14)' : 'rgba(221,231,226,0.13)'}
+      });
+    }, 50);
   }
+
+  window.addEventListener('gelocci:themechange', refreshRetirementChartTheme);
+  new MutationObserver(refreshRetirementChartTheme).observe(document.documentElement, {
+    attributes:true, attributeFilter:['class','data-theme']
+  });
 </script>
 
 <script src="/assets/js/components.js"></script>

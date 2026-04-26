@@ -1,0 +1,546 @@
+/* ───────────────────────────────────────────────
+   GELOCCI — Sistema de Temas (Dark / Light)
+   Dark é o padrão. A classe .light-mode no <html>
+   ativa o tema claro sobrescrevendo as variáveis.
+─────────────────────────────────────────────── */
+
+/* ── TEMA ESCURO (padrão) ─────────────────────── */
+:root {
+  --green: #00C853;
+  --green-dim: #00A844;
+  --green-glow: rgba(0, 200, 83, 0.12);
+  --green-border: rgba(0, 200, 83, 0.22);
+  --gold: #C9A84C;
+
+  --bg: #080B0A;
+  --bg-2: #0E1412;
+  --bg-card: #111815;
+  --bg-hover: #141C18;
+
+  --white: #F0F4F2;
+  --text: #F0F4F2;
+  --text-soft: rgba(240, 244, 242, 0.65);
+
+  --muted-1: rgba(240, 244, 242, 0.65);
+  --muted-2: rgba(240, 244, 242, 0.40);
+  --muted-3: rgba(240, 244, 242, 0.12);
+  --muted-4: rgba(240, 244, 242, 0.05);
+
+  --nav-bg: rgba(8, 11, 10, 0.90);
+  --mobile-menu-bg: rgba(8, 11, 10, 0.97);
+
+  --shadow-soft: 0 10px 28px rgba(0, 0, 0, 0.30);
+  --shadow-card: 0 16px 40px rgba(0, 0, 0, 0.40);
+
+  --body-gradient: linear-gradient(180deg, #080B0A 0%, #080B0A 100%);
+
+  /* Toggle button */
+  --toggle-bg: rgba(240, 244, 242, 0.10);
+  --toggle-icon: '☀️';
+  --toggle-label: 'Tema claro';
+
+  --chart-text: #F8FAFC;
+  --chart-grid: rgba(248, 250, 252, 0.18);
+  --chart-border: rgba(248, 250, 252, 0.38);
+  --chart-tooltip-bg: #111815;
+  --chart-tooltip-border: rgba(248, 250, 252, 0.24);
+  --chart-tooltip-title: #FFFFFF;
+  --chart-tooltip-body: #F8FAFC;
+}
+
+
+/* ── TEMA CLARO ────────────────────────────────── */
+html.light-mode {
+  --green: #00A844;
+  --green-dim: #008F3A;
+  --green-glow: rgba(0, 168, 68, 0.13);
+  --green-border: rgba(0, 168, 68, 0.24);
+  --gold: #A27C22;
+
+  --bg: #F6F8F7;
+  --bg-2: #EEF3F0;
+  --bg-card: #FFFFFF;
+  --bg-hover: #F1F6F3;
+
+  --white: #0B1411;
+  --text: #0B1411;
+  --text-soft: #3E5149;
+
+  --muted-1: #53675F;
+  --muted-2: #84958E;
+  --muted-3: #D8E2DE;
+  --muted-4: #EEF3F1;
+
+  --nav-bg: rgba(255, 255, 255, 0.88);
+  --mobile-menu-bg: rgba(255, 255, 255, 0.97);
+
+  --shadow-soft: 0 10px 28px rgba(15, 23, 42, 0.06);
+  --shadow-card: 0 16px 40px rgba(15, 23, 42, 0.08);
+
+  --body-gradient: linear-gradient(180deg, #FFFFFF 0%, #F6F8F7 42%, #F2F6F4 100%);
+
+  --toggle-bg: rgba(0, 168, 68, 0.10);
+
+  --chart-text: #111827;
+  --chart-grid: rgba(17, 24, 39, 0.16);
+  --chart-border: rgba(17, 24, 39, 0.32);
+  --chart-tooltip-bg: #FFFFFF;
+  --chart-tooltip-border: rgba(17, 24, 39, 0.22);
+  --chart-tooltip-title: #111827;
+  --chart-tooltip-body: #111827;
+}
+
+
+/* ── APLICAÇÃO DO BACKGROUND ──────────────────── */
+html {
+  background: var(--bg);
+  transition: background 0.3s ease;
+}
+
+html.light-mode body {
+  background:
+    radial-gradient(circle at top left, rgba(0, 168, 68, 0.08), transparent 34rem),
+    var(--body-gradient) !important;
+  color: var(--text) !important;
+}
+
+html.light-mode body::before {
+  opacity: 0.12 !important;
+  mix-blend-mode: multiply;
+}
+
+/* ── TRANSIÇÃO SUAVE AO TROCAR TEMA ───────────── */
+*,
+*::before,
+*::after {
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+/* Exceção: não animar transform e opacity por performance */
+.logo-dot,
+.btn-primary,
+.btn-ghost,
+.tool-card {
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+/* ── NAVEGAÇÃO ────────────────────────────────── */
+nav {
+  background: var(--nav-bg) !important;
+  border-bottom: 1px solid var(--muted-3) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+}
+
+html.light-mode nav {
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04) !important;
+}
+
+.logo,
+.logo:visited {
+  color: var(--text) !important;
+}
+
+.nav-links a,
+.nav-mobile-menu a,
+.footer-links a {
+  color: var(--muted-1) !important;
+}
+
+.nav-links a:hover,
+.nav-mobile-menu a:hover,
+.footer-links a:hover {
+  color: var(--text) !important;
+}
+
+.nav-hamburger span {
+  background: var(--text) !important;
+}
+
+.nav-mobile-menu {
+  background: var(--mobile-menu-bg) !important;
+  border-bottom: 1px solid var(--muted-3) !important;
+}
+
+html.light-mode .nav-mobile-menu {
+  box-shadow: var(--shadow-card) !important;
+}
+
+/* ── TIPOGRAFIA ───────────────────────────────── */
+h1, h2, h3, h4, h5, h6,
+.hero-title,
+.section-title,
+.metric-value,
+.result-value,
+.term-title,
+.value-title,
+.card-title {
+  color: var(--text) !important;
+}
+
+p,
+.hero-subtitle,
+.section-subtitle,
+.card-description,
+.term-description,
+.footer-copy,
+label,
+small,
+.disclaimer,
+.disclaimer-bottom,
+.hero-desc {
+  color: var(--text-soft) !important;
+}
+
+/* ── CARDS / SUPERFÍCIES ──────────────────────── */
+.card,
+.form-card,
+.inputs-card,
+.result-card,
+.results-card,
+.summary-card,
+.chart-card,
+.table-card,
+.tool-card,
+.value-card,
+.term-card,
+.trust-right,
+.dashboard-mock,
+.acord-card,
+.sim4-modo,
+.upload-card,
+.step-card,
+.content-card,
+.info-card,
+.metric-card,
+.calc-card {
+  background: var(--bg-card) !important;
+  border-color: var(--muted-3) !important;
+  box-shadow: var(--shadow-soft) !important;
+}
+
+.tool-card:hover,
+.term-card:hover,
+.acord-header:hover,
+.sim4-modo:hover,
+.taxa-table tbody tr:hover,
+.extrato-table tbody tr:hover td,
+.options-table tbody tr:hover,
+.table-row:hover {
+  background: var(--bg-hover) !important;
+  color: var(--text) !important;
+}
+
+.marquee-section,
+.acord-content,
+.table-header,
+.result-header,
+thead tr,
+.options-table th,
+.taxa-table thead tr,
+.extrato-table thead tr,
+.options-table td.strike-col,
+.options-table th.strike-header {
+  background: var(--bg-2) !important;
+  color: var(--text) !important;
+  border-color: var(--muted-3) !important;
+}
+
+/* ── FORMULÁRIOS ──────────────────────────────── */
+input,
+select,
+textarea,
+.form-group input,
+.form-group select,
+.form-group textarea,
+.search-box input,
+.sim4-contrib-table input,
+.sim4-lote-textarea,
+input[type='text'],
+input[type='number'],
+input[type='email'],
+input[type='password'],
+input[type='file'] {
+  background: var(--bg-card) !important;
+  border-color: var(--muted-3) !important;
+  color: var(--text) !important;
+}
+
+html.light-mode input,
+html.light-mode select,
+html.light-mode textarea {
+  box-shadow: inset 0 1px 0 rgba(15, 23, 42, 0.02) !important;
+}
+
+select option,
+.form-group select option {
+  background: var(--bg-card) !important;
+  color: var(--text) !important;
+}
+
+input::placeholder,
+textarea::placeholder,
+.search-box input::placeholder {
+  color: var(--muted-2) !important;
+  opacity: 1 !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus,
+.search-box input:focus {
+  border-color: var(--green) !important;
+  box-shadow: 0 0 0 4px var(--green-glow) !important;
+  outline: none !important;
+}
+
+/* ── BOTÕES ───────────────────────────────────── */
+.btn,
+.btn-primary,
+.btn-calc,
+.btn-submit,
+button[type='submit'],
+input[type='submit'] {
+  background: var(--green) !important;
+  color: var(--bg) !important;
+  box-shadow: 0 10px 22px var(--green-glow) !important;
+}
+
+html.light-mode .btn,
+html.light-mode .btn-primary,
+html.light-mode .btn-calc,
+html.light-mode .btn-submit,
+html.light-mode button[type='submit'],
+html.light-mode input[type='submit'] {
+  color: #FFFFFF !important;
+  box-shadow: 0 10px 22px rgba(0, 168, 68, 0.18) !important;
+}
+
+.btn:hover,
+.btn-primary:hover,
+.btn-calc:hover,
+.btn-submit:hover,
+button[type='submit']:hover,
+input[type='submit']:hover {
+  background: var(--green-dim) !important;
+}
+
+.btn-secondary,
+.btn-outline,
+button.secondary {
+  background: var(--bg-card) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--muted-3) !important;
+}
+
+/* ── TABELAS ──────────────────────────────────── */
+table,
+.table-card,
+.results-table,
+.options-table,
+.taxa-table,
+.extrato-table {
+  color: var(--text) !important;
+  border-color: var(--muted-3) !important;
+}
+
+th {
+  color: var(--text-soft) !important;
+  border-color: var(--muted-3) !important;
+}
+
+td {
+  color: var(--text) !important;
+  border-color: var(--muted-4) !important;
+}
+
+/* ── BADGES ───────────────────────────────────── */
+.badge,
+.badge-otm,
+.tag,
+.pill {
+  background: var(--muted-4) !important;
+  color: var(--text-soft) !important;
+  border-color: var(--muted-3) !important;
+}
+
+.badge-itm,
+.success,
+.status-success {
+  background: var(--green-glow) !important;
+  color: var(--green-dim) !important;
+}
+
+/* ── STEPPER ──────────────────────────────────── */
+.step-label,
+.step.pending .step-label,
+.sim4-na {
+  color: var(--muted-2) !important;
+}
+
+.step.active .step-label,
+.step.done .step-label {
+  color: var(--text) !important;
+}
+
+/* ── RODAPÉ ───────────────────────────────────── */
+footer {
+  border-top: 1px solid var(--muted-3) !important;
+  color: var(--text-soft) !important;
+}
+
+html.light-mode footer {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* ── CTA FINAL ────────────────────────────────── */
+html.light-mode .cta-final-inner {
+  background:
+    radial-gradient(circle at 88% 18%, rgba(0, 168, 68, 0.10), transparent 18rem),
+    linear-gradient(135deg, #FFFFFF 0%, #F4F8F6 100%) !important;
+  border: 1px solid var(--muted-3) !important;
+  box-shadow: 0 16px 42px rgba(15, 23, 42, 0.07) !important;
+}
+
+html.light-mode .cta-final-inner::before {
+  background: radial-gradient(circle, rgba(0, 168, 68, 0.12), transparent 70%) !important;
+  opacity: 0.8 !important;
+}
+
+html.light-mode .cta-final h2 {
+  color: var(--text) !important;
+}
+
+html.light-mode .cta-final p {
+  color: var(--text-soft) !important;
+}
+
+/* ── SELEÇÃO ──────────────────────────────────── */
+::selection {
+  background: var(--green-glow);
+  color: var(--text);
+}
+
+/* ── BOTÃO TOGGLE DE TEMA ─────────────────────── */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 8.9rem;
+  min-width: 8.9rem;
+  max-width: 8.9rem;
+  flex: 0 0 auto;
+  background: var(--toggle-bg, var(--muted-4));
+  border: 1px solid var(--muted-3);
+  border-radius: 50px;
+  padding: 0.35rem 0.75rem 0.35rem 0.5rem;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--muted-1);
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    transform 0.15s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--muted-3) !important;
+  color: var(--text) !important;
+  transform: translateY(-1px);
+}
+
+.theme-toggle-icon {
+  width: 1.25rem;
+  min-width: 1.25rem;
+  text-align: center;
+  font-size: 1rem;
+  line-height: 1;
+  transition: transform 0.4s ease;
+}
+
+html.light-mode .theme-toggle-icon {
+  transform: rotate(180deg);
+}
+
+
+.theme-toggle-label {
+  display: inline-block;
+  width: 5.9rem;
+  text-align: left;
+}
+
+.chart-canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 420px;
+}
+
+.chart-canvas-wrap canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+@media (max-width: 768px) {
+  .theme-toggle-label {
+    display: none;
+    width: auto;
+  }
+  .theme-toggle {
+    min-width: 2.4rem;
+    width: 2.4rem;
+    max-width: 2.4rem;
+    padding: 0.35rem 0.5rem;
+  }
+}
+
+/* ── Cards de seleção: estado ativo/selecionado preserva destaque verde ── */
+html.light-mode .sim4-modo.active {
+  background: var(--green-glow) !important;
+  border-color: var(--green) !important;
+  box-shadow: 0 0 0 2px var(--green-glow) !important;
+}
+html.light-mode .sim4-modo.active h4 { color: var(--green) !important; }
+
+html.light-mode .modo-card.selected {
+  background: var(--green-glow) !important;
+  border-color: var(--green) !important;
+  box-shadow: 0 0 8px var(--green-glow) !important;
+}
+html.light-mode .modo-card.selected .modo-icon {
+  background: var(--green-glow) !important;
+  border-color: var(--green-border) !important;
+}
+
+/* ── Card "em breve" desabilitado ── */
+.tool-card-disabled {
+  opacity: 0.45;
+  cursor: default !important;
+  pointer-events: none;
+  filter: grayscale(0.3);
+}
+.tool-card-disabled::after { display: none !important; }
+html.light-mode .tool-card-disabled {
+  background: var(--muted-4) !important;
+  border-color: var(--muted-3) !important;
+}

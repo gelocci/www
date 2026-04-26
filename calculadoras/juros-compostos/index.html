@@ -21,7 +21,7 @@
   <meta property="og:type" content="website">
   <link rel="icon" href="../../assets/imagens/favicon.ico" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 <style>
@@ -92,18 +92,32 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:1.4rem
 .btn-calc:active{transform:translateY(0);}
 
 .results-section{display:none;animation:fadeUp 0.5s ease both;}
-.results-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--muted-3);border:1px solid var(--muted-3);border-radius:16px;overflow:hidden;margin-bottom:1.5rem;}
-.result-card{background:var(--bg-card);padding:2rem;}
-.result-card.highlight{background:linear-gradient(135deg,#0E1F15,#0A1A11);}
+
+/* ── Hero card (valor principal, sempre escuro) ── */
+.results-hero{background:linear-gradient(135deg,#0E1F15,#0A1A11);border:1px solid var(--green-border);border-radius:16px;padding:2.5rem;margin-bottom:1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;}
+.results-hero-left{}
+.results-hero-label{font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--green);font-weight:500;margin-bottom:0.75rem;}
+.results-hero-value{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:900;color:var(--green);line-height:1;letter-spacing:-1px;margin-bottom:0.5rem;}
+.results-hero-sub{font-size:0.82rem;color:rgba(221,231,226,0.6);font-weight:300;line-height:1.5;}
+.results-hero-right{display:flex;flex-direction:column;gap:1.25rem;}
+.result-item{display:flex;flex-direction:column;gap:0.3rem;padding-bottom:1.25rem;border-bottom:1px solid rgba(221,231,226,0.12);}
+.result-item:last-child{border-bottom:none;padding-bottom:0;}
+.result-item-label{font-size:0.68rem;letter-spacing:1.5px;text-transform:uppercase;color:rgba(221,231,226,0.55);font-weight:500;}
+.result-item-value{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:#DDE7E2;}
+.result-item-note{font-size:0.75rem;color:rgba(221,231,226,0.45);font-weight:300;margin-top:0.2rem;}
+
+/* ── Grid de cards secundários ── */
+.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--muted-3);border:1px solid var(--muted-3);border-radius:12px;overflow:hidden;margin-bottom:1.5rem;}
+.result-card{background:var(--bg-card);padding:1.5rem;}
 .result-label{font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted-2);font-weight:500;margin-bottom:0.75rem;}
-.result-value{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;color:var(--white);line-height:1.1;}
-.result-card.highlight .result-value{color:var(--green);}
+.result-value{font-family:'Playfair Display',serif;font-size:clamp(1.2rem,2vw,1.6rem);font-weight:700;color:var(--white);line-height:1.1;}
 .result-sub{font-size:0.75rem;color:var(--muted-2);margin-top:0.4rem;}
 
-.chart-card{background:var(--bg-card);border:1px solid var(--muted-3);border-radius:16px;padding:2rem;}
-.chart-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;}
+/* ── Chart card ── */
+.chart-card{background:var(--bg-card);border:1px solid var(--muted-3);border-radius:16px;padding:2rem;margin-bottom:1.5rem;}
+.chart-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;}
 .chart-card-title{font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted-2);font-weight:500;}
-.chart-legend{display:flex;gap:1.5rem;}
+.chart-legend{display:flex;gap:1.5rem;flex-wrap:wrap;}
 .legend-item{display:flex;align-items:center;gap:0.4rem;font-size:0.75rem;color:var(--muted-2);}
 .legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 
@@ -123,13 +137,21 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
   .calc-wrapper{padding:0 1.25rem 4rem;}
   .form-card{padding:1.5rem;}
   .form-grid{grid-template-columns:1fr;}
+  .results-hero{grid-template-columns:1fr;gap:2rem;}
   .results-grid{grid-template-columns:1fr;}
   .chart-card{padding:1.25rem;}
   .chart-card-header{flex-direction:column;align-items:flex-start;gap:1rem;}
   footer{flex-direction:column;align-items:flex-start;padding:2rem 1.25rem;}
   .footer-links{flex-wrap:wrap;gap:1rem;}
 }
+
+/* Fix ApexCharts: tooltip e background transparente */
+.apexcharts-canvas { background: transparent !important; }
+.apexcharts-svg { background: transparent !important; }
+
 </style>
+  <link rel="stylesheet" href="../../assets/css/theme.css">
+  <script src="../../assets/js/theme.js?v=20260426-chartfix"></script>
 </head>
 <body>
 
@@ -185,21 +207,23 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
   </div>
 
   <div class="results-section" id="resultsSection">
-    <div class="results-grid" id="resultsGrid">
-      <div class="result-card highlight">
-        <div class="result-label">Reserva Acumulada</div>
-        <div class="result-value" id="resAccumulado">—</div>
-        <div class="result-sub">Valor bruto ao final do período</div>
+    <div class="results-hero">
+      <div class="results-hero-left">
+        <div class="results-hero-label">Reserva Acumulada</div>
+        <div class="results-hero-value" id="resAccumulado">—</div>
+        <div class="results-hero-sub">Valor bruto ao final do período</div>
       </div>
-      <div class="result-card">
-        <div class="result-label">Valor Presente</div>
-        <div class="result-value" id="resPresentValue">—</div>
-        <div class="result-sub">Poder de compra hoje (descontada a inflação)</div>
-      </div>
-      <div class="result-card">
-        <div class="result-label">Renda Mensal Estimada</div>
-        <div class="result-value" id="resRetirement">—</div>
-        <div class="result-sub">Estimativa de retirada mensal sustentável (0,5%)</div>
+      <div class="results-hero-right">
+        <div class="result-item">
+          <div class="result-item-label">Valor Presente</div>
+          <div class="result-item-value" id="resPresentValue">—</div>
+          <div class="result-item-note">Poder de compra hoje (descontada a inflação)</div>
+        </div>
+        <div class="result-item">
+          <div class="result-item-label">Renda Mensal Estimada</div>
+          <div class="result-item-value" id="resRetirement">—</div>
+          <div class="result-item-note">Estimativa de retirada mensal sustentável (0,5%)</div>
+        </div>
       </div>
     </div>
     <div class="chart-card">
@@ -210,7 +234,7 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
           <div class="legend-item"><div class="legend-dot" style="background:#C9A84C;"></div>Total investido</div>
         </div>
       </div>
-      <canvas id="investmentChart"></canvas>
+      <div class="chart-canvas-wrap"><div id="investmentChart"></div></div>
     </div>
   </div>
 </div>
@@ -228,125 +252,156 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
     $('#period').mask('000', {reverse: true});
   });
 
+  function isLightMode() {
+    return document.documentElement.classList.contains('light-mode')
+      || document.documentElement.getAttribute('data-theme') === 'light';
+  }
+
+  function buildChartOptions(labels, dataAccumulated, dataContributions) {
+    const light = isLightMode();
+    return {
+      chart: {
+        type: 'area',
+        height: 420,
+        background: 'transparent',
+        toolbar: { show: false },
+        zoom: { enabled: false },
+        animations: { enabled: false },
+        fontFamily: 'Outfit, sans-serif'
+      },
+      theme: { mode: light ? 'light' : 'dark' },
+      series: [
+        { name: 'Reserva Acumulada', data: dataAccumulated },
+        { name: 'Total Investido',   data: dataContributions }
+      ],
+      colors: ['#00C853', '#C9A84C'],
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shadeIntensity: 1,
+          opacityFrom: light ? 0.22 : 0.18,
+          opacityTo:   light ? 0.04 : 0.02,
+          stops: [0, 95]
+        }
+      },
+      stroke: { curve: 'smooth', width: 2 },
+      markers: { size: 2, hover: { size: 5 } },
+      xaxis: {
+        categories: labels,
+        title: { text: 'Tempo (anos)', style: { fontFamily: 'Outfit, sans-serif', fontSize: '11px' } },
+        labels: { style: { fontFamily: 'Outfit, sans-serif', fontSize: '11px' } }
+      },
+      yaxis: {
+        title: { text: 'Valor (R$)', style: { fontFamily: 'Outfit, sans-serif', fontSize: '11px' } },
+        labels: {
+          style: { fontFamily: 'Outfit, sans-serif', fontSize: '11px' },
+          formatter: function(v) {
+            if (v >= 1000000) return 'R$ ' + (v/1000000).toFixed(1) + 'M';
+            if (v >= 1000)    return 'R$ ' + (v/1000).toFixed(0) + 'k';
+            return 'R$ ' + v;
+          }
+        }
+      },
+      tooltip: {
+        shared: true,
+        intersect: false,
+        theme: 'dark',
+        style: { fontFamily: 'Outfit, sans-serif', fontSize: '13px' },
+        y: {
+          formatter: function(v) {
+            return parseFloat(v).toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
+          }
+        }
+      },
+      legend: { show: false },
+      grid: { borderColor: light ? 'rgba(36,51,45,0.14)' : 'rgba(221,231,226,0.13)' },
+      dataLabels: { enabled: false }
+    };
+  }
+
   document.getElementById('advancedCompoundInterestForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
-    const initialDeposit = parseFloat(document.getElementById('initialDeposit').value.replace(/\./g, '').replace(',', '.')) || 0;
+    const initialDeposit      = parseFloat(document.getElementById('initialDeposit').value.replace(/\./g, '').replace(',', '.')) || 0;
     const monthlyContribution = parseFloat(document.getElementById('monthlyContribution').value.replace(/\./g, '').replace(',', '.')) || 0;
-    const monthlyInterest = parseFloat(document.getElementById('monthlyInterest').value.replace(',', '.')) / 100 || 0;
-    const inflation = parseFloat(document.getElementById('inflation').value.replace(',', '.')) / 100 || 0;
-    const period = parseInt(document.getElementById('period').value);
-    const include13th = document.getElementById('include13th').value === 'yes';
+    const monthlyInterest     = parseFloat(document.getElementById('monthlyInterest').value.replace(',', '.')) / 100 || 0;
+    const inflation           = parseFloat(document.getElementById('inflation').value.replace(',', '.')) / 100 || 0;
+    const period              = parseInt(document.getElementById('period').value);
+    const include13th         = document.getElementById('include13th').value === 'yes';
 
     let accumulated = initialDeposit;
     let contributionValue = monthlyContribution;
     let contributionsTotal = 0;
-    let labels = [];
-    let dataAccumulated = [];
-    let dataContributions = [];
+    let labels = [], dataAccumulated = [], dataContributions = [];
     const year = new Date().getFullYear();
 
     for (let month = 1; month <= period * 12; month++) {
       if (month % 12 === 0) contributionValue *= (1 + inflation);
-      let extraContribution = (month % 12 === 0 && include13th) ? contributionValue : 0;
-      contributionsTotal += contributionValue + extraContribution;
-      accumulated = accumulated * (1 + monthlyInterest) + contributionValue + extraContribution;
+      let extra = (month % 12 === 0 && include13th) ? contributionValue : 0;
+      contributionsTotal += contributionValue + extra;
+      accumulated = accumulated * (1 + monthlyInterest) + contributionValue + extra;
       if (month % 12 === 0) {
-        labels.push(`${year + Math.floor(month / 12)}`);
-        dataAccumulated.push(accumulated.toFixed(2));
-        dataContributions.push(contributionsTotal.toFixed(2));
+        labels.push('' + (year + Math.floor(month / 12)));
+        dataAccumulated.push(Number(accumulated.toFixed(2)));
+        dataContributions.push(Number(contributionsTotal.toFixed(2)));
       }
     }
 
-    const presentValue = accumulated / Math.pow((1 + inflation), period);
+    const presentValue     = accumulated / Math.pow((1 + inflation), period);
     const monthlyRetirement = presentValue * 0.005;
 
-    document.getElementById('resAccumulado').textContent = accumulated.toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
+    document.getElementById('resAccumulado').textContent   = accumulated.toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
     document.getElementById('resPresentValue').textContent = presentValue.toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
-    document.getElementById('resRetirement').textContent = monthlyRetirement.toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
+    document.getElementById('resRetirement').textContent   = monthlyRetirement.toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
 
     const resultsSection = document.getElementById('resultsSection');
     resultsSection.style.display = 'block';
 
-    const ctx = document.getElementById('investmentChart').getContext('2d');
     if (window.investmentChart && typeof window.investmentChart.destroy === 'function') {
       window.investmentChart.destroy();
     }
-    window.investmentChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: 'Reserva Acumulada',
-            data: dataAccumulated,
-            borderColor: '#00C853',
-            backgroundColor: 'rgba(0,200,83,0.08)',
-            borderWidth: 2,
-            fill: true,
-            tension: 0.4,
-            pointRadius: 0,
-            pointHoverRadius: 4
-          },
-          {
-            label: 'Total Investido',
-            data: dataContributions,
-            borderColor: '#C9A84C',
-            backgroundColor: 'rgba(201,168,76,0.08)',
-            borderWidth: 2,
-            fill: true,
-            tension: 0.4,
-            pointRadius: 0,
-            pointHoverRadius: 4
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        interaction: { mode: 'index', intersect: false },
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            backgroundColor: '#111815',
-            borderColor: 'rgba(240,244,242,0.12)',
-            borderWidth: 1,
-            titleColor: 'rgba(240,244,242,0.65)',
-            bodyColor: '#F0F4F2',
-            padding: 12,
-            callbacks: {
-              label: function(ctx) {
-                return ' ' + ctx.dataset.label + ': ' + parseFloat(ctx.raw).toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
-              }
-            }
+    window.investmentChart = new ApexCharts(
+      document.getElementById('investmentChart'),
+      buildChartOptions(labels, dataAccumulated, dataContributions)
+    );
+    window.investmentChart.render();
+
+    // Scroll para os resultados (após render)
+    requestAnimationFrame(function() {
+      const el     = document.getElementById('resultsSection');
+      const offset = el.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top: offset, behavior: 'smooth' });
+    });
+  });
+
+  // Troca de tema: recriar o gráfico com o novo tema
+  var _investmentThemeTimer = null;
+  function refreshInvestmentChartTheme() {
+    if (_investmentThemeTimer) clearTimeout(_investmentThemeTimer);
+    _investmentThemeTimer = setTimeout(function() {
+      _investmentThemeTimer = null;
+      if (!window.investmentChart) return;
+      var lm = isLightMode();
+      window.investmentChart.updateOptions({
+        theme: { mode: lm ? 'light' : 'dark' },
+        tooltip: { theme: 'dark' },
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shadeIntensity: 1,
+            opacityFrom: lm ? 0.22 : 0.18,
+            opacityTo:   lm ? 0.04 : 0.02,
+            stops: [0, 95]
           }
         },
-        scales: {
-          x: {
-            grid: { color: 'rgba(240,244,242,0.06)' },
-            ticks: { color: 'rgba(240,244,242,0.40)', font: { family: 'Outfit', size: 11 } },
-            border: { color: 'rgba(240,244,242,0.12)' }
-          },
-          y: {
-            grid: { color: 'rgba(240,244,242,0.06)' },
-            ticks: {
-              color: 'rgba(240,244,242,0.40)',
-              font: { family: 'Outfit', size: 11 },
-              callback: function(v) {
-                if (v >= 1000000) return 'R$ ' + (v/1000000).toFixed(1) + 'M';
-                if (v >= 1000) return 'R$ ' + (v/1000).toFixed(0) + 'k';
-                return 'R$ ' + v;
-              }
-            },
-            border: { color: 'rgba(240,244,242,0.12)' }
-          }
-        }
-      }
-    });
+        grid: { borderColor: lm ? 'rgba(36,51,45,0.14)' : 'rgba(221,231,226,0.13)' }
+      });
+    }, 50);
+  }
 
-    // Scroll para os cards de resultado, não para o gráfico
-    const grid = document.getElementById('resultsGrid');
-    const offset = grid.getBoundingClientRect().top + window.scrollY - 80;
-    window.scrollTo({ top: offset, behavior: 'smooth' });
+  window.addEventListener('gelocci:themechange', refreshInvestmentChartTheme);
+  new MutationObserver(refreshInvestmentChartTheme).observe(document.documentElement, {
+    attributes: true, attributeFilter: ['class', 'data-theme']
   });
 </script>
 

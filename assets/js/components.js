@@ -27,6 +27,9 @@
       .then(html => {
         placeholder.outerHTML = html;
         inicializarNav();
+        if (window.gelocciRefreshThemeToggle) {
+          window.gelocciRefreshThemeToggle();
+        }
       })
       .catch(() => console.warn('Gelocci: header não carregado'));
   }

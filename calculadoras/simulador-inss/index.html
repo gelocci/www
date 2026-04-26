@@ -701,10 +701,10 @@ footer {
 .sim4-modos { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:1.5rem; }
 .sim4-modo { border:1px solid var(--muted-3); border-radius:var(--radius-lg); padding:14px 12px; cursor:pointer; transition:all 0.2s; background:var(--bg-card); }
 .sim4-modo:hover { border-color:var(--muted-2); background:var(--bg-hover); }
-.sim4-modo.active { border-color:var(--green); background:var(--green-glow); }
+.sim4-modo.active { border-color:var(--green) !important; background:rgba(0,200,83,0.18) !important; box-shadow:0 0 0 1px var(--green) !important; }
 .sim4-modo h4 { font-size:13px; font-weight:500; color:var(--muted-1); margin-bottom:4px; }
 .sim4-modo p  { font-size:11px; color:var(--muted-2); line-height:1.5; }
-.sim4-modo.active h4 { color:var(--green); }
+.sim4-modo.active h4 { color:var(--green) !important; }
 .sim4-form { display:flex; flex-wrap:wrap; gap:16px; align-items:flex-end; margin-bottom:1.5rem; }
 .sim4-form .form-group { flex:1; min-width:180px; }
 .sim4-manual-tabs { display:flex; gap:0; margin-bottom:1rem; border:0.5px solid var(--muted-3); border-radius:var(--radius-sm); overflow:hidden; width:fit-content; }
@@ -849,6 +849,8 @@ footer {
   .footer-links { flex-wrap:wrap; gap:1rem; }
 }
 </style>
+  <link rel="stylesheet" href="../../assets/css/theme.css">
+  <script src="../../assets/js/theme.js"></script>
 </head>
 <body>
 
