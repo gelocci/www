@@ -475,7 +475,7 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
     })({
         calculadora: 'Juros Compostos',
         valor: document.getElementById('resAccumulado').textContent,
-        params: monthlyInterest*100*12 + '% a.a. · R$ ' + monthlyContribution.toLocaleString('pt-BR') + '/mês · ' + period + ' anos',
+        params: (monthlyInterest*100).toFixed(2).replace('.',',') + '% a.m. · R$ ' + monthlyContribution.toLocaleString('pt-BR') + '/mês · ' + period + ' anos',
         url: window.location.href
       });
 
