@@ -109,18 +109,18 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:1.4rem
 .mock-title{font-size:0.75rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-2);font-weight:500;}
 .mock-badge{background:var(--green-glow);border:1px solid var(--green-border);color:var(--green);font-size:0.7rem;padding:0.2rem 0.6rem;border-radius:100px;}
 .chart{display:flex;align-items:flex-end;gap:6px;height:100px;margin-bottom:1.5rem;}
-.bar{flex:1;border-radius:3px 3px 0 0;background:var(--muted-3);animation:growBar 1s ease both;}
+.bar{flex:1;border-radius:3px 3px 0 0;background:#1A2E21;animation:growBar 1s ease both;}
 .bar.active{background:var(--green);}
-.bar:nth-child(1){height:40%;animation-delay:0.1s;}
-.bar:nth-child(2){height:60%;animation-delay:0.15s;}
-.bar:nth-child(3){height:45%;animation-delay:0.2s;}
-.bar:nth-child(4){height:75%;animation-delay:0.25s;}
-.bar:nth-child(5){height:55%;animation-delay:0.3s;}
-.bar:nth-child(6){height:85%;animation-delay:0.35s;}
-.bar:nth-child(7){height:65%;animation-delay:0.4s;}
-.bar:nth-child(8){height:90%;animation-delay:0.45s;}
-.bar:nth-child(9){height:70%;animation-delay:0.5s;}
-.bar:nth-child(10){height:95%;animation-delay:0.55s;}
+.bar:nth-child(1){height:25%;animation-delay:0.1s;}
+.bar:nth-child(2){height:40%;animation-delay:0.15s;}
+.bar:nth-child(3){height:32%;animation-delay:0.2s;}
+.bar:nth-child(4){height:50%;animation-delay:0.25s;}
+.bar:nth-child(5){height:38%;animation-delay:0.3s;}
+.bar:nth-child(6){height:55%;animation-delay:0.35s;}
+.bar:nth-child(7){height:45%;animation-delay:0.4s;}
+.bar:nth-child(8){height:65%;animation-delay:0.45s;background:#1A4028;}
+.bar:nth-child(9){height:82%;animation-delay:0.5s;background:#0D6B35;}
+.bar:nth-child(10){height:100%;animation-delay:0.55s;background:#00C853;}
 @keyframes growBar{from{transform:scaleY(0);transform-origin:bottom;}to{transform:scaleY(1);transform-origin:bottom;}}
 .mock-value{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;margin-bottom:0.3rem;}
 .mock-change{font-size:0.8rem;color:var(--green);margin-bottom:1.5rem;}
