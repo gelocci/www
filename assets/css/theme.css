@@ -669,6 +669,11 @@ nav .nav-links {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  padding: 0;
+  margin: 0;
 }
 
 /* Toggle compacto no nav-right */

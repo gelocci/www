@@ -8,4 +8,9 @@
   <url><loc>https://gelocci.com.br/calculadoras/equivalencia-de-taxas/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://gelocci.com.br/quem-somos/</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
   <url><loc>https://gelocci.com.br/contato/</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
+  <url>
+    <loc>https://gelocci.com.br/educacao/juros-compostos/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
