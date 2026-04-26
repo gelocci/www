@@ -112,11 +112,16 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
   footer{flex-direction:column;align-items:flex-start;padding:2rem 1.25rem;}.footer-links{flex-wrap:wrap;gap:1rem;}
 }
 
+.btn-pdf{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;border:1px solid var(--muted-3);background:transparent;color:var(--muted-1);font-size:12px;font-family:'Outfit',sans-serif;cursor:pointer;transition:border-color 0.2s,color 0.2s;}
+.btn-pdf:hover{border-color:#E53935;color:#E53935;}
+.btn-pdf svg{width:13px;height:13px;flex-shrink:0;}
+.btn-pdf.loading{opacity:0.6;cursor:wait;}
 .btn-share{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;border:1px solid var(--muted-3);background:transparent;color:var(--muted-1);font-size:12px;font-family:'Outfit',sans-serif;cursor:pointer;transition:border-color 0.2s,color 0.2s;}
 .btn-share:hover{border-color:var(--green);color:var(--green);}
 .btn-share svg{width:13px;height:13px;flex-shrink:0;}
 </style>
   <link rel="stylesheet" href="../../assets/css/theme.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="../../assets/js/theme.js"></script>
 </head>
 <body>
@@ -150,7 +155,14 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
       </div>
     </div>
     <button type="button" class="btn-calc" onclick="converterTaxa()">Converter →</button>
-    <button class="btn-share" id="btnShare" onclick="compartilharURL()" style="display:none;margin-top:1rem;">
+  </div>
+
+  <div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:0.75rem;">
+    <button class="btn-pdf" id="btnPdf" onclick="exportarPDF()" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      Exportar PDF
+    </button>
+    <button class="btn-share" id="btnShare" onclick="compartilharURL()" style="display:none;">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
       Compartilhar
     </button>
@@ -171,6 +183,93 @@ footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;just
 </script>
 
 <script>
+
+function exportarPDFEqTaxas() {
+  const btn = document.getElementById('btnPdf');
+  btn.classList.add('loading'); btn.textContent = 'Gerando...';
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const W = 210, margin = 18, contentW = 174;
+  let y = 0;
+
+  // Header
+  doc.setFillColor(14,31,21); doc.rect(0,0,W,28,'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(18); doc.setTextColor(0,200,83);
+  doc.text('Gelocci', margin, 17);
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(107,140,118);
+  doc.text('Inteligência Financeira', margin, 23);
+  const hoje = new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
+  doc.text('Simulação gerada em ' + hoje, W-margin, 17, {align:'right'});
+  doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(221,231,226);
+  doc.text('Equivalência de Taxas', W-margin, 23, {align:'right'});
+  y = 38;
+
+  // Card principal com a taxa de entrada
+  const sub = document.getElementById('resultsCardSub').textContent;
+  doc.setFillColor(14,31,21); doc.setDrawColor(0,168,68); doc.setLineWidth(0.3);
+  doc.roundedRect(margin, y, contentW, 30, 3, 3, 'FD');
+  doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor(0,200,83);
+  doc.text('CONVERSÃO DE TAXAS', margin+8, y+10);
+  doc.setFontSize(16); doc.setTextColor(0,200,83);
+  doc.text(sub, margin+8, y+22);
+  y += 38;
+
+  // Tabela de resultados
+  doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(20,30,25);
+  doc.text('TABELA DE EQUIVALÊNCIA', margin, y+6);
+  doc.setDrawColor(0,168,68); doc.setLineWidth(0.4);
+  doc.line(margin, y+8, margin+contentW, y+8);
+  y += 14;
+
+  const periodos = ['Mensal','Trimestral','Semestral','Anual'];
+  const tipos = ['Proporcional','Equivalente'];
+  const colW = contentW/5;
+
+  // Cabeçalho da tabela
+  doc.setFillColor(14,31,21);
+  doc.rect(margin, y, contentW, 8, 'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor(221,231,226);
+  doc.text('TIPO', margin+4, y+5.5);
+  periodos.forEach((p,i) => {
+    doc.text(p.toUpperCase(), margin + (i+1)*colW + colW/2, y+5.5, {align:'center'});
+  });
+  y += 8;
+
+  // Linhas
+  tipos.forEach((tipo, ti) => {
+    doc.setFillColor(ti%2===0 ? 245 : 240, ti%2===0 ? 248 : 245, ti%2===0 ? 246 : 243);
+    doc.setDrawColor(210,225,215); doc.setLineWidth(0.2);
+    doc.rect(margin, y, contentW, 10, 'FD');
+    doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(20,30,25);
+    doc.text(tipo, margin+4, y+7);
+
+    // Ler os valores da tabela HTML
+    const rows = document.querySelectorAll('.taxa-table tbody tr');
+    if (rows[ti]) {
+      const cells = rows[ti].querySelectorAll('td');
+      for (let c = 1; c < cells.length && c <= 4; c++) {
+        doc.setFont('helvetica','bold');
+        doc.text(cells[c].textContent.trim(), margin + c*colW + colW/2, y+7, {align:'center'});
+      }
+    }
+    y += 10;
+  });
+  y += 8;
+
+  // Footer
+  y = Math.max(y+6, doc.internal.pageSize.height-18);
+  doc.setFillColor(14,31,21); doc.rect(0,y,W,18,'F');
+  doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(107,140,118);
+  doc.text('gelocci.com.br  ·  Simulação estimada. Não constitui aconselhamento financeiro.', W/2, y+10, {align:'center'});
+
+  doc.save('gelocci-equivalencia-taxas.pdf');
+  btn.classList.remove('loading');
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> Exportar PDF';
+}
+
+function exportarPDF(){ exportarPDFEqTaxas(); }
+
 function pushStateFromForm() {
   var params = new URLSearchParams({
     taxa:    document.getElementById('rateInput').value || '',
@@ -249,6 +348,7 @@ function converterTaxa(){
     resultsCard.style.display='block';
     pushStateFromForm();
     document.getElementById('btnShare').style.display='inline-flex';
+    document.getElementById('btnPdf').style.display='inline-flex';
 
     // Salvar no histórico
     (function(entrada) {

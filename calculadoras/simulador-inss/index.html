@@ -740,6 +740,10 @@ footer {
 .sim4-lote-preview span { color:var(--green); font-weight:500; }
 .sim4-resultado { margin-top:1.5rem; }
 .sim4-resultado-label { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted-2); margin-bottom:0.75rem; }
+.btn-pdf{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;border:1px solid var(--muted-3);background:transparent;color:var(--muted-1);font-size:12px;font-family:'Outfit',sans-serif;cursor:pointer;transition:border-color 0.2s,color 0.2s;}
+.btn-pdf:hover{border-color:#E53935;color:#E53935;}
+.btn-pdf svg{width:13px;height:13px;flex-shrink:0;}
+.btn-pdf.loading{opacity:0.6;cursor:wait;}
 .sim4-table-wrap { border:0.5px solid var(--muted-3); border-radius:var(--radius-lg); overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; }
 .sim4-table { min-width:480px; }
 .sim4-table { width:100%; border-collapse:collapse; }
@@ -976,7 +980,7 @@ footer {
         <!-- Nome em evidência -->
         <div class="extracao-nome" id="cnis-nome">—</div>
         <div class="extracao-sub">
-          <span id="cnis-cpf">—</span>
+          <span>CPF: <strong id="cnis-cpf">—</strong></span>
           <span class="extracao-sep">·</span>
           <span>Nascimento: <strong id="cnis-nasc">—</strong></span>
           <span class="extracao-sep">·</span>
@@ -1127,6 +1131,12 @@ footer {
        PASSO 3 — Resultado
   ═══════════════════════════════════════════ -->
   <div class="step-panel" id="panel-3">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:0.75rem;">
+      <button class="btn-pdf" id="btnPdfInss" onclick="exportarPDFInss()" style="display:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Exportar PDF
+      </button>
+    </div>
     <div class="panel-card">
 
       <!-- Loading -->
@@ -1172,7 +1182,7 @@ footer {
 
       </div><!-- /resultado-conteudo -->
 
-      <div class="btn-row" style="margin-top:1.5rem">
+      <div class="btn-row" style="margin-top:1.5rem;">
         <button class="btn-secondary" onclick="irPara(2)">← Voltar</button>
       </div>
     </div>
@@ -1293,10 +1303,251 @@ footer {
 
 <div id="site-footer"></div>
 
-<script src="/assets/js/components.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="/assets/js/components.js"></script>
 
 <script>
 // ─── CONFIGURAÇÃO ──────────────────────────────────────────
+
+// ── Exportar PDF INSS ────────────────────────────────────────────────────────
+async function exportarPDFInss() {
+  const btn = document.getElementById('btnPdfInss');
+  btn.classList.add('loading'); btn.textContent = 'Gerando...';
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const W = 210, M = 14, CW = W - M*2;
+  const PH = doc.internal.pageSize.height;
+  const FOOTER_H = 16;
+  const SAFE = PH - FOOTER_H; // zona segura
+
+  const GREEN  = [0,168,68],  DARK   = [14,31,21];
+  const MUTED  = [107,140,118], TEXT = [20,30,25];
+  const LIGHT  = [221,231,226], BORDER= [210,225,215];
+  const BG     = [248,250,249], BG2   = [238,244,240];
+
+  let y = 0;
+  const seg    = state.segurado || {};
+  const regras = state.regras   || [];
+  const cpfVal = seg.cpf || state._cpf || '';
+
+  // ── Helpers ──────────────────────────────────────────────────────────────
+  function addFooter() {
+    doc.setFillColor(...DARK);
+    doc.rect(0, PH-14, W, 14, 'F');
+    doc.setFont('helvetica','normal'); doc.setFontSize(6.5); doc.setTextColor(...MUTED);
+    doc.text('gelocci.com.br  ·  Simulação estimada. Não constitui aconselhamento financeiro.', W/2, PH-6, {align:'center'});
+  }
+
+  function newPage() {
+    addFooter();
+    doc.addPage();
+    y = 14;
+  }
+
+  function needSpace(h) {
+    if (y + h > SAFE) newPage();
+  }
+
+  // Calcula altura de uma regra (título + cabeçalho + requisitos)
+  function alturaRegra(regra) {
+    doc.setFontSize(7);
+    let h = 12 + 7; // título + cabeçalho tabela
+    (regra.requisitos || []).forEach(req => {
+      const n = doc.splitTextToSize(req.nome||'', 48).length;
+      const e = doc.splitTextToSize(req.exigidoTexto||'', 36).length;
+      const a = doc.splitTextToSize(req.atualTexto||'', 50).length;
+      h += Math.max(n,e,a) * 4.5 + 7;
+    });
+    return h + 4;
+  }
+
+  // ── Header ────────────────────────────────────────────────────────────────
+  doc.setFillColor(...DARK); doc.rect(0,0,W,28,'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(18); doc.setTextColor(...GREEN);
+  doc.text('Gelocci', M, 17);
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(...MUTED);
+  doc.text('Inteligência Financeira', M, 23);
+  const hoje = new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
+  doc.text('Simulação gerada em ' + hoje, W-M, 17, {align:'right'});
+  doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(...LIGHT);
+  doc.text('Simulador de Aposentadoria INSS', W-M, 23, {align:'right'});
+  y = 36;
+
+  // ── Hero ──────────────────────────────────────────────────────────────────
+  const heroH = 16 + (seg.dataNascimento ? 7 : 0) + (cpfVal && cpfVal !== '—' ? 7 : 0);
+  doc.setFillColor(...DARK); doc.setDrawColor(...GREEN); doc.setLineWidth(0.3);
+  doc.roundedRect(M, y, CW, heroH, 3, 3, 'FD');
+  doc.setFont('helvetica','bold'); doc.setFontSize(18); doc.setTextColor(...GREEN);
+  doc.text((seg.nome || 'SEGURADO').toUpperCase(), M+8, y+13);
+  let hy = y + 20;
+  doc.setFont('helvetica','normal'); doc.setFontSize(7.5); doc.setTextColor(...MUTED);
+  if (seg.dataNascimento) { doc.text('Nascimento: ' + seg.dataNascimento, M+8, hy); hy += 7; }
+  if (cpfVal && cpfVal !== '—') { doc.text('CPF: ' + cpfVal, M+8, hy); }
+  y += heroH + 8;
+
+  // ── Métricas ──────────────────────────────────────────────────────────────
+  const metricas = document.querySelectorAll('#res-metrics .res-metric');
+  if (metricas.length > 0) {
+    const mW = (CW - (metricas.length-1)*4) / metricas.length;
+    metricas.forEach((m, i) => {
+      const cx = M + i*(mW+4);
+      doc.setFillColor(...BG2); doc.setDrawColor(...BORDER); doc.setLineWidth(0.3);
+      doc.roundedRect(cx, y, mW, 20, 2, 2, 'FD');
+      const label = m.querySelector('.res-metric-label')?.textContent || '';
+      const val   = m.querySelector('.res-metric-val')?.textContent   || '';
+      const isGreen = m.querySelector('.green') !== null;
+      doc.setFont('helvetica','bold'); doc.setFontSize(6); doc.setTextColor(...MUTED);
+      doc.text(label.toUpperCase(), cx+4, y+6);
+      doc.setFont('helvetica','bold'); doc.setFontSize(10);
+      doc.setTextColor(isGreen?0:20, isGreen?168:30, isGreen?68:25);
+      doc.text(val, cx+4, y+15);
+    });
+    y += 28;
+  }
+
+  // ── Renderizar grupo de regras ─────────────────────────────────────────────
+  function renderGrupo(label, lista) {
+    if (!lista.length) return;
+
+    // Calcular altura do título + primeira regra para não quebrar
+    const altTitulo = 12;
+    const altPrimeira = alturaRegra(lista[0]);
+    needSpace(altTitulo + altPrimeira);
+
+    // Título do grupo
+    doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor(...MUTED);
+    doc.text(label, M, y+5);
+    doc.setDrawColor(...GREEN); doc.setLineWidth(0.4);
+    doc.line(M, y+7, M+CW, y+7);
+    y += 12;
+
+    lista.forEach(regra => {
+      const elegivel = regra.elegivel;
+      const reqs = regra.requisitos || [];
+      const altR = alturaRegra(regra);
+
+      // Regra inteira na mesma página
+      needSpace(altR);
+
+      // Barra lateral colorida
+      doc.setFillColor(elegivel ? 0:190, elegivel ? 168:55, elegivel ? 68:55);
+      doc.rect(M, y, 3, altR-4, 'F');
+
+      // Título da regra
+      doc.setFillColor(elegivel ? 14:242, elegivel ? 31:242, elegivel ? 21:242);
+      doc.rect(M+3, y, CW-3, 10, 'F');
+      doc.setFont('helvetica','bold'); doc.setFontSize(7);
+      doc.setTextColor(elegivel?0:160, elegivel?168:50, elegivel?68:50);
+      doc.text(elegivel ? 'OK' : 'NAO', M+6, y+7);
+      doc.setFont('helvetica','bold'); doc.setFontSize(8.5);
+      doc.setTextColor(elegivel?0:30, elegivel?140:30, elegivel?60:30);
+      doc.text(regra.nome, M+18, y+7, {maxWidth: CW-55});
+      if (elegivel && regra.rmi) {
+        doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(...GREEN);
+        doc.text(fmtBRL(regra.rmi), W-M-3, y+7, {align:'right'});
+      }
+      y += 12;
+
+      // Cabeçalho tabela requisitos
+      if (reqs.length > 0) {
+        doc.setFillColor(225,232,228);
+        doc.rect(M+3, y, CW-3, 6, 'F');
+        doc.setFont('helvetica','bold'); doc.setFontSize(5.5); doc.setTextColor(80,100,90);
+        doc.text('REQUISITO',     M+6,    y+4.5);
+        doc.text('EXIGIDO',       M+58,   y+4.5);
+        doc.text('SITUAÇÃO ATUAL',M+98,   y+4.5);
+        doc.text('STATUS',        W-M-3,  y+4.5, {align:'right'});
+        y += 7;
+
+        reqs.forEach((req, ri) => {
+          doc.setFontSize(7);
+          const nA = doc.splitTextToSize(req.nome||'', 48);
+          const eA = doc.splitTextToSize(req.exigidoTexto||'', 36);
+          const aA = doc.splitTextToSize(req.atualTexto||'', 50);
+          const rH = Math.max(nA.length, eA.length, aA.length) * 4.5 + 7;
+
+          if (ri%2===0) {
+            doc.setFillColor(...BG); doc.rect(M+3, y, CW-3, rH, 'F');
+          }
+          doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(...TEXT);
+          doc.text(nA, M+6, y+5);
+          doc.setTextColor(80,100,90);
+          doc.text(eA, M+58, y+5);
+          doc.setTextColor(req.ok?0:150, req.ok?120:40, req.ok?70:40);
+          doc.text(aA, M+98, y+5);
+          doc.setFont('helvetica','bold'); doc.setFontSize(6.5);
+          doc.setTextColor(req.ok?0:170, req.ok?168:50, req.ok?68:50);
+          doc.text(req.ok?'OK':'FALTA', W-M-3, y+5, {align:'right'});
+          doc.setDrawColor(215,228,220); doc.setLineWidth(0.1);
+          doc.line(M+3, y+rH, M+CW, y+rH);
+          y += rH;
+        });
+      }
+      y += 6;
+    });
+    y += 4;
+  }
+
+  // ── PÓS-2019 primeiro (principal) ────────────────────────────────────────
+  const pos = regras.filter(r => r.grupo === 'POS_2019');
+  const pre = regras.filter(r => r.grupo === 'PRE_2019');
+  renderGrupo('REGRAS DE TRANSIÇÃO (PÓS-2019)', pos);
+
+  // ── PRÉ-2019 em nova página ───────────────────────────────────────────────
+  if (pre.length > 0) {
+    newPage();
+    renderGrupo('REGRAS ANTIGAS (PRÉ-2019)', pre);
+  }
+
+  // ── Tabela sim4 se disponível ─────────────────────────────────────────────
+  const sim4 = document.getElementById('sim4-resultado');
+  if (sim4 && sim4.style.display !== 'none') {
+    newPage();
+    doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(...TEXT);
+    doc.text('PROJEÇÃO DE REGRAS', M, y+6);
+    doc.setDrawColor(...GREEN); doc.setLineWidth(0.4);
+    doc.line(M, y+8, M+CW, y+8);
+    y += 14;
+
+    const cols = [{l:'REGRA',w:68},{l:'DATA ELEGÍVEL',w:32},{l:'IDADE',w:22},{l:'CONTRIBUIÇÃO',w:30},{l:'RMI ESTIMADO',w:30}];
+    doc.setFillColor(...DARK); doc.rect(M, y, CW, 7, 'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(6); doc.setTextColor(...LIGHT);
+    let cx = M;
+    cols.forEach(c => { doc.text(c.l, cx+3, y+5); cx += c.w; });
+    y += 7;
+
+    document.querySelectorAll('#sim4-tbody tr').forEach((row, ri) => {
+      const cells = row.querySelectorAll('td');
+      if (!cells.length) return;
+      needSpace(9);
+      doc.setFillColor(ri%2===0?245:240, ri%2===0?248:245, ri%2===0?246:243);
+      doc.setDrawColor(...BORDER); doc.setLineWidth(0.1);
+      doc.rect(M, y, CW, 7.5, 'FD');
+      doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(...TEXT);
+      cx = M;
+      cols.forEach((c,ci) => {
+        const t = cells[ci] ? cells[ci].textContent.trim() : '';
+        doc.text(t, cx+3, y+5.5, {maxWidth: c.w-4});
+        cx += c.w;
+      });
+      y += 7.5;
+    });
+  }
+
+  // ── Footer final ──────────────────────────────────────────────────────────
+  addFooter();
+
+  const nome = (seg.nome||'segurado').trim().replace(/[^a-zA-Z0-9]/g,'-').toLowerCase();
+  doc.save('gelocci-inss-' + nome + '.pdf');
+
+  btn.classList.remove('loading');
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> Exportar PDF';
+}
+
+
+
 const BACKEND_URL = 'https://inss-api.gelocci.com.br';
 
 // ─── ESTADO GLOBAL ─────────────────────────────────────────
@@ -1478,6 +1729,12 @@ async function calcularManual() {
 function renderizarResultado(data) {
   document.getElementById('resultado-loading').style.display = 'none';
   document.getElementById('resultado-conteudo').style.display = 'block';
+  document.getElementById('btnPdfInss').style.display = 'inline-flex';
+
+  // Salvar dados no state para uso no PDF
+  state.regras        = data.regras        || [];
+  state.mediaSalarial = data.mediaSalarial  || null;
+  if (data.segurado) state.segurado = { ...state.segurado, ...data.segurado };
 
   const seg = data.segurado;
   const con = data.contribuicao;
@@ -1487,6 +1744,21 @@ function renderizarResultado(data) {
   const elNome = document.getElementById('res-nome');
   if (!elNome) { console.error('res-nome nao encontrado'); return; }
   elNome.textContent = seg.nome || 'Segurado';
+
+  // Subtítulo com CPF e nascimento (quando disponíveis)
+  let resSub = document.getElementById('res-sub');
+  if (!resSub) {
+    resSub = document.createElement('div');
+    resSub.id = 'res-sub';
+    resSub.style.cssText = 'font-size:0.8rem;color:var(--muted-2);margin-top:0.25rem;margin-bottom:0.5rem;display:flex;gap:1rem;flex-wrap:wrap;';
+    elNome.parentNode.insertBefore(resSub, elNome.nextSibling);
+  }
+  const subParts = [];
+  const cpfVal = seg.cpf || state._cpf || '';
+  if (cpfVal && cpfVal !== '—') subParts.push('CPF: ' + cpfVal);
+  if (seg.dataNascimento && seg.dataNascimento !== '—') subParts.push('Nascimento: ' + seg.dataNascimento);
+  resSub.textContent = subParts.join('  ·  ');
+  resSub.style.display = subParts.length ? 'block' : 'none';
 
   // Métricas
   document.getElementById('res-metrics').innerHTML = `
@@ -1598,6 +1870,10 @@ async function processarPdf(input) {
     const data = await res.json();
 
     state.segurado     = data.segurado;
+    state.regras       = data.regras || [];
+    // Garantir CPF no state para o PDF
+    if (data.segurado && data.segurado.cpf) state._cpf = data.segurado.cpf;
+    state.mediaSalarial = data.mediaSalarial;
     state.contribuicao  = data.contribuicao;
     state.mediaSalarial = data.mediaSalarial;
 
