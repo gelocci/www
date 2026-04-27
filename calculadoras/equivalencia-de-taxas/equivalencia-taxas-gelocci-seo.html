@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-H3WXX5RDYY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-H3WXX5RDYY');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Equivalência de Taxas | Converter Taxa Mensal e Anual | Gelocci</title>
+  <meta name="description" content="Converta taxas de juros entre períodos mensal, trimestral, semestral e anual. Compare juros simples e juros compostos em uma tabela clara e gratuita.">
+  <meta name="robots" content="index, follow">
+  <meta name="keywords" content="equivalência de taxas, taxa equivalente, converter taxa mensal para anual, juros simples, juros compostos, calculadora financeira">
+  <meta name="author" content="Gerson Locci">
+  <link rel="canonical" href="https://gelocci.com.br/calculadoras/equivalencia-de-taxas/">
+
+  <!-- Open Graph (WhatsApp, Facebook, LinkedIn) -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://gelocci.com.br/calculadoras/equivalencia-de-taxas/">
+  <meta property="og:title" content="Calculadora de Equivalência de Taxas | Gelocci">
+  <meta property="og:description" content="Converta uma taxa informada para outros períodos e compare os resultados em juros simples e compostos.">
+  <meta property="og:image" content="https://gelocci.com.br/assets/imagens/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="Gelocci">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Calculadora de Equivalência de Taxas | Gelocci">
+  <meta name="twitter:description" content="Converta taxas mensais, trimestrais, semestrais e anuais nos regimes de juros simples e compostos.">
+  <meta name="twitter:image" content="https://gelocci.com.br/assets/imagens/og-image.png">
+  <link rel="icon" href="../../assets/imagens/favicon.ico" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--green:#00C853;--green-dim:#00A844;--green-glow:rgba(0,200,83,0.12);--green-border:rgba(0,200,83,0.22);--gold:#C9A84C;--bg:#080B0A;--bg-2:#0E1412;--bg-card:#111815;--bg-hover:#141C18;--white:#F0F4F2;--muted-1:rgba(240,244,242,0.65);--muted-2:rgba(240,244,242,0.40);--muted-3:rgba(240,244,242,0.12);--muted-4:rgba(240,244,242,0.05);}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--white);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:0.4;}
+nav{display:flex;justify-content:space-between;align-items:center;padding:1.4rem 2.5rem;position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,11,10,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--muted-3);}
+.logo{font-family:'Playfair Display',serif;font-weight:700;font-size:1.5rem;color:var(--white);letter-spacing:-0.5px;display:flex;align-items:center;gap:0.5rem;text-decoration:none;}
+.logo-dot{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 10px var(--green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 8px var(--green);}50%{opacity:0.6;box-shadow:0 0 16px var(--green);}}
+.nav-links{display:flex;gap:2.5rem;list-style:none;}
+.nav-links a{color:var(--muted-1);text-decoration:none;font-size:0.875rem;font-weight:400;transition:color 0.2s;}
+.nav-links a:hover{color:var(--white);}
+.nav-back{color:var(--muted-1);text-decoration:none;font-size:0.875rem;display:flex;align-items:center;gap:0.4rem;transition:color 0.2s;}
+.nav-back:hover{color:var(--white);}
+.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;}
+.nav-hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px;transition:transform 0.25s,opacity 0.25s;}
+.nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.nav-hamburger.open span:nth-child(2){opacity:0;}
+.nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.nav-mobile-menu{display:none;position:fixed;top:57px;left:0;right:0;background:rgba(8,11,10,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--muted-3);padding:1.5rem 1.25rem;z-index:99;flex-direction:column;}
+.nav-mobile-menu.open{display:flex;}
+.nav-mobile-menu a{color:var(--muted-1);text-decoration:none;font-size:1rem;padding:0.9rem 0;border-bottom:1px solid var(--muted-3);transition:color 0.2s;}
+.nav-mobile-menu a:last-child{border-bottom:none;}
+.page-header{padding:8rem 2.5rem 3rem;max-width:1200px;margin:0 auto;}
+.page-eyebrow{display:inline-flex;align-items:center;gap:0.6rem;font-size:0.75rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--green);margin-bottom:1.2rem;font-weight:500;}
+.eyebrow-line{width:28px;height:1px;background:var(--green);}
+.page-header h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);font-weight:900;line-height:1.1;letter-spacing:-1px;margin-bottom:0.75rem;}
+.page-header h1 em{font-style:italic;color:var(--green);}
+.page-header p{color:var(--muted-1);font-size:0.95rem;font-weight:300;max-width:560px;line-height:1.7;}
+.calc-wrapper{max-width:800px;margin:0 auto;padding:0 2.5rem 6rem;}
+.form-card{background:var(--bg-card);border:1px solid var(--muted-3);border-radius:16px;padding:2.5rem;margin-bottom:1.5rem;}
+.form-card-title{font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted-2);font-weight:500;margin-bottom:2rem;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+.form-group{display:flex;flex-direction:column;gap:0.5rem;}
+.form-group label{font-size:0.8rem;color:var(--muted-2);font-weight:500;letter-spacing:0.3px;}
+.form-group input,.form-group select{background:var(--bg-2);border:1px solid var(--muted-3);border-radius:8px;padding:0.85rem 1rem;color:var(--white);font-family:'Outfit',sans-serif;font-size:0.95rem;transition:border-color 0.2s,box-shadow 0.2s;outline:none;width:100%;}
+.form-group input::placeholder{color:var(--muted-2);}
+.form-group input:focus,.form-group select:focus{border-color:var(--green-border);box-shadow:0 0 0 3px var(--green-glow);}
+.form-group select option{background:var(--bg-card);color:var(--white);}
+.form-hint{font-size:0.75rem;color:var(--muted-2);margin-top:0.25rem;}
+.btn-calc{width:100%;background:var(--green);color:var(--bg);border:none;padding:1rem 2rem;border-radius:8px;font-family:'Outfit',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;margin-top:0.5rem;letter-spacing:0.3px;}
+.btn-calc:hover{transform:translateY(-1px);box-shadow:0 8px 30px rgba(0,200,83,0.3);}
+.btn-calc:active{transform:translateY(0);}
+.results-card{display:none;background:var(--bg-card);border:1px solid var(--muted-3);border-radius:16px;overflow:hidden;animation:fadeUp 0.5s ease both;}
+.results-card-header{padding:1.5rem 2rem;border-bottom:1px solid var(--muted-3);}
+.results-card-title{font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted-2);font-weight:500;}
+.results-card-sub{font-size:0.8rem;color:var(--muted-2);margin-top:0.3rem;}
+.table-scroll{overflow-x:auto;}
+.taxa-table{width:100%;border-collapse:collapse;}
+.taxa-table thead tr{background:var(--bg-2);}
+.taxa-table th{padding:1rem 1.5rem;text-align:left;font-size:0.7rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-2);font-weight:500;border-bottom:1px solid var(--muted-3);white-space:nowrap;}
+.taxa-table th:not(:first-child){text-align:center;}
+.taxa-table td{padding:1.1rem 1.5rem;font-size:0.9rem;color:var(--muted-1);border-bottom:1px solid var(--muted-3);white-space:nowrap;}
+.taxa-table td:not(:first-child){text-align:center;}
+.taxa-table tbody tr:last-child td{border-bottom:none;}
+.taxa-table tbody tr:hover{background:var(--bg-hover);}
+.taxa-table .tipo{font-weight:500;color:var(--white);font-size:0.85rem;}
+.taxa-table .highlight{color:var(--green);font-weight:600;font-family:'Playfair Display',serif;font-size:1rem;}
+.seo-content{max-width:1000px;margin:0 auto;padding:0 2.5rem 2.5rem;}
+.seo-card{background:rgba(240,244,242,0.03);border:1px solid var(--muted-3);border-radius:16px;padding:2rem;margin-bottom:1.5rem;}
+.seo-card h2{font-family:'Playfair Display',serif;font-size:clamp(1.45rem,2.4vw,2rem);line-height:1.2;margin-bottom:1rem;color:var(--white);}
+.seo-card h3{font-size:1rem;margin:1.25rem 0 0.6rem;color:var(--white);}
+.seo-card p,.seo-card li{color:var(--muted-1);font-size:0.95rem;line-height:1.75;font-weight:300;}
+.seo-card ul{padding-left:1.2rem;margin:0.75rem 0 0;}
+.formula-box{background:var(--bg-2);border:1px solid var(--muted-3);border-radius:12px;padding:1rem 1.2rem;margin:1rem 0;color:var(--muted-1);font-size:0.95rem;line-height:1.7;}
+.formula-box strong{color:var(--green);font-weight:700;}
+.cta-inline{display:inline-flex;align-items:center;gap:0.4rem;margin-top:1rem;color:var(--green);text-decoration:none;font-weight:600;font-size:0.9rem;}
+.faq-section{max-width:1000px;margin:0 auto;padding:0 2.5rem 5rem;}
+.faq-section h2{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,2.5vw,2.1rem);margin-bottom:1.25rem;}
+.faq-item{border-top:1px solid var(--muted-3);padding:1.25rem 0;}
+.faq-item:last-child{border-bottom:1px solid var(--muted-3);}
+.faq-item h3{font-size:1rem;margin-bottom:0.5rem;color:var(--white);}
+.faq-item p{color:var(--muted-1);font-size:0.92rem;line-height:1.7;font-weight:300;}
+footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;max-width:1200px;margin:0 auto;}
+.footer-links{display:flex;gap:1.5rem;}
+.footer-links a{color:var(--muted-2);text-decoration:none;font-size:0.8rem;transition:color 0.2s;}
+.footer-links a:hover{color:var(--green);}
+.footer-copy{color:var(--muted-2);font-size:0.75rem;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+@media(max-width:768px){
+  nav{padding:1rem 1.25rem;}.nav-links{display:none;}.nav-hamburger{display:flex;}
+  .page-header{padding:6rem 1.25rem 2rem;}.calc-wrapper{padding:0 1.25rem 4rem;}
+  .form-card{padding:1.5rem;}.form-grid{grid-template-columns:1fr;}
+  footer{flex-direction:column;align-items:flex-start;padding:2rem 1.25rem;}.footer-links{flex-wrap:wrap;gap:1rem;}.seo-content,.faq-section{padding-left:1.25rem;padding-right:1.25rem}.seo-card{padding:1.5rem}
+}
+
+.btn-pdf{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;border:1px solid var(--muted-3);background:transparent;color:var(--muted-1);font-size:12px;font-family:'Outfit',sans-serif;cursor:pointer;transition:border-color 0.2s,color 0.2s;}
+.btn-pdf:hover{border-color:#E53935;color:#E53935;}
+.btn-pdf svg{width:13px;height:13px;flex-shrink:0;}
+.btn-pdf.loading{opacity:0.6;cursor:wait;}
+.btn-share{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;border:1px solid var(--muted-3);background:transparent;color:var(--muted-1);font-size:12px;font-family:'Outfit',sans-serif;cursor:pointer;transition:border-color 0.2s,color 0.2s;}
+.btn-share:hover{border-color:var(--green);color:var(--green);}
+.btn-share svg{width:13px;height:13px;flex-shrink:0;}
+</style>
+  <link rel="stylesheet" href="../../assets/css/theme.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="../../assets/js/theme.js"></script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Calculadora de Equivalência de Taxas",
+    "url": "https://gelocci.com.br/calculadoras/equivalencia-de-taxas/",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Web",
+    "description": "Calculadora gratuita para converter taxas de juros entre períodos mensal, trimestral, semestral e anual, comparando juros simples e compostos.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Gelocci",
+      "url": "https://gelocci.com.br/"
+    }
+  }
+  </script>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<div class="page-header">
+  <div class="page-eyebrow"><div class="eyebrow-line"></div>Calculadora</div>
+  <h1>Equivalência<br>de <em>Taxas</em></h1>
+  <p>Informe uma taxa e seu período e converta para mensal, trimestral, semestral e anual. Compare o resultado no regime de juros simples e no regime de juros compostos.</p>
+</div>
+
+<section class="seo-content" aria-labelledby="como-converter-taxas">
+  <div class="seo-card">
+    <h2 id="como-converter-taxas">Como converter taxas de juros entre períodos</h2>
+    <p>
+      A equivalência de taxas permite comparar juros expressos em períodos diferentes. Isso é útil para analisar investimentos, financiamentos, rentabilidades mensais, taxas anuais e simulações financeiras sem misturar unidades de tempo incompatíveis.
+    </p>
+    <p>
+      Nesta calculadora, você informa uma taxa e o período original. Em seguida, a ferramenta mostra as taxas correspondentes para outros períodos, separando o cálculo em dois regimes: juros simples e juros compostos.
+    </p>
+    <h3>Juros simples x juros compostos</h3>
+    <p>
+      Nos juros simples, a conversão é proporcional ao tempo. Já nos juros compostos, a taxa considera capitalização, ou seja, os juros de cada período passam a compor a base de cálculo dos períodos seguintes.
+    </p>
+    <div class="formula-box">
+      <p><strong>Juros simples:</strong> taxa convertida = taxa original × fator de tempo.</p>
+      <p><strong>Juros compostos:</strong> taxa convertida = (1 + taxa original)<sup>fator de tempo</sup> − 1.</p>
+    </div>
+    <p>
+      Por isso, uma taxa de 1% ao mês não equivale exatamente a 12% ao ano em juros compostos. Com capitalização mensal, o equivalente anual é maior, pois considera o efeito dos juros sobre juros.
+    </p>
+    <a class="cta-inline" href="#rateInput">Converter uma taxa agora →</a>
+  </div>
+</section>
+
+<div class="calc-wrapper">
+  <div class="form-card">
+    <div class="form-card-title">Parâmetros da conversão</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="rateInput">Taxa (%)</label>
+        <input type="number" id="rateInput" name="rateInput" required placeholder="Ex: 1,5" step="0.01" min="0">
+        <span class="form-hint">Digite a taxa que você quer converter</span>
+      </div>
+      <div class="form-group">
+        <label for="periodSelect">Período da taxa</label>
+        <select id="periodSelect" name="periodSelect">
+          <option value="monthly">Mensal</option>
+          <option value="quarterly">Trimestral</option>
+          <option value="semiannual">Semestral</option>
+          <option value="annual">Anual</option>
+        </select>
+        <span class="form-hint">Selecione o período da taxa informada</span>
+      </div>
+    </div>
+    <button type="button" class="btn-calc" onclick="converterTaxa()">Converter taxa →</button>
+  </div>
+
+  <div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:0.75rem;">
+    <button class="btn-pdf" id="btnPdf" onclick="exportarPDF()" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      Exportar PDF
+    </button>
+    <button class="btn-share" id="btnShare" onclick="compartilharURL()" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      Compartilhar
+    </button>
+  </div>
+
+  <div class="results-card" id="resultsCard">
+    <div class="results-card-header">
+      <div class="results-card-title">Taxas equivalentes</div>
+      <div class="results-card-sub" id="resultsCardSub"></div>
+    </div>
+    <div id="result"></div>
+  </div>
+</div>
+
+
+<section class="faq-section" aria-labelledby="faq-equivalencia-taxas">
+  <h2 id="faq-equivalencia-taxas">Perguntas frequentes sobre equivalência de taxas</h2>
+  <div class="faq-item">
+    <h3>O que é uma taxa equivalente?</h3>
+    <p>É uma taxa expressa em outro período que produz efeito financeiro compatível com a taxa original, respeitando o regime de juros utilizado.</p>
+  </div>
+  <div class="faq-item">
+    <h3>Converter taxa mensal para anual é sempre multiplicar por 12?</h3>
+    <p>Somente no regime de juros simples. Em juros compostos, é necessário considerar capitalização: uma taxa mensal acumulada por 12 meses gera uma taxa anual composta.</p>
+  </div>
+  <div class="faq-item">
+    <h3>Quando usar juros simples?</h3>
+    <p>Use juros simples quando a análise for proporcional e sem capitalização. É comum em explicações didáticas ou em contratos específicos que adotem esse regime.</p>
+  </div>
+  <div class="faq-item">
+    <h3>Quando usar juros compostos?</h3>
+    <p>Use juros compostos para investimentos, rentabilidades acumuladas e situações em que os rendimentos de um período passam a render nos períodos seguintes.</p>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script>
+</script>
+
+<script>
+
+function exportarPDFEqTaxas() {
+  const btn = document.getElementById('btnPdf');
+  btn.classList.add('loading'); btn.textContent = 'Gerando...';
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const W = 210, margin = 18, contentW = 174;
+  let y = 0;
+
+  // Header
+  doc.setFillColor(14,31,21); doc.rect(0,0,W,28,'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(18); doc.setTextColor(0,200,83);
+  doc.text('Gelocci', margin, 17);
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(107,140,118);
+  doc.text('Inteligência Financeira', margin, 23);
+  const hoje = new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
+  doc.text('Simulação gerada em ' + hoje, W-margin, 17, {align:'right'});
+  doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(221,231,226);
+  doc.text('Equivalência de Taxas', W-margin, 23, {align:'right'});
+  y = 38;
+
+  // Card principal com a taxa de entrada
+  const sub = document.getElementById('resultsCardSub').textContent;
+  doc.setFillColor(14,31,21); doc.setDrawColor(0,168,68); doc.setLineWidth(0.3);
+  doc.roundedRect(margin, y, contentW, 30, 3, 3, 'FD');
+  doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor(0,200,83);
+  doc.text('CONVERSÃO DE TAXAS', margin+8, y+10);
+  doc.setFontSize(16); doc.setTextColor(0,200,83);
+  doc.text(sub, margin+8, y+22);
+  y += 38;
+
+  // Tabela de resultados
+  doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(20,30,25);
+  doc.text('TABELA DE EQUIVALÊNCIA', margin, y+6);
+  doc.setDrawColor(0,168,68); doc.setLineWidth(0.4);
+  doc.line(margin, y+8, margin+contentW, y+8);
+  y += 14;
+
+  const periodos = ['Mensal','Trimestral','Semestral','Anual'];
+  const tipos = ['Proporcional','Equivalente'];
+  const colW = contentW/5;
+
+  // Cabeçalho da tabela
+  doc.setFillColor(14,31,21);
+  doc.rect(margin, y, contentW, 8, 'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor(221,231,226);
+  doc.text('TIPO', margin+4, y+5.5);
+  periodos.forEach((p,i) => {
+    doc.text(p.toUpperCase(), margin + (i+1)*colW + colW/2, y+5.5, {align:'center'});
+  });
+  y += 8;
+
+  // Linhas
+  tipos.forEach((tipo, ti) => {
+    doc.setFillColor(ti%2===0 ? 245 : 240, ti%2===0 ? 248 : 245, ti%2===0 ? 246 : 243);
+    doc.setDrawColor(210,225,215); doc.setLineWidth(0.2);
+    doc.rect(margin, y, contentW, 10, 'FD');
+    doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(20,30,25);
+    doc.text(tipo, margin+4, y+7);
+
+    // Ler os valores da tabela HTML
+    const rows = document.querySelectorAll('.taxa-table tbody tr');
+    if (rows[ti]) {
+      const cells = rows[ti].querySelectorAll('td');
+      for (let c = 1; c < cells.length && c <= 4; c++) {
+        doc.setFont('helvetica','bold');
+        doc.text(cells[c].textContent.trim(), margin + c*colW + colW/2, y+7, {align:'center'});
+      }
+    }
+    y += 10;
+  });
+  y += 8;
+
+  // Footer
+  y = Math.max(y+6, doc.internal.pageSize.height-18);
+  doc.setFillColor(14,31,21); doc.rect(0,y,W,18,'F');
+  doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(107,140,118);
+  doc.text('gelocci.com.br  ·  Simulação estimada. Não constitui aconselhamento financeiro.', W/2, y+10, {align:'center'});
+
+  doc.save('gelocci-equivalencia-taxas.pdf');
+  btn.classList.remove('loading');
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> Exportar PDF';
+}
+
+function exportarPDF(){ exportarPDFEqTaxas(); }
+
+function pushStateFromForm() {
+  var params = new URLSearchParams({
+    taxa:    document.getElementById('rateInput').value || '',
+    periodo: document.getElementById('periodSelect').value
+  });
+  history.replaceState(null, '', '?' + params.toString());
+}
+
+function loadFromURL() {
+  var params = new URLSearchParams(window.location.search);
+  if (!params.has('taxa')) return false;
+  var taxa = params.get('taxa');
+  var periodo = params.get('periodo');
+  if (taxa)    document.getElementById('rateInput').value = taxa;
+  if (periodo) document.getElementById('periodSelect').value = periodo;
+  return true;
+}
+
+function compartilharURL() {
+  var url = window.location.href;
+  var btn = document.getElementById('btnShare');
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(function() {
+      var original = btn.innerHTML;
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><polyline points="20 6 9 17 4 12"/></svg> Copiado!';
+      btn.style.color = 'var(--green)';
+      btn.style.borderColor = 'var(--green)';
+      setTimeout(function() { btn.innerHTML = original; btn.style.color = ''; btn.style.borderColor = ''; }, 2000);
+    });
+  } else {
+    prompt('Copie a URL abaixo:', url);
+  }
+}
+
+// Inicialização
+document.addEventListener('DOMContentLoaded', function() {
+  if (loadFromURL()) {
+    converterTaxa();
+  }
+});
+
+function converterTaxa(){
+  var taxa=parseFloat(document.getElementById('rateInput').value.replace(',','.'));
+  var periodo=document.getElementById('periodSelect').value;
+  var resultDiv=document.getElementById('result');
+  var resultsCard=document.getElementById('resultsCard');
+  var periodoNome={monthly:'Mensal',quarterly:'Trimestral',semiannual:'Semestral',annual:'Anual'};
+
+  if(!isNaN(taxa)&&taxa>0){
+    let resultadoHTML='';
+    resultadoHTML+=`
+      <table class="taxa-table">
+        <thead>
+          <tr>
+            <th>Tipo de Juros</th>
+            <th>Mensal</th>
+            <th>Trimestral</th>
+            <th>Semestral</th>
+            <th>Anual</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    switch(periodo){
+      case 'monthly': resultadoHTML+=gerarLinhas(taxa,[1,3,6,12]); break;
+      case 'quarterly': resultadoHTML+=gerarLinhas(taxa,[1/3,1,2,4]); break;
+      case 'semiannual': resultadoHTML+=gerarLinhas(taxa,[1/6,1/2,1,2]); break;
+      case 'annual': resultadoHTML+=gerarLinhas(taxa,[1/12,1/4,1/2,1]); break;
+    }
+
+    resultadoHTML+=`</tbody></table>`;
+    resultDiv.innerHTML='<div class="table-scroll">'+resultadoHTML+'</div>';
+
+    document.getElementById('resultsCardSub').textContent=`Taxa de entrada: ${taxa.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}% ao ${periodoNome[periodo].toLowerCase()}`;
+    resultsCard.style.display='block';
+    pushStateFromForm();
+    document.getElementById('btnShare').style.display='inline-flex';
+    document.getElementById('btnPdf').style.display='inline-flex';
+
+    // Salvar no histórico
+    (function(entrada) {
+      if (window.gelocciSalvarSimulacao) { gelocciSalvarSimulacao(entrada); }
+      else { window._gelocciHistFila = window._gelocciHistFila || []; window._gelocciHistFila.push(entrada); }
+    })({
+      calculadora: 'Equivalência de Taxas',
+      valor: taxa.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) + '% ' + ({monthly:'mensal',quarterly:'trimestral',semiannual:'semestral',annual:'anual'})[periodo],
+      params: 'Conversão de taxa ' + ({monthly:'mensal',quarterly:'trimestral',semiannual:'semestral',annual:'anual'})[periodo],
+      url: window.location.href
+    });
+
+    const offset=resultsCard.getBoundingClientRect().top+window.scrollY-80;
+    window.scrollTo({top:offset,behavior:'smooth'});
+  } else {
+    alert('Por favor, insira uma taxa válida.');
+  }
+}
+
+function gerarLinhas(taxa,periodos){
+  return `
+    <tr>
+      <td class="tipo">Juros Simples</td>
+      <td><span class="highlight">${jurosSimples(taxa,periodos[0])}</span>%</td>
+      <td><span class="highlight">${jurosSimples(taxa,periodos[1])}</span>%</td>
+      <td><span class="highlight">${jurosSimples(taxa,periodos[2])}</span>%</td>
+      <td><span class="highlight">${jurosSimples(taxa,periodos[3])}</span>%</td>
+    </tr>
+    <tr>
+      <td class="tipo">Juros Compostos</td>
+      <td><span class="highlight">${jurosCompostos(taxa,periodos[0])}</span>%</td>
+      <td><span class="highlight">${jurosCompostos(taxa,periodos[1])}</span>%</td>
+      <td><span class="highlight">${jurosCompostos(taxa,periodos[2])}</span>%</td>
+      <td><span class="highlight">${jurosCompostos(taxa,periodos[3])}</span>%</td>
+    </tr>
+  `;
+}
+
+function jurosSimples(taxa,periodo){return formatarDecimal(taxa*periodo);}
+function jurosCompostos(taxa,periodo){return formatarDecimal(((Math.pow(1+taxa/100,periodo))-1)*100);}
+function formatarDecimal(numero){
+  return new Intl.NumberFormat('pt-BR',{style:'decimal',minimumFractionDigits:2,maximumFractionDigits:2}).format(numero);
+}
+</script>
+
+<script src="/assets/js/components.js"></script>
+</body>
+</html>
