@@ -143,15 +143,34 @@ if (window._gelocciHistFila && window._gelocciHistFila.length) {
     const mobileMenu = document.getElementById('mobileMenu');
     if (!hamburger || !mobileMenu) return;
 
-    hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('open');
-      mobileMenu.classList.toggle('open');
-    });
-
-    window.closeMobileMenu = function() {
+    function fecharMobileMenu() {
       hamburger.classList.remove('open');
       mobileMenu.classList.remove('open');
-    };
+      mobileMenu.classList.remove('active');
+      hamburger.setAttribute('aria-expanded', 'false');
+    }
+
+    function alternarMobileMenu(event) {
+      if (event) event.stopPropagation();
+      const aberto = mobileMenu.classList.toggle('open');
+      hamburger.classList.toggle('open', aberto);
+      hamburger.setAttribute('aria-expanded', aberto ? 'true' : 'false');
+    }
+
+    hamburger.setAttribute('aria-expanded', 'false');
+    hamburger.addEventListener('click', alternarMobileMenu);
+
+    document.addEventListener('click', function(e) {
+      if (!mobileMenu.classList.contains('open')) return;
+      if (mobileMenu.contains(e.target) || hamburger.contains(e.target)) return;
+      fecharMobileMenu();
+    });
+
+    window.addEventListener('resize', function() {
+      if (window.innerWidth > 768) fecharMobileMenu();
+    });
+
+    window.closeMobileMenu = fecharMobileMenu;
   }
 
   // ── Executa ao carregar o DOM ────────────────────────────────

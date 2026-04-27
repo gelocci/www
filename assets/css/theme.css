@@ -686,3 +686,78 @@ nav .nav-links {
 .nav-right .theme-toggle-label {
   display: none !important;
 }
+
+
+/* ───────────────────────────────────────────────
+   FIX RESPONSIVO DO HEADER
+─────────────────────────────────────────────── */
+.nav-hamburger { display: none; }
+.nav-mobile-menu { display: none; }
+
+@media (min-width: 769px) {
+  nav .nav-links { display: flex !important; }
+  .nav-right { display: flex !important; }
+  .nav-hamburger { display: none !important; }
+  .nav-mobile-menu { display: none !important; }
+}
+
+@media (max-width: 768px) {
+  nav { position: relative; }
+  nav .nav-links { display: none !important; }
+  .nav-right { display: none !important; }
+
+  .nav-hamburger {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-left: auto;
+    padding: 0;
+    border: 1px solid var(--muted-3);
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .nav-hamburger span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--text) !important;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+  .nav-mobile-menu {
+    display: none !important;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 1rem 1.25rem 1.25rem;
+    background: var(--mobile-menu-bg) !important;
+    border-bottom: 1px solid var(--muted-3) !important;
+    z-index: 999;
+    box-shadow: var(--shadow-card);
+  }
+
+  .nav-mobile-menu.open,
+  .nav-mobile-menu.active { display: flex !important; }
+
+  .nav-mobile-menu a {
+    width: 100%;
+    padding: 0.4rem 0;
+    text-decoration: none;
+  }
+}
