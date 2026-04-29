@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-H3WXX5RDYY"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-H3WXX5RDYY');</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Você sabe quem foi William Bengen? A regra que mudou a aposentadoria | Gelocci</title>
+  <meta name="description" content="Entenda a Regra dos 4% de William Bengen, como o simulador de aposentadoria faz o cálculo reverso e a diferença entre renda perpétua e renda por período.">
+  <meta name="keywords" content="regra dos 4%, William Bengen, simulador aposentadoria, renda perpétua, renda por período, independência financeira, quanto poupar para aposentar">
+  <meta name="author" content="Gerson Locci">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://gelocci.com.br/educacao/simulador-aposentadoria/">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://gelocci.com.br/educacao/simulador-aposentadoria/">
+  <meta property="og:title" content="Você sabe quem foi William Bengen? A regra que mudou a aposentadoria">
+  <meta property="og:description" content="A história da Regra dos 4%, como o cálculo reverso da aposentadoria funciona e a diferença entre renda perpétua e renda por período.">
+  <meta property="og:image" content="https://gelocci.com.br/assets/imagens/og-image.png">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="Gelocci">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Você sabe quem foi William Bengen? A regra que mudou a aposentadoria">
+  <meta name="twitter:description" content="A história da Regra dos 4% e como ela alimenta o simulador de aposentadoria do Gelocci.">
+  <meta name="twitter:image" content="https://gelocci.com.br/assets/imagens/og-image.png">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Você sabe quem foi William Bengen? A regra que mudou a aposentadoria",
+    "description": "Entenda a Regra dos 4% de William Bengen, como o simulador de aposentadoria faz o cálculo reverso e a diferença entre renda perpétua e renda por período.",
+    "author": { "@type": "Person", "name": "Gerson Locci" },
+    "publisher": { "@type": "Organization", "name": "Gelocci", "url": "https://gelocci.com.br" },
+    "url": "https://gelocci.com.br/educacao/simulador-aposentadoria/"
+  }
+  </script>
+
+  <link rel="icon" href="../../assets/imagens/favicon.ico" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --green: #00C853;
+  --green-dim: #00A844;
+  --green-soft: rgba(0,200,83,0.10);
+  --green-glow: rgba(0,200,83,0.18);
+  --green-border: rgba(0,200,83,0.28);
+  --gold: #C9A84C;
+  --gold-soft: rgba(201,168,76,0.12);
+  --gold-border: rgba(201,168,76,0.28);
+  --bg: #080B0A;
+  --bg-2: #0E1412;
+  --bg-card: #111815;
+  --bg-hover: #151F1A;
+  --white: #F0F4F2;
+  --muted-1: rgba(240,244,242,0.70);
+  --muted-2: rgba(240,244,242,0.46);
+  --muted-3: rgba(240,244,242,0.13);
+  --muted-4: rgba(240,244,242,0.06);
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Outfit', system-ui, sans-serif;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-body);background:var(--bg);color:var(--white);overflow-x:hidden;line-height:1.75;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:0.45;}
+
+/* NAV */
+nav{display:flex;justify-content:space-between;align-items:center;padding:1.4rem 2.5rem;position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,11,10,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--muted-3);}
+.logo{font-family:var(--font-display);font-weight:700;font-size:1.5rem;color:var(--white);letter-spacing:-0.5px;display:flex;align-items:center;gap:0.5rem;text-decoration:none;}
+.logo-dot{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 10px var(--green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 8px var(--green);}50%{opacity:0.6;box-shadow:0 0 16px var(--green);}}
+.nav-links{display:flex;gap:2.5rem;list-style:none;}
+.nav-links a{color:var(--muted-1);text-decoration:none;font-size:0.875rem;font-weight:400;transition:color 0.2s;}
+.nav-links a:hover{color:var(--white);}
+.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;}
+.nav-hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px;transition:transform 0.25s,opacity 0.25s;}
+.nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.nav-hamburger.open span:nth-child(2){opacity:0;}
+.nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.nav-mobile-menu{display:none;position:fixed;top:57px;left:0;right:0;background:rgba(8,11,10,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--muted-3);padding:1.5rem 1.25rem;z-index:99;flex-direction:column;}
+.nav-mobile-menu.open{display:flex;}
+.nav-mobile-menu a{color:var(--muted-1);text-decoration:none;font-size:1rem;padding:0.9rem 0;border-bottom:1px solid var(--muted-3);transition:color 0.2s;}
+.nav-mobile-menu a:last-child{border-bottom:none;}
+.nav-mobile-menu a:hover{color:var(--white);}
+
+/* LAYOUT */
+.page-wrap{max-width:820px;margin:0 auto;padding:0 2.5rem;}
+
+/* HERO EDITORIAL */
+.article-hero{padding:8rem 0 4rem;max-width:820px;margin:0 auto;padding-left:2.5rem;padding-right:2.5rem;}
+.article-eyebrow{display:inline-flex;align-items:center;gap:0.65rem;color:var(--green);font-size:0.72rem;letter-spacing:2.4px;text-transform:uppercase;font-weight:600;margin-bottom:1.5rem;}
+.article-eyebrow::before{content:'';width:28px;height:1px;background:var(--green);}
+.article-hero h1{font-family:var(--font-display);font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.05;letter-spacing:-1.5px;margin-bottom:1.5rem;}
+.article-hero h1 em{color:var(--green);font-style:italic;}
+.article-meta{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;padding:1rem 0;border-top:1px solid var(--muted-3);border-bottom:1px solid var(--muted-3);margin-bottom:2.5rem;}
+.meta-item{font-size:0.78rem;color:var(--muted-2);display:flex;align-items:center;gap:0.4rem;}
+.meta-dot{width:4px;height:4px;border-radius:50%;background:var(--muted-3);}
+.article-lead{font-size:1.12rem;line-height:1.8;color:var(--muted-1);font-weight:300;margin-bottom:0;}
+
+/* CORPO DO ARTIGO */
+.article-body{padding-bottom:2rem;}
+.article-body h2{font-family:var(--font-display);font-size:clamp(1.6rem,3vw,2.2rem);line-height:1.1;letter-spacing:-0.8px;margin:3.5rem 0 1.25rem;color:var(--white);}
+.article-body h2 em{color:var(--green);font-style:italic;}
+.article-body h3{font-family:var(--font-display);font-size:1.25rem;line-height:1.2;margin:2.5rem 0 0.85rem;color:var(--white);}
+.article-body p{color:var(--muted-1);font-size:0.98rem;line-height:1.82;margin-bottom:1.2rem;font-weight:300;}
+.article-body p strong{color:var(--white);font-weight:600;}
+.article-body a{color:var(--green);text-decoration:none;border-bottom:1px solid var(--green-border);transition:border-color 0.2s;}
+.article-body a:hover{border-color:var(--green);}
+
+/* PULL QUOTE */
+.pull-quote{border-left:3px solid var(--green);padding:1.25rem 1.5rem;margin:2.5rem 0;background:var(--green-soft);border-radius:0 12px 12px 0;}
+.pull-quote p{font-family:var(--font-display);font-size:1.15rem;font-style:italic;color:var(--white);line-height:1.55;margin:0;}
+.pull-quote cite{display:block;font-size:0.78rem;color:var(--muted-2);font-style:normal;margin-top:0.65rem;font-family:var(--font-body);}
+
+/* DESTAQUE DOURADO */
+.gold-callout{background:var(--gold-soft);border:1px solid var(--gold-border);border-radius:14px;padding:1.5rem;margin:2.5rem 0;}
+.gold-callout-label{font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:0.6rem;}
+.gold-callout p{color:rgba(240,230,200,0.85);font-size:0.92rem;line-height:1.7;margin:0;}
+
+/* FORMULA BOX */
+.formula-box{background:var(--bg-2);border:1px solid var(--green-border);border-radius:14px;padding:1.5rem 1.75rem;margin:2rem 0;}
+.formula-box-label{font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--green);font-weight:600;margin-bottom:0.85rem;}
+.formula-main{font-family:var(--font-display);font-size:1.45rem;color:var(--green);font-weight:900;margin-bottom:1rem;line-height:1.2;}
+.formula-legend{list-style:none;display:flex;flex-direction:column;gap:0.45rem;}
+.formula-legend li{font-size:0.86rem;color:var(--muted-1);}
+.formula-legend li strong{color:var(--white);}
+
+/* SEÇÃO VISUAL — full-bleed com SVG */
+.visual-section{margin:3.5rem -2.5rem;background:var(--bg-2);border-top:1px solid var(--muted-3);border-bottom:1px solid var(--muted-3);padding:3rem 2.5rem;}
+.visual-section-inner{max-width:820px;margin:0 auto;}
+.visual-label{font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--green);font-weight:600;margin-bottom:1rem;}
+.visual-title{font-family:var(--font-display);font-size:clamp(1.3rem,2.5vw,1.8rem);line-height:1.15;margin-bottom:1.5rem;}
+.visual-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center;}
+.visual-text p{color:var(--muted-1);font-size:0.94rem;line-height:1.78;font-weight:300;margin-bottom:1rem;}
+.visual-text p:last-child{margin-bottom:0;}
+.visual-svg-wrap{display:flex;align-items:center;justify-content:center;}
+
+/* COMPARAÇÃO — dois painéis */
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--muted-3);border:1px solid var(--muted-3);border-radius:18px;overflow:hidden;margin:2.5rem 0;}
+.compare-card{background:var(--bg-card);padding:1.75rem;}
+.compare-card.highlight{background:radial-gradient(ellipse at 90% 0%, rgba(0,200,83,0.1), transparent 60%), var(--bg-card);}
+.compare-badge{display:inline-flex;align-items:center;gap:0.4rem;font-size:0.65rem;letter-spacing:1.8px;text-transform:uppercase;font-weight:600;padding:0.3rem 0.7rem;border-radius:999px;margin-bottom:1rem;}
+.compare-badge.green{color:var(--green);background:var(--green-soft);border:1px solid var(--green-border);}
+.compare-badge.gold{color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-border);}
+.compare-card h3{font-family:var(--font-display);font-size:1.15rem;line-height:1.2;margin-bottom:0.75rem;}
+.compare-card p{color:var(--muted-1);font-size:0.88rem;line-height:1.7;font-weight:300;margin-bottom:0.8rem;}
+.compare-card p:last-child{margin-bottom:0;}
+.compare-pro{font-size:0.82rem;color:var(--green);display:flex;align-items:flex-start;gap:0.5rem;margin-top:0.5rem;}
+.compare-con{font-size:0.82rem;color:rgba(240,180,100,0.8);display:flex;align-items:flex-start;gap:0.5rem;margin-top:0.5rem;}
+
+/* LINHA DO TEMPO — Bengen */
+.timeline{margin:2.5rem 0;display:flex;flex-direction:column;gap:0;}
+.timeline-item{display:grid;grid-template-columns:80px 1fr;gap:1.25rem;position:relative;}
+.timeline-item::before{content:'';position:absolute;left:39px;top:28px;bottom:-1px;width:1px;background:var(--muted-3);}
+.timeline-item:last-child::before{display:none;}
+.timeline-year{font-family:var(--font-display);font-size:0.85rem;font-weight:700;color:var(--green);padding-top:0.2rem;text-align:right;line-height:1.4;}
+.timeline-dot{position:absolute;left:34px;top:6px;width:11px;height:11px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);}
+.timeline-content{padding:0 0 2rem 0;}
+.timeline-content h4{font-size:0.95rem;font-weight:600;margin-bottom:0.4rem;color:var(--white);}
+.timeline-content p{color:var(--muted-1);font-size:0.86rem;line-height:1.65;font-weight:300;margin:0;}
+
+/* AVISO */
+.warning-box{background:rgba(201,168,76,0.08);border:1px solid var(--gold-border);border-radius:12px;padding:1.25rem 1.5rem;margin:2.5rem 0;display:flex;gap:1rem;align-items:flex-start;}
+.warning-icon{font-size:1.1rem;flex-shrink:0;margin-top:2px;}
+.warning-box p{color:rgba(240,220,160,0.85);font-size:0.88rem;line-height:1.7;margin:0;}
+
+/* FAQ */
+.faq-wrap{margin:3rem 0;}
+.faq-item{border-top:1px solid var(--muted-3);padding:1.25rem 0;}
+.faq-item:last-child{border-bottom:1px solid var(--muted-3);}
+.faq-item h4{font-size:0.98rem;font-weight:600;color:var(--white);margin-bottom:0.55rem;}
+.faq-item p{color:var(--muted-1);font-size:0.88rem;line-height:1.65;margin:0;font-weight:300;}
+
+/* CTA FINAL */
+.article-cta{background:linear-gradient(135deg,#0E1F15,#0A1410);border:1px solid var(--green-border);border-radius:20px;padding:2.5rem;margin:3.5rem 0;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;}
+.article-cta h3{font-family:var(--font-display);font-size:1.6rem;line-height:1.1;letter-spacing:-0.5px;margin-bottom:0.5rem;}
+.article-cta p{color:var(--muted-1);font-size:0.9rem;line-height:1.6;}
+.btn-cta{display:inline-flex;align-items:center;gap:0.5rem;background:var(--green);color:#041009 !important;padding:0.9rem 1.75rem;border-radius:8px;font-family:var(--font-body);font-weight:700;font-size:0.92rem;text-decoration:none;border:none;transition:transform 0.2s,box-shadow 0.2s;white-space:nowrap;}
+.btn-cta:hover{transform:translateY(-1px);box-shadow:0 12px 34px rgba(0,200,83,0.28);border-bottom:none;color:#041009 !important;}
+
+/* RELATED */
+.related{margin:2.5rem 0 5rem;}
+.related-label{font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted-2);font-weight:600;margin-bottom:1.25rem;}
+.related-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;}
+.related-card{background:var(--bg-card);border:1px solid var(--muted-3);border-radius:14px;padding:1.25rem;text-decoration:none;color:inherit;transition:background 0.2s,border-color 0.2s;}
+.related-card:hover{background:var(--bg-hover);border-color:var(--green-border);}
+.related-card-cat{font-size:0.65rem;letter-spacing:1.8px;text-transform:uppercase;color:var(--green);font-weight:600;margin-bottom:0.6rem;}
+.related-card h4{font-family:var(--font-display);font-size:1rem;line-height:1.2;margin-bottom:0.4rem;}
+.related-card p{font-size:0.82rem;color:var(--muted-2);line-height:1.5;}
+
+footer{border-top:1px solid var(--muted-3);padding:2rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;max-width:1200px;margin:0 auto;}
+.footer-links{display:flex;gap:1.5rem;}
+.footer-links a{color:var(--muted-2);text-decoration:none;font-size:0.8rem;transition:color 0.2s;}
+.footer-links a:hover{color:var(--green);}
+.footer-copy{color:var(--muted-2);font-size:0.75rem;}
+
+/* SCROLL REVEAL */
+[data-reveal]{opacity:0;transform:translateY(24px);transition:opacity 0.65s cubic-bezier(0.22,1,0.36,1),transform 0.65s cubic-bezier(0.22,1,0.36,1);}
+[data-reveal].is-visible{opacity:1;transform:translateY(0);}
+[data-reveal="left"]{transform:translateX(-28px);}
+[data-reveal="left"].is-visible{transform:translateX(0);}
+[data-reveal="right"]{transform:translateX(28px);}
+[data-reveal="right"].is-visible{transform:translateX(0);}
+
+/* LIGHT MODE */
+html.light-mode body,html[data-theme="light"] body{background:#F4F7F5;color:#132019;}
+html.light-mode .article-body p,html[data-theme="light"] .article-body p,
+html.light-mode .visual-text p,html[data-theme="light"] .visual-text p{color:rgba(19,32,25,0.72);}
+html.light-mode .compare-card,html[data-theme="light"] .compare-card,
+html.light-mode .related-card,html[data-theme="light"] .related-card,
+html.light-mode .faq-item h4,html[data-theme="light"] .faq-item h4{background:#fff;color:#132019;}
+html.light-mode .visual-section,html[data-theme="light"] .visual-section{background:#EAF0EC;}
+html.light-mode .formula-box,html[data-theme="light"] .formula-box{background:#E2EDE6;}
+
+@media(max-width:768px){
+  nav{padding:1rem 1.25rem;}.nav-links{display:none;}.nav-hamburger{display:flex;}
+  .article-hero,.page-wrap{padding-left:1.25rem;padding-right:1.25rem;}
+  .visual-section{margin:3rem -1.25rem;padding:2rem 1.25rem;}
+  .visual-grid{grid-template-columns:1fr;}
+  .compare-grid{grid-template-columns:1fr;}
+  .related-grid{grid-template-columns:1fr;}
+  .article-cta{flex-direction:column;align-items:flex-start;}
+  .btn-cta{width:100%;justify-content:center;}
+  footer{flex-direction:column;align-items:flex-start;padding:2rem 1.25rem;}
+  .footer-links{flex-wrap:wrap;gap:1rem;}
+}
+</style>
+
+  <link rel="stylesheet" href="../../assets/css/theme.css">
+  <script src="../../assets/js/theme.js"></script>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<!-- ════════════════════════════════════════════════
+     HERO EDITORIAL
+     ════════════════════════════════════════════════ -->
+<div class="article-hero">
+  <div class="article-eyebrow">Educação financeira</div>
+  <h1>Você sabe quem foi<br><em>William Bengen?</em></h1>
+  <div class="article-meta">
+    <span class="meta-item">Aposentadoria</span>
+    <span class="meta-dot"></span>
+    <span class="meta-item">Leitura de 8 min</span>
+    <span class="meta-dot"></span>
+    <span class="meta-item">Intermediário</span>
+  </div>
+  <p class="article-lead">
+    Em 1994, um planejador financeiro americano publicou um estudo que mudou a forma como o mundo pensa sobre aposentadoria. A ideia era simples — mas as implicações foram profundas. Ela está por trás do modelo de renda perpétua do simulador de aposentadoria do Gelocci.
+  </p>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     CORPO
+     ════════════════════════════════════════════════ -->
+<div class="page-wrap">
+<article class="article-body">
+
+  <!-- SEÇÃO 1 — QUEM FOI BENGEN -->
+  <h2>O homem que <em>desenhou</em> a aposentadoria</h2>
+
+  <p>William Bengen era um engenheiro aeroespacial que mudou de carreira para se tornar planejador financeiro. Em 1994, ele se deparou com uma pergunta que seus clientes faziam constantemente: <strong>"Quanto posso sacar por ano sem ficar sem dinheiro?"</strong></p>
+
+  <p>Não havia uma resposta científica para isso. Até então, os profissionais usavam estimativas intuitivas — uns diziam 5%, outros 6%, sem nenhum embasamento histórico sólido. Bengen decidiu ir aos dados.</p>
+
+  <p>Ele analisou o comportamento de portfólios americanos ao longo de décadas, passando pela Grande Depressão, pelas guerras mundiais, pela crise do petróleo dos anos 1970 e pela estagflação. E testou uma pergunta: <strong>qual seria a maior taxa de retirada anual que, em nenhum período histórico de 30 anos, teria esgotado o patrimônio?</strong></p>
+
+</article>
+
+<!-- SVG 1 — LINHA DO TEMPO DE BENGEN -->
+<div class="visual-section" data-reveal>
+  <div class="visual-section-inner">
+    <div class="visual-label">A história</div>
+    <div class="visual-title">Da NASA à regra que nunca quebrou</div>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-year">1944</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h4>Nasce William P. Bengen</h4>
+          <p>Cresce com interesse em ciências exatas. Mais tarde se formará em engenharia aeroespacial pelo MIT.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1970s</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h4>Muda de carreira</h4>
+          <p>Abandona a engenharia e se torna planejador financeiro certificado (CFP) na Califórnia. Começa a atender clientes preocupados com longevidade financeira.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1994</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h4>Publica "Determining Withdrawal Rates Using Historical Data"</h4>
+          <p>O artigo no <em>Journal of Financial Planning</em> apresenta a conclusão: <strong>4% ao ano</strong>, reajustado pela inflação, nunca esgotou um portfólio em nenhum período histórico de 30 anos.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1998</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h4>Trinity Study confirma os 4%</h4>
+          <p>Três professores da Trinity University replicam o estudo com dados diferentes e chegam à mesma conclusão, solidificando a regra como referência mundial.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2021</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h4>Bengen revisita o próprio estudo</h4>
+          <p>Com dados mais recentes e portfólios com small caps, ele sugere que a taxa poderia chegar a 4,7%. Mas o mercado continua usando 4% como referência conservadora.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<article class="article-body">
+
+  <div class="pull-quote" data-reveal>
+    <p>"O juro composto é a oitava maravilha do mundo. Quem entende, ganha. Quem não entende, paga."</p>
+    <cite>— Atribuído a Albert Einstein (e muito citado por Bengen em suas apresentações)</cite>
+  </div>
+
+  <!-- SEÇÃO 2 — A REGRA DOS 4% -->
+  <h2>A <em>Regra dos 4%</em>: como funciona na prática</h2>
+
+  <p>A mecânica da regra é elegantemente simples. Imagine que você chegou à aposentadoria com R$ 1.000.000 investidos num portfólio diversificado.</p>
+
+  <p>No primeiro ano, você pode sacar <strong>4% = R$ 40.000</strong>, ou seja, R$ 3.333 por mês. No segundo ano, você corrige esse valor pelo IPCA. No terceiro, corrige de novo. E assim sucessivamente.</p>
+
+  <p>A ideia é que o portfólio continue rendendo e reponha o que foi sacado — mantendo o patrimônio real intacto ou até crescendo ao longo do tempo.</p>
+
+  <div class="formula-box" data-reveal>
+    <div class="formula-box-label">A fórmula da renda perpétua</div>
+    <div class="formula-main">Patrimônio = Renda Anual ÷ 4%</div>
+    <ul class="formula-legend">
+      <li><strong>Patrimônio</strong> = capital necessário para se aposentar</li>
+      <li><strong>Renda Anual</strong> = quanto você quer sacar por ano (em valores futuros)</li>
+      <li><strong>4%</strong> = taxa de retirada segura de Bengen</li>
+    </ul>
+  </div>
+
+  <p>Se você quer R$ 6.000/mês (R$ 72.000/ano), o patrimônio necessário é:</p>
+  <p><strong>R$ 72.000 ÷ 0,04 = R$ 1.800.000</strong></p>
+
+  <p>É exatamente essa lógica que o simulador usa quando você escolhe o modelo de <strong>renda perpétua</strong>. Internamente, o cálculo usa a taxa mensal equivalente a 4% ao ano, convertida com juros compostos:</p>
+
+  <div class="formula-box" data-reveal>
+    <div class="formula-box-label">Taxa mensal da renda perpétua (no código)</div>
+    <div class="formula-main">i = (1,04)<sup>1/12</sup> − 1 ≈ 0,327%/mês</div>
+    <ul class="formula-legend">
+      <li>Patrimônio = Renda Mensal Futura ÷ 0,00327</li>
+      <li>Isso garante consistência com a capitalização composta mensal</li>
+    </ul>
+  </div>
+
+</article>
+
+<!-- SVG 2 — ILUSTRAÇÃO DA REGRA DOS 4% -->
+<div class="visual-section" data-reveal>
+  <div class="visual-section-inner">
+    <div class="visual-grid">
+      <div class="visual-text">
+        <div class="visual-label">Visualizando a regra</div>
+        <div class="visual-title">O patrimônio que se sustenta sozinho</div>
+        <p>Pense num reservatório de água. Ele recebe chuva (rendimentos) e perde água pela torneira (saques). A regra dos 4% diz: <strong>a torneira deve girar no máximo 4% do reservatório por ano</strong>.</p>
+        <p>Se a chuva for suficiente, o nível do reservatório nunca cai — e em anos bons, até sobe. Isso é a renda perpétua: o patrimônio principal permanece intacto para sempre.</p>
+        <p>Bengen testou esse reservatório em todos os períodos históricos de 30 anos disponíveis — incluindo o pior de todos, 1929-1959 — e o reservatório nunca secou com a torneira em 4%.</p>
+      </div>
+      <div class="visual-svg-wrap">
+        <!-- SVG: Reservatório — viewBox ampliado para acomodar labels -->
+        <svg viewBox="0 0 340 320" xmlns="http://www.w3.org/2000/svg" width="100%" style="max-width:320px;">
+          <defs>
+            <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#00C853" stop-opacity="0.6"/>
+              <stop offset="100%" stop-color="#00A844" stop-opacity="0.9"/>
+            </linearGradient>
+            <linearGradient id="tankGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#0E1412"/>
+              <stop offset="100%" stop-color="#080B0A"/>
+            </linearGradient>
+            <clipPath id="tankClip">
+              <rect x="60" y="60" width="160" height="185" rx="8"/>
+            </clipPath>
+            <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="rgba(0,200,83,0.5)"/>
+            </marker>
+          </defs>
+
+          <!-- Chuva -->
+          <g opacity="0.7">
+            <line x1="90"  y1="10" x2="85"  y2="35" stroke="#00C853" stroke-width="1.5" stroke-dasharray="3,3"/>
+            <line x1="110" y1="5"  x2="105" y2="30" stroke="#00C853" stroke-width="1.5" stroke-dasharray="3,3"/>
+            <line x1="130" y1="8"  x2="125" y2="33" stroke="#00C853" stroke-width="1.5" stroke-dasharray="3,3"/>
+            <line x1="150" y1="4"  x2="145" y2="29" stroke="#00C853" stroke-width="1.5" stroke-dasharray="3,3"/>
+            <line x1="170" y1="10" x2="165" y2="35" stroke="#00C853" stroke-width="1.5" stroke-dasharray="3,3"/>
+            <line x1="190" y1="6"  x2="185" y2="31" stroke="#00C853" stroke-width="1.5" stroke-dasharray="3,3"/>
+          </g>
+          <!-- Label chuva -->
+          <text x="140" y="22" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="#00C853" font-weight="600">RENDIMENTOS</text>
+          <!-- Seta chuva -->
+          <path d="M140 42 L140 52" stroke="rgba(0,200,83,0.5)" stroke-width="1.5" marker-end="url(#arr)"/>
+
+          <!-- Tanque contorno -->
+          <rect x="60" y="55" width="160" height="190" rx="10" fill="url(#tankGrad)" stroke="rgba(0,200,83,0.3)" stroke-width="1.5"/>
+          <!-- Água dentro -->
+          <rect x="61" y="140" width="158" height="104" fill="url(#waterGrad)" clip-path="url(#tankClip)"/>
+          <!-- Linha d'água -->
+          <rect x="61" y="137" width="158" height="6" fill="rgba(0,200,83,0.4)" clip-path="url(#tankClip)"/>
+
+          <!-- Label patrimônio (parte vazia) -->
+          <text x="140" y="108" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="rgba(240,244,242,0.45)">PATRIMÔNIO</text>
+          <text x="140" y="124" text-anchor="middle" font-family="'Playfair Display',serif" font-size="14" fill="rgba(240,244,242,0.7)">R$ 1.000.000</text>
+
+          <!-- 4% dentro da água -->
+          <text x="140" y="183" text-anchor="middle" font-family="'Playfair Display',serif" font-size="30" fill="white" font-weight="900">4%</text>
+          <text x="140" y="203" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="rgba(240,244,242,0.65)">taxa de retirada segura</text>
+
+          <!-- Torneira — deslocada para a esquerda para caber o label -->
+          <rect x="218" y="213" width="22" height="8" rx="4" fill="rgba(0,200,83,0.5)" stroke="rgba(0,200,83,0.6)" stroke-width="1"/>
+          <line x1="240" y1="217" x2="258" y2="217" stroke="rgba(0,200,83,0.5)" stroke-width="2"/>
+
+          <!-- Gotas -->
+          <ellipse cx="261" cy="228" rx="3"   ry="4"   fill="rgba(0,200,83,0.65)"/>
+          <ellipse cx="259" cy="242" rx="2.5" ry="3.5" fill="rgba(0,200,83,0.45)"/>
+          <ellipse cx="263" cy="255" rx="2"   ry="3"   fill="rgba(0,200,83,0.3)"/>
+
+          <!-- Label "saque anual" com fundo para legibilidade -->
+          <rect x="268" y="225" width="60" height="24" rx="4" fill="rgba(8,11,10,0.6)"/>
+          <text x="298" y="235" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="rgba(0,200,83,0.9)" font-weight="600">saque</text>
+          <text x="298" y="246" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="rgba(0,200,83,0.9)" font-weight="600">anual</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<article class="article-body">
+
+  <!-- SEÇÃO 3 — PERPÉTUA VS PERÍODO -->
+  <h2>Perpétua ou por período: <em>qual escolher?</em></h2>
+
+  <p>O simulador oferece dois modelos de retirada. Eles partem de filosofias diferentes sobre o que fazer com o patrimônio ao longo da aposentadoria.</p>
+
+</article>
+
+<!-- COMPARAÇÃO DOS DOIS MÉTODOS -->
+<div class="compare-grid" data-reveal>
+  <div class="compare-card highlight">
+    <div class="compare-badge green">Renda perpétua</div>
+    <h3>O patrimônio nunca acaba</h3>
+    <p>Você vive apenas dos rendimentos, nunca tocando no principal. A ideia é que o capital original seja preservado — e até possa ser transmitido como herança.</p>
+    <p>O simulador usa a Regra dos 4% de Bengen como taxa de retirada segura, convertida para mensal com juros compostos.</p>
+    <div class="compare-pro">✓ Segurança máxima — o patrimônio sobrevive indefinidamente</div>
+    <div class="compare-pro">✓ Pode transmitir herança</div>
+    <div class="compare-pro">✓ Funciona mesmo se você viver mais do que esperado</div>
+    <div class="compare-con">↑ Exige um patrimônio maior para a mesma renda mensal</div>
+  </div>
+  <div class="compare-card">
+    <div class="compare-badge gold">Renda por período</div>
+    <h3>O patrimônio é consumido aos poucos</h3>
+    <p>Você informa uma expectativa de vida e o simulador distribui o patrimônio ao longo desse período. No último ano projetado, o saldo chega a zero — mas você aproveitou tudo.</p>
+    <p>O cálculo usa a fórmula do valor presente de uma anuidade, descontando a taxa real de retorno (retorno menos inflação).</p>
+    <div class="compare-pro">✓ Exige um patrimônio menor para a mesma renda mensal</div>
+    <div class="compare-pro">✓ Aproveita o capital integralmente durante a vida</div>
+    <div class="compare-con">↑ Risco se você viver mais do que o projetado</div>
+    <div class="compare-con">↑ Não deixa herança financeira</div>
+  </div>
+</div>
+
+<!-- SVG 3 — COMPARAÇÃO VISUAL DOS DOIS MODELOS -->
+<div class="visual-section" data-reveal>
+  <div class="visual-section-inner">
+    <div class="visual-label">Visualização comparativa</div>
+    <div class="visual-title">Como o patrimônio se comporta em cada modelo</div>
+    <svg viewBox="0 0 680 260" xmlns="http://www.w3.org/2000/svg" width="100%" style="max-width:680px;display:block;margin:0 auto;">
+      <defs>
+        <linearGradient id="lineGreen" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#00C853"/>
+          <stop offset="100%" stop-color="#00C853"/>
+        </linearGradient>
+        <linearGradient id="lineGold" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#C9A84C"/>
+          <stop offset="100%" stop-color="#C9A84C"/>
+        </linearGradient>
+        <linearGradient id="fillGreen" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#00C853" stop-opacity="0.18"/>
+          <stop offset="100%" stop-color="#00C853" stop-opacity="0.02"/>
+        </linearGradient>
+        <linearGradient id="fillGold" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#C9A84C" stop-opacity="0.15"/>
+          <stop offset="100%" stop-color="#C9A84C" stop-opacity="0.02"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Fundo -->
+      <rect width="680" height="260" rx="12" fill="#0E1412"/>
+
+      <!-- Grid linhas -->
+      <line x1="60" y1="40"  x2="640" y2="40"  stroke="rgba(240,244,242,0.06)" stroke-width="1"/>
+      <line x1="60" y1="90"  x2="640" y2="90"  stroke="rgba(240,244,242,0.06)" stroke-width="1"/>
+      <line x1="60" y1="140" x2="640" y2="140" stroke="rgba(240,244,242,0.06)" stroke-width="1"/>
+      <line x1="60" y1="190" x2="640" y2="190" stroke="rgba(240,244,242,0.06)" stroke-width="1"/>
+
+      <!-- Eixos -->
+      <line x1="60" y1="30" x2="60" y2="220" stroke="rgba(240,244,242,0.2)" stroke-width="1"/>
+      <line x1="60" y1="220" x2="650" y2="220" stroke="rgba(240,244,242,0.2)" stroke-width="1"/>
+
+      <!-- Labels eixo Y -->
+      <text x="52" y="44"  text-anchor="end" font-family="Outfit,sans-serif" font-size="9" fill="rgba(240,244,242,0.4)">2M</text>
+      <text x="52" y="94"  text-anchor="end" font-family="Outfit,sans-serif" font-size="9" fill="rgba(240,244,242,0.4)">1.5M</text>
+      <text x="52" y="144" text-anchor="end" font-family="Outfit,sans-serif" font-size="9" fill="rgba(240,244,242,0.4)">1M</text>
+      <text x="52" y="194" text-anchor="end" font-family="Outfit,sans-serif" font-size="9" fill="rgba(240,244,242,0.4)">500k</text>
+
+      <!-- Labels eixo X -->
+      <text x="60"  y="235" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="rgba(240,244,242,0.4)">Hoje</text>
+      <text x="205" y="235" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="rgba(240,244,242,0.4)">10 anos</text>
+      <text x="350" y="235" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="rgba(240,244,242,0.4)">20 anos</text>
+      <text x="495" y="235" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="rgba(240,244,242,0.4)">30 anos</text>
+      <text x="640" y="235" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="rgba(240,244,242,0.4)">40 anos</text>
+
+      <!-- Curva PERPÉTUA (verde — cresce levemente, se estabiliza) -->
+      <path d="M60,144 C120,130 180,118 240,110 C300,102 360,98 420,96 C480,94 540,93 640,92"
+            fill="none" stroke="#00C853" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M60,144 C120,130 180,118 240,110 C300,102 360,98 420,96 C480,94 540,93 640,92 L640,220 L60,220 Z"
+            fill="url(#fillGreen)"/>
+
+      <!-- Curva POR PERÍODO (ouro — desce até zero em 30 anos) -->
+      <path d="M60,144 C130,155 200,170 270,185 C340,200 410,210 495,218 L495,220"
+            fill="none" stroke="#C9A84C" stroke-width="2.5" stroke-linejoin="round" stroke-dasharray="6,3"/>
+      <path d="M60,144 C130,155 200,170 270,185 C340,200 410,210 495,218 L495,220 L60,220 Z"
+            fill="url(#fillGold)"/>
+
+      <!-- Ponto zero (por período) -->
+      <circle cx="495" cy="220" r="5" fill="#C9A84C"/>
+      <text x="497" y="214" font-family="Outfit,sans-serif" font-size="9" fill="#C9A84C">saldo zero</text>
+
+      <!-- Ponto inicial compartilhado -->
+      <circle cx="60" cy="144" r="5" fill="rgba(240,244,242,0.7)"/>
+
+      <!-- Labels das curvas -->
+      <rect x="460" y="50" width="12" height="3" rx="1" fill="#00C853"/>
+      <text x="476" y="54" font-family="Outfit,sans-serif" font-size="10" fill="#00C853" font-weight="600">Renda perpétua</text>
+      <rect x="460" y="68" width="12" height="3" rx="1" fill="#C9A84C" fill-opacity="0.7"/>
+      <text x="476" y="72" font-family="Outfit,sans-serif" font-size="10" fill="#C9A84C">Renda por período</text>
+
+      <!-- Annotation perpétua -->
+      <text x="648" y="89" font-family="Outfit,sans-serif" font-size="8" fill="rgba(0,200,83,0.8)">patrimônio</text>
+      <text x="648" y="99" font-family="Outfit,sans-serif" font-size="8" fill="rgba(0,200,83,0.8)">preservado</text>
+    </svg>
+    <p style="font-size:0.8rem;color:var(--muted-2);margin-top:1rem;text-align:center;">Representação esquemática. Os valores reais dependem da taxa de retorno, inflação e aportes mensais.</p>
+  </div>
+</div>
+
+<article class="article-body">
+
+  <!-- SEÇÃO 4 — A FÓRMULA DO PERÍODO -->
+  <h2>A fórmula da <em>renda por período</em></h2>
+
+  <p>Quando você escolhe o modelo por período, o simulador usa a fórmula do valor presente de uma anuidade — uma série de pagamentos ao longo do tempo, descontada pela taxa de retorno real.</p>
+
+  <div class="formula-box" data-reveal>
+    <div class="formula-box-label">Patrimônio necessário — modelo por período</div>
+    <div class="formula-main" style="font-size:1.1rem;">P = R × [1 − (1 + i<sub>real</sub>)<sup>−n</sup>] ÷ i<sub>real</sub></div>
+    <ul class="formula-legend">
+      <li><strong>P</strong> = patrimônio necessário na data da aposentadoria</li>
+      <li><strong>R</strong> = renda mensal desejada (em valores futuros, corrigida pela inflação)</li>
+      <li><strong>i<sub>real</sub></strong> = taxa real mensal = (1 + retorno) ÷ (1 + inflação) − 1</li>
+      <li><strong>n</strong> = meses de usufruto (expectativa de vida − idade de aposentadoria)</li>
+    </ul>
+  </div>
+
+  <p>A taxa real é o retorno descontado da inflação. Se o portfólio rende 10% ao ano e a inflação é 4%, a taxa real anual é aproximadamente 5,77% — e o simulador a converte para mensal antes de aplicar a fórmula.</p>
+
+  <p>Isso significa que quanto <strong>maior a taxa de retorno real</strong>, menor o patrimônio necessário. E quanto <strong>maior o período de usufruto</strong>, maior o patrimônio necessário — pois os saques se acumulam por mais tempo.</p>
+
+  <!-- SEÇÃO 5 — A CONTA REVERSA -->
+  <h2>A conta <em>reversa</em>: de onde vem o aporte mensal</h2>
+
+  <p>O diferencial do simulador é a conta reversa: você não informa o aporte — você informa a meta (renda desejada) e o simulador encontra o aporte.</p>
+
+  <p>O processo tem quatro etapas:</p>
+
+  <div class="gold-callout" data-reveal>
+    <div class="gold-callout-label">As 4 etapas do cálculo</div>
+    <p><strong>1.</strong> A renda desejada (em valores de hoje) é projetada para a data da aposentadoria usando a inflação informada.<br><br>
+    <strong>2.</strong> Com a renda futura, o simulador calcula o patrimônio necessário — usando o modelo escolhido (perpétua ou período).<br><br>
+    <strong>3.</strong> O patrimônio atual é projetado até a aposentadoria com juros compostos. O resultado é subtraído do patrimônio necessário para encontrar o quanto falta acumular.<br><br>
+    <strong>4.</strong> O valor faltante é convertido em aporte mensal, usando uma série geométrica crescente — pois os aportes são reajustados pela inflação todo ano para manter o poder de compra.</p>
+  </div>
+
+  <p>Esse último passo é onde a matemática fica menos óbvia. Como os aportes crescem com a inflação, não é possível usar a fórmula simples de série uniforme — é preciso usar uma fórmula de série geométrica, que o simulador resolve internamente.</p>
+
+  <!-- SEÇÃO 6 — LIMITAÇÕES -->
+  <h2>O que o simulador <em>não faz</em></h2>
+
+  <p>Transparência é parte do design do Gelocci. Por isso, é importante entender os limites do modelo:</p>
+
+  <div class="warning-box" data-reveal>
+    <div class="warning-icon">⚠</div>
+    <p><strong>Sem tábua atuarial.</strong> O simulador usa uma expectativa de vida informada pelo usuário — não uma probabilidade estatística baseada em sexo, região ou histórico de saúde. Na prática, cada pessoa tem uma longevidade diferente.</p>
+  </div>
+
+  <div class="warning-box" data-reveal>
+    <div class="warning-icon">⚠</div>
+    <p><strong>A regra dos 4% foi calibrada para o mercado americano.</strong> O S&P 500 teve um dos melhores retornos históricos do mundo. Para o Brasil, com inflação historicamente mais alta e maior volatilidade, muitos especialistas sugerem usar 3% a 3,5% como taxa de retirada segura — o que significa um patrimônio necessário maior.</p>
+  </div>
+
+  <div class="warning-box" data-reveal>
+    <div class="warning-icon">⚠</div>
+    <p><strong>Sem impostos nem taxas.</strong> O retorno real do investidor é sempre menor que o nominal, por conta de IR sobre rendimentos, taxas de administração, e outros custos. O simulador usa a taxa de retorno bruta informada pelo usuário.</p>
+  </div>
+
+  <div class="warning-box" data-reveal>
+    <div class="warning-icon">⚠</div>
+    <p><strong>A regra dos 4% assume 30 anos de aposentadoria.</strong> Se você pretende se aposentar mais cedo, o horizonte é mais longo — e a segurança da regra diminui. Para aposentadorias de 40 ou 50 anos, 3,5% é considerado mais conservador.</p>
+  </div>
+
+  <!-- FAQ -->
+  <h2>Perguntas <em>frequentes</em></h2>
+
+  <div class="faq-wrap" data-reveal>
+    <div class="faq-item">
+      <h4>Posso usar a Regra dos 4% no Brasil?</h4>
+      <p>Sim, como referência conceitual. Mas como a inflação brasileira é historicamente maior e o mercado de capitais tem menos histórico de longo prazo, muitos planejadores recomendam usar 3% ou 3,5% como taxa de retirada — o que exige um patrimônio maior. No simulador, você pode ajustar a taxa de retorno para refletir uma premissa mais conservadora.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Qual modelo devo escolher — perpétuo ou por período?</h4>
+      <p>Depende dos seus objetivos. Se você quer preservar o patrimônio e eventualmente transmitir herança, o modelo perpétuo é mais adequado — mas exige um capital maior. Se seu objetivo é aproveitar o patrimônio integralmente durante a vida, o modelo por período pode ser mais eficiente. A recomendação é simular os dois cenários e comparar o aporte necessário.</p>
+    </div>
+    <div class="faq-item">
+      <h4>O aporte calculado é fixo ou muda?</h4>
+      <p>O simulador apresenta o valor do primeiro aporte em valores de hoje. A lógica do modelo pressupõe que ele seja reajustado anualmente pela inflação — o que o simulador usa na série geométrica crescente. Na prática, você deve revisar e reajustar seus aportes regularmente.</p>
+    </div>
+    <div class="faq-item">
+      <h4>O que acontece se eu já tiver patrimônio investido?</h4>
+      <p>O patrimônio atual é projetado com juros compostos até a data da aposentadoria. Esse valor é descontado do patrimônio necessário — reduzindo o aporte mensal. Quanto mais cedo você começar e quanto mais já tiver acumulado, menor tende a ser o esforço mensal necessário.</p>
+    </div>
+    <div class="faq-item">
+      <h4>O simulador considera o INSS?</h4>
+      <p>Não. Este simulador é focado em patrimônio privado e investimentos. Para simular aposentadoria pelo INSS, incluindo regras de transição e upload de CNIS, o Gelocci tem o <a href="/calculadoras/simulador-inss/">Simulador de Aposentadoria INSS</a> — uma ferramenta específica para esse fim.</p>
+    </div>
+  </div>
+
+  <!-- CTA FINAL -->
+  <div class="article-cta" data-reveal>
+    <div>
+      <h3>Pronto para fazer a conta reversa?</h3>
+      <p>Informe a renda que você quer ter na aposentadoria e descubra quanto precisa investir por mês a partir de hoje.</p>
+    </div>
+    <a href="/calculadoras/simulador-aposentadoria/" class="btn-cta">Abrir simulador →</a>
+  </div>
+
+  <!-- RELACIONADOS -->
+  <div class="related" data-reveal>
+    <div class="related-label">Leia também</div>
+    <div class="related-grid">
+      <a href="/educacao/juros-compostos/" class="related-card">
+        <div class="related-card-cat">Investimentos</div>
+        <h4>A analogia da floresta: como os juros compostos realmente funcionam</h4>
+        <p>A base matemática por trás do crescimento do patrimônio ao longo do tempo.</p>
+      </a>
+      <a href="/calculadoras/simulador-inss/" class="related-card">
+        <div class="related-card-cat">Previdência</div>
+        <h4>Simulador de Aposentadoria INSS</h4>
+        <p>Carregue seu CNIS e descubra quando você pode se aposentar pelo INSS.</p>
+      </a>
+    </div>
+  </div>
+
+</article>
+</div><!-- /page-wrap -->
+
+<div id="site-footer"></div>
+
+<script>
+(function () {
+  var els = document.querySelectorAll('[data-reveal]');
+  if (!els.length) return;
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      var delay = parseInt(entry.target.getAttribute('data-delay') || 0, 10);
+      var el = entry.target;
+      setTimeout(function () { el.classList.add('is-visible'); }, delay);
+      observer.unobserve(el);
+    });
+  }, { threshold: 0.10, rootMargin: '0px 0px -40px 0px' });
+  els.forEach(function (el) { observer.observe(el); });
+})();
+</script>
+
+<script src="/assets/js/components.js"></script>
+</body>
+</html>
