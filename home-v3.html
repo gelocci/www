@@ -1017,14 +1017,26 @@ html[data-theme="light"] .proof-pill strong {
 }
 .edu-all-link:hover { background: var(--green-soft); transform: translateX(3px); }
 
-/* Feed de 4 cards lado a lado */
-.edu-feed {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.25rem;
+/* Feed — carrossel de 6 cards */
+.edu-carousel-wrap {
+  position: relative;
 }
-
+.edu-feed {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 0.5rem;
+  cursor: grab;
+}
+.edu-feed:active { cursor: grabbing; }
+.edu-feed::-webkit-scrollbar { display: none; }
 .edu-card {
+  flex: 0 0 calc(25% - 1rem);
+  min-width: 260px;
+  scroll-snap-align: start;
   background: var(--bg-card);
   border: 1px solid var(--muted-3);
   border-radius: 20px;
@@ -1036,14 +1048,12 @@ html[data-theme="light"] .proof-pill strong {
   position: relative;
   overflow: hidden;
   transition: background 0.28s, transform 0.28s, border-color 0.28s;
-  /* Scroll reveal aplicado via JS */
 }
 .edu-card:hover {
   background: var(--bg-hover);
   border-color: var(--green-border);
   transform: translateY(-4px);
 }
-
 /* Barra verde animada no topo */
 .edu-card::before {
   content: '';
@@ -1057,7 +1067,7 @@ html[data-theme="light"] .proof-pill strong {
 }
 .edu-card:hover::before { transform: scaleX(1); }
 
-/* Card em destaque — primeiro, ligeiramente maior */
+/* Card em destaque */
 .edu-card.edu-featured {
   background:
     radial-gradient(ellipse at 90% 0%, rgba(0,200,83,0.11), transparent 55%),
@@ -1068,6 +1078,49 @@ html[data-theme="light"] .proof-pill strong {
   background:
     radial-gradient(ellipse at 90% 0%, rgba(0,200,83,0.17), transparent 55%),
     var(--bg-hover);
+}
+
+/* Controles do carrossel */
+.edu-carousel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.edu-carousel-btn {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--muted-3);
+  background: var(--bg-card);
+  color: var(--muted-1);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  flex-shrink: 0;
+}
+.edu-carousel-btn:hover:not(:disabled) {
+  border-color: var(--green-border);
+  color: var(--green);
+  background: var(--green-soft);
+}
+.edu-carousel-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.edu-carousel-btn svg { width: 16px; height: 16px; }
+.edu-carousel-dots {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+.edu-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--muted-3);
+  transition: background 0.2s, transform 0.2s;
+  cursor: pointer;
+}
+.edu-dot.active {
+  background: var(--green);
+  transform: scale(1.3);
 }
 
 .edu-card-category {
@@ -1146,12 +1199,12 @@ html[data-theme="light"] .proof-pill strong {
 .edu-card:hover .edu-read { gap: 0.55rem; }
 
 @media (max-width: 1024px) {
-  .edu-feed { grid-template-columns: repeat(2, 1fr); }
+  .edu-card { flex: 0 0 calc(50% - 0.65rem); }
   .edu-bg-word { opacity: 0.6; }
 }
 @media (max-width: 768px) {
   .edu-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
-  .edu-feed { grid-template-columns: 1fr; }
+  .edu-card { flex: 0 0 calc(85vw); min-width: 0; }
   .edu-content { width: calc(100% - 2.5rem); }
   .edu-bg-word { display: none; }
   .edu-particle { display: none; }
@@ -1540,63 +1593,102 @@ html[data-theme="light"] .cta-inner .btn-ghost:hover {
         <a href="/educacao/" class="edu-all-link" data-reveal data-delay="280">Ver todos os artigos →</a>
       </div>
 
-      <div class="edu-feed">
+      <div class="edu-carousel-wrap">
+        <div class="edu-feed" id="eduFeed">
 
-        <a href="/educacao/juros-compostos/" class="edu-card edu-featured" data-reveal data-delay="0">
-          <div class="edu-card-category"><span class="edu-card-dot"></span>Investimentos</div>
-          <h3>A analogia da floresta: como os juros compostos realmente funcionam</h3>
-          <p class="edu-card-teaser">
-            Você planta uma semente. Ela vira árvore. A árvore gera novas sementes, que viram outras árvores.
-            É assim que o dinheiro cresce quando os rendimentos passam a render sobre si mesmos.
-          </p>
-          <div class="edu-card-quote">
-            "O juro composto é a oitava maravilha do mundo. Quem entende, ganha. Quem não entende, paga."
-          </div>
-          <div class="edu-card-footer">
-            <div class="edu-card-meta">5 min <span>·</span> Iniciante</div>
-            <div class="edu-read">Ler artigo <span>→</span></div>
-          </div>
-        </a>
+          <a href="/educacao/juros-compostos/" class="edu-card edu-featured">
+            <div class="edu-card-category"><span class="edu-card-dot"></span>Investimentos</div>
+            <h3>A analogia da floresta: como os juros compostos realmente funcionam</h3>
+            <p class="edu-card-teaser">
+              Você planta uma semente. Ela vira árvore. A árvore gera novas sementes, que viram outras árvores.
+              É assim que o dinheiro cresce quando os rendimentos passam a render sobre si mesmos.
+            </p>
+            <div class="edu-card-quote">
+              "O juro composto é a oitava maravilha do mundo. Quem entende, ganha. Quem não entende, paga."
+            </div>
+            <div class="edu-card-footer">
+              <div class="edu-card-meta">5 min <span>·</span> Iniciante</div>
+              <div class="edu-read">Ler artigo <span>→</span></div>
+            </div>
+          </a>
 
-        <a href="/educacao/inss/" class="edu-card" data-reveal data-delay="100">
-          <div class="edu-card-category"><span class="edu-card-dot"></span>Previdência</div>
-          <h3>Regras do INSS pós-reforma: o que mudou e o que permanece</h3>
-          <p class="edu-card-teaser">
-            A reforma de 2019 criou regras de transição que ainda confundem muita gente.
-            Entenda quais se aplicam ao seu caso antes de simular.
-          </p>
-          <div class="edu-card-footer">
-            <div class="edu-card-meta">7 min <span>·</span> Intermediário</div>
-            <div class="edu-read">Ler <span>→</span></div>
-          </div>
-        </a>
+          <a href="/educacao/inss/" class="edu-card">
+            <div class="edu-card-category"><span class="edu-card-dot"></span>Previdência</div>
+            <h3>Regras do INSS pós-reforma: o que mudou e o que permanece</h3>
+            <p class="edu-card-teaser">
+              A reforma de 2019 criou regras de transição que ainda confundem muita gente.
+              Entenda quais se aplicam ao seu caso antes de simular.
+            </p>
+            <div class="edu-card-footer">
+              <div class="edu-card-meta">12 min <span>·</span> Intermediário</div>
+              <div class="edu-read">Ler <span>→</span></div>
+            </div>
+          </a>
 
-        <a href="/educacao/equivalencia-de-taxas/" class="edu-card" data-reveal data-delay="200">
-          <div class="edu-card-category"><span class="edu-card-dot"></span>Taxas</div>
-          <h3>Taxa nominal vs. taxa efetiva: a diferença que ninguém te conta</h3>
-          <p class="edu-card-teaser">
-            Quando o banco diz "12% ao ano", pode não ser o que parece.
-            Entenda a diferença antes de comparar produtos financeiros.
-          </p>
-          <div class="edu-card-footer">
-            <div class="edu-card-meta">4 min <span>·</span> Iniciante</div>
-            <div class="edu-read">Ler <span>→</span></div>
-          </div>
-        </a>
+          <a href="/educacao/equivalencia-de-taxas/" class="edu-card">
+            <div class="edu-card-category"><span class="edu-card-dot"></span>Taxas</div>
+            <h3>Por que 1% ao mês não é 12% ao ano?</h3>
+            <p class="edu-card-teaser">
+              Quando o banco diz "12% ao ano capitalizado mensalmente", pode não ser o que parece.
+              Entenda a diferença antes de comparar produtos financeiros.
+            </p>
+            <div class="edu-card-footer">
+              <div class="edu-card-meta">10 min <span>·</span> Iniciante</div>
+              <div class="edu-read">Ler <span>→</span></div>
+            </div>
+          </a>
 
-        <a href="/educacao/black-scholes/" class="edu-card" data-reveal data-delay="300">
-          <div class="edu-card-category"><span class="edu-card-dot"></span>Derivativos</div>
-          <h3>Black-Scholes sem matemática: precificando opções de forma intuitiva</h3>
-          <p class="edu-card-teaser">
-            O modelo que valeu um Nobel. Explicado com exemplos do cotidiano
-            para quem opera ou quer entender o mercado de opções.
-          </p>
-          <div class="edu-card-footer">
-            <div class="edu-card-meta">9 min <span>·</span> Avançado</div>
-            <div class="edu-read">Ler <span>→</span></div>
-          </div>
-        </a>
+          <a href="/educacao/simulador-aposentadoria/" class="edu-card">
+            <div class="edu-card-category"><span class="edu-card-dot"></span>Aposentadoria</div>
+            <h3>Você sabe quem foi William Bengen? A regra que mudou a aposentadoria</h3>
+            <p class="edu-card-teaser">
+              Em 1994, um planejador financeiro publicou um estudo que definiu para sempre
+              quanto você pode sacar por ano sem ficar sem dinheiro.
+            </p>
+            <div class="edu-card-footer">
+              <div class="edu-card-meta">8 min <span>·</span> Intermediário</div>
+              <div class="edu-read">Ler <span>→</span></div>
+            </div>
+          </a>
 
+          <a href="/educacao/opcoes/" class="edu-card">
+            <div class="edu-card-category"><span class="edu-card-dot"></span>Derivativos</div>
+            <h3>Você sabe o que são opções financeiras?</h3>
+            <p class="edu-card-teaser">
+              Call, put, ITM, OTM — um vocabulário que parece código secreto, mas que esconde
+              uma ideia simples. Entenda com analogias do cotidiano.
+            </p>
+            <div class="edu-card-footer">
+              <div class="edu-card-meta">9 min <span>·</span> Iniciante</div>
+              <div class="edu-read">Ler <span>→</span></div>
+            </div>
+          </a>
+
+          <a href="/educacao/black-scholes/" class="edu-card">
+            <div class="edu-card-category"><span class="edu-card-dot"></span>Derivativos</div>
+            <h3>A fórmula que vale um Nobel: entenda o modelo Black-Scholes</h3>
+            <p class="edu-card-teaser">
+              O modelo que precifica opções no mundo todo. Explicado com a história dos três
+              economistas que o criaram e o que cada variável significa.
+            </p>
+            <div class="edu-card-footer">
+              <div class="edu-card-meta">10 min <span>·</span> Avançado</div>
+              <div class="edu-read">Ler <span>→</span></div>
+            </div>
+          </a>
+
+        </div>
+
+        <!-- Controles do carrossel -->
+        <div class="edu-carousel-controls">
+          <button class="edu-carousel-btn" id="eduPrev" aria-label="Anterior">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="edu-carousel-dots" id="eduDots"></div>
+          <button class="edu-carousel-btn" id="eduNext" aria-label="Próximo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
       </div>
     </div>
   </section>
@@ -1619,6 +1711,133 @@ html[data-theme="light"] .cta-inner .btn-ghost:hover {
 <div id="site-footer"></div>
 
 <script src="/assets/js/components.js"></script>
+
+<script>
+/* ============================================================
+   CARROSSEL — Educação financeira
+   ============================================================ */
+(function () {
+  var feed = document.getElementById('eduFeed');
+  var prev = document.getElementById('eduPrev');
+  var next = document.getElementById('eduNext');
+  var dotsWrap = document.getElementById('eduDots');
+  if (!feed || !prev || !next) return;
+
+  var cards = feed.querySelectorAll('.edu-card');
+  var total = cards.length;
+  var current = 0;
+
+  // Quantos cards visíveis por vez
+  function visibleCount() {
+    var w = window.innerWidth;
+    if (w >= 1024) return 4;
+    if (w >= 640)  return 2;
+    return 1;
+  }
+
+  // Total de "páginas"
+  function pageCount() {
+    return Math.ceil(total / visibleCount());
+  }
+
+  // Criar dots
+  function buildDots() {
+    dotsWrap.innerHTML = '';
+    var n = pageCount();
+    for (var i = 0; i < n; i++) {
+      var dot = document.createElement('button');
+      dot.className = 'edu-dot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', 'Página ' + (i + 1));
+      dot.setAttribute('data-page', i);
+      dot.addEventListener('click', function () {
+        goTo(parseInt(this.getAttribute('data-page')));
+      });
+      dotsWrap.appendChild(dot);
+    }
+  }
+
+  function updateDots(page) {
+    var dots = dotsWrap.querySelectorAll('.edu-dot');
+    dots.forEach(function (d, i) {
+      d.classList.toggle('active', i === page);
+    });
+  }
+
+  function goTo(page) {
+    var n = pageCount();
+    if (page < 0) page = 0;
+    if (page >= n) page = n - 1;
+    current = page;
+
+    // Scroll suave até o primeiro card da página
+    var idx = page * visibleCount();
+    if (idx >= total) idx = total - 1;
+    var card = cards[idx];
+    feed.scrollTo({ left: card.offsetLeft - feed.offsetLeft, behavior: 'smooth' });
+
+    updateDots(current);
+    prev.disabled = current === 0;
+    next.disabled = current >= n - 1;
+  }
+
+  // Drag to scroll
+  var isDragging = false, startX = 0, scrollStart = 0;
+  feed.addEventListener('mousedown', function (e) {
+    isDragging = true;
+    startX = e.pageX;
+    scrollStart = feed.scrollLeft;
+    feed.style.userSelect = 'none';
+  });
+  document.addEventListener('mousemove', function (e) {
+    if (!isDragging) return;
+    feed.scrollLeft = scrollStart - (e.pageX - startX);
+  });
+  document.addEventListener('mouseup', function () {
+    if (!isDragging) return;
+    isDragging = false;
+    feed.style.userSelect = '';
+    // Sincroniza dot com posição atual
+    syncCurrentPage();
+  });
+
+  // Touch swipe
+  var touchStartX = 0;
+  feed.addEventListener('touchstart', function (e) { touchStartX = e.touches[0].clientX; }, { passive: true });
+  feed.addEventListener('touchend', function (e) {
+    var diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) {
+      goTo(diff > 0 ? current + 1 : current - 1);
+    }
+  });
+
+  // Sincroniza page atual com scroll
+  function syncCurrentPage() {
+    var scrollRatio = feed.scrollLeft / (feed.scrollWidth - feed.clientWidth || 1);
+    current = Math.round(scrollRatio * (pageCount() - 1));
+    if (isNaN(current) || current < 0) current = 0;
+    updateDots(current);
+    prev.disabled = current === 0;
+    next.disabled = current >= pageCount() - 1;
+  }
+
+  feed.addEventListener('scroll', function () {
+    clearTimeout(feed._scrollTimer);
+    feed._scrollTimer = setTimeout(syncCurrentPage, 80);
+  });
+
+  prev.addEventListener('click', function () { goTo(current - 1); });
+  next.addEventListener('click', function () { goTo(current + 1); });
+
+  window.addEventListener('resize', function () {
+    buildDots();
+    goTo(0);
+  });
+
+  // Init
+  buildDots();
+  goTo(0);
+})();
+</script>
 
 <script>
 /* ============================================================
